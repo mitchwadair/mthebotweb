@@ -31,12 +31,14 @@ client.on("followersonly", (channel, enabled) => {followmode = enabled});
 client.connect();
 
 //chat state variables
+//TODO: store states for each channel should we want to expand to outside my own
 let submode = false;
 let followmode = false;
 let slowmode = false;
 let emotemode = false;
 
 //command counters
+//TODO: store interval for each channel should we want to expand to outside my own
 let intervalCounter = 0;
 
 //timed messages
@@ -46,6 +48,7 @@ function intervalExec() {
     if (intervalCounter >= 5) {
       merchChat(channel);
       client.say(channel, `If you have twitch prime, don\'t forget that you get one free subscription every month!  Consider using it here to support ${(channel.substring(1))}`);
+      console.log('* sent interval messages');
       intervalCounter = 0;
     }
   });
@@ -69,7 +72,12 @@ const commands = [
   {command: 'followmode', handler: followmodeCommandHandler, commandLevel: 'mod'},
   {command: 'emotemode', handler: emotemodeCommandHandler, commandLevel: 'mod'},
   {command: 'slowmode', handler: slowmodeCommandHandler, commandLevel: 'mod'},
+  {command: 'bot', handler: botCommandHandler, commandLevel: 'user'},
 ];
+
+//=========================================================================================================================================
+//                                                      COMMAND HANDLERS
+//=========================================================================================================================================
 
 function commandsCommandHandler(channel) {
   let commandList = '';
@@ -104,9 +112,10 @@ function modCommandsCommandHandler(channel, user) {
     });
     client.whisper(user.username, `The mod commands for ${channel.substring(1)}'s channel are: ${commandList}`)
       .then((data) => {
-          console.log(`* whisper sent to ${data}`)
+        console.log(`* whisper sent to ${data}`)
+        console.log('* Executed modcommands command');
       }).catch((err) => {
-          console.log(`* ERROR SENDING WHISPER TO ${user}`);
+        console.log(`* ERROR SENDING WHISPER TO ${user}`);
       });
   }
 }
@@ -120,6 +129,7 @@ function submodeCommandHandler(channel, user) {
       client.subscribersoff(channel);
       submode = false;
     }
+    console.log('* Executed submode command');
   }
 }
 
@@ -133,6 +143,7 @@ function followmodeCommandHandler(channel, user) {
       client.followersonlyoff(channel);
       followmode = false;
     }
+    console.log('* Executed followmode command');
   }
 }
 
@@ -145,6 +156,7 @@ function emotemodeCommandHandler(channel, user) {
       client.emoteonlyoff(channel);
       emotemode = false;
     }
+    console.log('* Executed emotemode command');
   }
 }
 
@@ -158,6 +170,7 @@ function slowmodeCommandHandler(channel, user) {
       client.slowoff(channel);
       slowmode = false;
     }
+    console.log('* Executed slowmode command');
   }
 }
 
@@ -169,10 +182,20 @@ function modsCommandHandler(channel) {
   client.mods(channel)
     .then((data) => {
       client.say(channel, `The mods on this channel are: ${data.toString().replace(new RegExp(',', 'g'), ', ')}`);
+    console.log('* Executed mods command');
     }).catch((err) => {
       console.log('* ERROR GETTING MODS: ' + err);
     });
 }
+
+function botCommandHandler(channel)  {
+  client.say(channel, 'This bot was created by MtheB_ ( https://www.twitch.tv/mtheb_ ).  You can check out the source code here: https://github.com/mitchwadair/mthebot');
+  console.log('* Executed bot command');
+}
+
+//=========================================================================================================================================
+//                                                      EVENT HANDLERS
+//=========================================================================================================================================
 
 // Called every time a message comes in
 function onChatHandler (target, context, msg, self) {
@@ -233,6 +256,10 @@ function onRaidHandler(channel, username, viewers) {
 function onConnectedHandler (addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
+
+//=========================================================================================================================================
+//                                                      HELPER FUNCTIONS
+//=========================================================================================================================================
 
 function isMod(channel, user) {
   return user.mod == true || user.username == 'mtheb_';
