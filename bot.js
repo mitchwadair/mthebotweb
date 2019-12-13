@@ -1,4 +1,5 @@
 const tmi = require('tmi.js');
+const fetch = require('node-fetch');
 
 // Define configuration options
 const opts = {
@@ -73,6 +74,7 @@ const commands = [
   {command: 'emotemode', handler: emotemodeCommandHandler, commandLevel: 'mod'},
   {command: 'slowmode', handler: slowmodeCommandHandler, commandLevel: 'mod'},
   {command: 'bot', handler: botCommandHandler, commandLevel: 'user'},
+  {command: 'uptime', handler: uptimeCommandHandler, commandLevel: 'user'},
 ];
 
 //=========================================================================================================================================
@@ -193,6 +195,17 @@ function botCommandHandler(channel)  {
   console.log('* Executed bot command');
 }
 
+function uptimeCommandHandler(channel)  {
+  fetch(`https://beta.decapi.me/twitch/uptime/${channel.substring(1)}`)
+    .then(res => res.text())
+    .then(data => {
+      let message = data.includes('offline') ? data : `${channel.substring(1)} has been live for ${data}.`;
+      client.say(channel, message);
+      console.log('* Executed uptime command');
+    })
+    .catch(err => console.error(err));
+}
+
 //=========================================================================================================================================
 //                                                      EVENT HANDLERS
 //=========================================================================================================================================
@@ -201,7 +214,6 @@ function botCommandHandler(channel)  {
 function onChatHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   intervalCounter++;
-  console.log(context);
   
   // Remove whitespace from chat message
   const commandFull = msg.trim();
