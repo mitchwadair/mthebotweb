@@ -48,7 +48,7 @@ function intervalExec() {
   opts.channels.forEach((channel) => {
     if (intervalCounter >= 5) {
       merchChat(channel);
-      client.say(channel, `If you have twitch prime, don\'t forget that you get one free subscription every month!  Consider using it here to support ${(channel.substring(1))}`);
+      primeChat(channel);
       console.log('* sent interval messages');
       intervalCounter = 0;
     }
@@ -56,7 +56,7 @@ function intervalExec() {
 }
 
 function primeChat(channel) {
-  
+  client.say(channel, `If you have twitch prime, don\'t forget that you get one free subscription every month!  Consider using it here to support ${(channel.substring(1))}`);
 }
 
 function merchChat(channel) {
