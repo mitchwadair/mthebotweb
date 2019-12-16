@@ -1,6 +1,20 @@
 const tmi = require('tmi.js');
 const fetch = require('node-fetch');
 
+const http = require('http');
+const express = require('express');
+const app = express();
+
+//ping self to stay alive
+app.get("/", (request, response) => {
+  console.log("* Ping! Hello, I'm alive!");
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT);
+setInterval(() => {
+  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 270000);
+
 // Define configuration options
 const opts = {
   identity: {
