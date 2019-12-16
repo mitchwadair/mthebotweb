@@ -7,7 +7,7 @@ const app = express();
 
 //ping self to stay alive
 app.get("/", (request, response) => {
-  console.log("* Ping! Hello, I'm alive!");
+  console.log(`* ${new Date().toString()} * Ping! Hello, I'm alive!`);
   response.sendStatus(200);
 });
 app.listen(process.env.PORT);
