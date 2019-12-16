@@ -1,4 +1,5 @@
 const tmi = require('tmi.js');
+const fetch = require('node-fetch');
 
 // Define configuration options
 const opts = {
@@ -195,7 +196,7 @@ function botCommandHandler(channel)  {
 }
 
 function uptimeCommandHandler(channel)  {
-  window.fetch(`https://beta.decapi.me/twitch/uptime/${channel.substring(1)}`)
+  fetch(`https://beta.decapi.me/twitch/uptime/${channel.substring(1)}`)
     .then(res => res.text())
     .then(data => {
       let message = data.includes('offline') ? data : `${channel.substring(1)} has been live for ${data}.`;
@@ -239,7 +240,8 @@ function onResubHandler(channel, username, months, message, userstate, methods) 
   let cumulativeMonths = ~~userstate["msg-param-cumulative-months"];
   let suffix = ordinalSuffix(months);
   let cumSuffix = ordinalSuffix(cumulativeMonths);
-  let botMessage = months > 0 ? `Welcome ${username} to their ${months}${suffix} month in the Hive! Their ${cumulativeMonths}${cumSuffix} month in a row!` : `Welcome ${username} back to the Hive!`;
+  let rowMessage = months > 0 ? `Their ${months}${suffix} month in a row!` : '';
+  let botMessage = cumulativeMonths > 0 ? `Welcome ${username} to their ${cumulativeMonths}${cumSuffix} month in the Hive! ${rowMessage}` : `Welcome ${username} back to the Hive!`;
   client.say(channel, botMessage);
   console.log('* resub');
 }
