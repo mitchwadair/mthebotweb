@@ -1,4 +1,5 @@
 const tmi = require('tmi.js');
+const fetch = require('node-fetch');
 
 // Define configuration options
 const opts = {
@@ -195,7 +196,7 @@ function botCommandHandler(channel)  {
 }
 
 function uptimeCommandHandler(channel)  {
-  window.fetch(`https://beta.decapi.me/twitch/uptime/${channel.substring(1)}`)
+  fetch(`https://beta.decapi.me/twitch/uptime/${channel.substring(1)}`)
     .then(res => res.text())
     .then(data => {
       let message = data.includes('offline') ? data : `${channel.substring(1)} has been live for ${data}.`;
