@@ -13,7 +13,7 @@ app.get("/", (request, response) => {
 app.listen(process.env.PORT);
 setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 270000);
+}, 150000);
 
 // Define configuration options
 const opts = {
