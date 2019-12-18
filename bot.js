@@ -89,6 +89,8 @@ const commands = [
   {command: 'slowmode', handler: slowmodeCommandHandler, commandLevel: 'mod'},
   {command: 'bot', handler: botCommandHandler, commandLevel: 'user'},
   {command: 'uptime', handler: uptimeCommandHandler, commandLevel: 'user'},
+  {command: 'holdW', handler: holdWCommandHandler, commandLevel: 'user'},
+  {command: 'followage', handler: followAgeCommandHandler, commandLevel: 'user'},
 ];
 
 //=========================================================================================================================================
@@ -216,6 +218,21 @@ function uptimeCommandHandler(channel)  {
       let message = data.includes('offline') ? data : `${channel.substring(1)} has been live for ${data}.`;
       client.say(channel, message);
       console.log('* Executed uptime command');
+    })
+    .catch(err => console.error(err));
+}
+
+function holdWCommandHandler(channel) {
+  client.say(channel, 'Hold W and tap heads BabyRage');
+  console.log('* Executed holdW command');
+}
+
+function followAgeCommandHandler(channel, user) {
+  fetch(`https://2g.be/twitch/following.php?user=${user.username}&channel=${channel.substring(1)}&format=mwdhms`)
+    .then(res => res.text())
+    .then(data => {
+      client.say(channel, data);
+      console.log('* Executed followage command');
     })
     .catch(err => console.error(err));
 }
