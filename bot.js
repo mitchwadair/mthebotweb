@@ -31,6 +31,7 @@ const client = new tmi.client(opts);
 
 // Register our event handlers (defined below)
 client.on('chat', onChatHandler);
+client.on("message", onMessageHandler);
 client.on('connected', onConnectedHandler);
 client.on("raided", onRaidedHandler);
 client.on("hosted", onHostedHandler);
@@ -279,6 +280,14 @@ function onChatHandler (target, context, msg, self) {
         cmd.handler(target, context);
       }
     });
+  }
+}
+
+function onMessageHandler(channel, userstate, message, self) {
+  if (userstate['custom-reward-id'] != undefined && userstate['custom-reward-id'] == '8798321f-73d6-4a5e-88fb-c4d1132c8827') {
+    client.say(channel, `@${channel.substring(1)}, ${userstate.username} has rick rolled you!`);
+    client.say(channel, '!songs request dQw4w9WgXcQ');
+    console.log('* rick rolled');
   }
 }
 
