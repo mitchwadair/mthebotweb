@@ -284,10 +284,23 @@ function onChatHandler (target, context, msg, self) {
 }
 
 function onMessageHandler(channel, userstate, message, self) {
-  if (userstate['custom-reward-id'] != undefined && userstate['custom-reward-id'] == '8798321f-73d6-4a5e-88fb-c4d1132c8827') {
-    client.say(channel, `@${channel.substring(1)}, ${userstate.username} has rick rolled you!`);
-    client.say(channel, '!songs request dQw4w9WgXcQ');
-    console.log('* rick rolled');
+  if (userstate['custom-reward-id'] != undefined) {
+    switch (userstate['custom-reward-id']) {
+      case '8798321f-73d6-4a5e-88fb-c4d1132c8827':
+        client.say(channel, `@${channel.substring(1)}, ${userstate.username} has rick rolled you!`);
+        client.say(channel, '!songs request dQw4w9WgXcQ');
+        console.log('* rick rolled');
+        break;
+      case '83b02f96-3f41-4d6b-803d-5e4b84305878':
+        client.say(channel, `@${channel.substring(1)}, ${userstate.username} took you to the slumber ranch!`);
+        client.say(channel, '!songs request 2TRIWkJpFbw');
+        console.log('* slumber ranch');
+        break;
+      default:
+        console.log(`* unknown custom reward id: ${userstate['custom-reward-id']}`);
+        break;
+    }
+    
   }
 }
 
