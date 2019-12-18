@@ -90,7 +90,9 @@ const commands = [
   {command: 'bot', handler: botCommandHandler, commandLevel: 'user'},
   {command: 'uptime', handler: uptimeCommandHandler, commandLevel: 'user'},
   {command: 'holdW', handler: holdWCommandHandler, commandLevel: 'user'},
+  {command: 'holdS', handler: holdSCommandHandler, commandLevel: 'user'},
   {command: 'followage', handler: followAgeCommandHandler, commandLevel: 'user'},
+  {command: 'sub', handler: subCommandHandler, commandLevel: 'user'},
 ];
 
 //=========================================================================================================================================
@@ -227,6 +229,11 @@ function holdWCommandHandler(channel) {
   console.log('* Executed holdW command');
 }
 
+function holdSCommandHandler(channel) {
+  client.say(channel, 'Hold S and skedaddle out of there BabyRage');
+  console.log('* Executed holdW command');
+}
+
 function followAgeCommandHandler(channel, user) {
   fetch(`https://2g.be/twitch/following.php?user=${user.username}&channel=${channel.substring(1)}&format=mwdhms`)
     .then(res => res.text())
@@ -235,6 +242,11 @@ function followAgeCommandHandler(channel, user) {
       console.log('* Executed followage command');
     })
     .catch(err => console.error(err));
+}
+
+function subCommandHandler(channel) {
+  client.say(channel, `Hey you! Want to be part of the hive? Just drop a quick sub https://www.twitch.tv/products/${channel.substring(1)} and you also get 0% off on the MtB_ merch!`);
+  console.log('* Executed sub command');
 }
 
 //=========================================================================================================================================
