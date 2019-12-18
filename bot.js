@@ -93,6 +93,7 @@ const commands = [
   {command: 'holdS', handler: holdSCommandHandler, commandLevel: 'user'},
   {command: 'followage', handler: followAgeCommandHandler, commandLevel: 'user'},
   {command: 'sub', handler: subCommandHandler, commandLevel: 'user'},
+  {command: 'gum', handler: gumCommandHandler, commandLevel: 'user'},
 ];
 
 //=========================================================================================================================================
@@ -231,7 +232,7 @@ function holdWCommandHandler(channel) {
 
 function holdSCommandHandler(channel) {
   client.say(channel, 'Hold S and skedaddle out of there BabyRage');
-  console.log('* Executed holdW command');
+  console.log('* Executed holdS command');
 }
 
 function followAgeCommandHandler(channel, user) {
@@ -247,6 +248,11 @@ function followAgeCommandHandler(channel, user) {
 function subCommandHandler(channel) {
   client.say(channel, `Hey you! Want to be part of the hive? Just drop a quick sub https://www.twitch.tv/products/${channel.substring(1)} and you also get 0% off on the MtB_ merch!`);
   console.log('* Executed sub command');
+}
+
+function gumCommandHandler(channel) {
+  client.say(channel, `Hey @${channel.substring(1)}! You know why you are doing bad? You need some gum!`);
+  console.log('* Executed gum command');
 }
 
 //=========================================================================================================================================
