@@ -32,11 +32,13 @@ const client = new tmi.client(opts);
 // Register our event handlers (defined below)
 client.on('chat', onChatHandler);
 client.on('connected', onConnectedHandler);
-client.on("raided", onRaidHandler);
+client.on("raided", onRaidedHandler);
+client.on("hosted", onHostedHandler);
 client.on("resub", onResubHandler);
 client.on("subscription", onSubHandler);
 client.on("subgift", onSubGiftHandler);
 client.on("submysterygift", onSubMysteryGiftHandler);
+client.on("cheer", onCheerHandler);
 client.on("slowmode", (channel, enabled, length) => {slowmode = enabled});
 client.on("subscribers", (channel, enabled) => {submode = enabled});
 client.on("emoteonly", (channel, enabled) => {emotemode = enabled});
@@ -309,9 +311,21 @@ function onSubMysteryGiftHandler(channel, username, numbOfSubs, methods, usersta
   console.log('* gifted mystery subs');
 }
 
-function onRaidHandler(channel, username, viewers) {
+function onRaidedHandler(channel, username, viewers) {
   client.say(channel, `${username} is raiding with ${viewers} viewers! Thank you!`)
-  console.log('* raid');
+  console.log('* raided');
+}
+
+function onHostedHandler(channel, username, viewers, autohost) {
+  if (!autohost) {
+    client.say(channel, `${username} is hosting with ${viewers} viewers! Thank you!`)
+    console.log('* hosted');
+  }
+}
+
+function onCheerHandler(channel, userstate, message) {
+  client.say(channel, `Thank you ${userstate.username} for cheering ${userstate.bits} bits! I really appreciate it!`)
+  console.log('* cheer');
 }
 
 // Called every time the bot connects to Twitch chat
