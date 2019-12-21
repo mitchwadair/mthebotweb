@@ -13,7 +13,7 @@ app.get("/", (request, response) => {
 app.listen(process.env.PORT);
 setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 150000);
+}, 270000);
 
 // Define configuration options
 const opts = {
@@ -97,6 +97,8 @@ const commands = [
   {command: 'followage', handler: followAgeCommandHandler, commandLevel: 'user'},
   {command: 'sub', handler: subCommandHandler, commandLevel: 'user'},
   {command: 'gum', handler: gumCommandHandler, commandLevel: 'user'},
+  {command: 'gg', handler: ggCommandHandler, commandLevel: 'user'},
+  {command: 'jaylyn', handler: jaylynCommandHandler, commandLevel: 'user'},
 ];
 
 //=========================================================================================================================================
@@ -249,13 +251,23 @@ function followAgeCommandHandler(channel, user) {
 }
 
 function subCommandHandler(channel) {
-  client.say(channel, `Hey you! Want to be part of the hive? Just drop a quick sub https://www.twitch.tv/products/${channel.substring(1)} and you also get 0% off on the MtB_ merch!`);
+  client.say(channel, `Hey you! Want to be part of the Hive? Just drop a quick sub https://www.twitch.tv/products/${channel.substring(1)} and you also get 0% off on the MtB_ merch!`);
   console.log('* Executed sub command');
 }
 
 function gumCommandHandler(channel) {
   client.say(channel, `Hey @${channel.substring(1)}! You know why you are doing bad? You need some gum!`);
   console.log('* Executed gum command');
+}
+
+function ggCommandHandler(channel) {
+  client.say(channel, 'GG! Goodnight gamers :) <3');
+  console.log('* Executed gg command');
+}
+
+function jaylynCommandHandler(channel) {
+  client.say(channel, `@jaytbae is here in chat now! and she is MtheB_'s gamer gf! say hi :) she may or may not stream sometimes here!`);
+  console.log('* Executed jaylyn command');
 }
 
 //=========================================================================================================================================
