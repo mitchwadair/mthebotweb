@@ -77,7 +77,7 @@ function primeChat(channel) {
 }
 
 function merchChat(channel) {
-  client.say(channel, `Want to wear some ${(channel.substring(1))}? Check out the merch store here: https://teespring.com/stores/mtb-merch-store`); //TODO: generalize link for other channels
+  client.say(channel, `Want to wear some ${(channel.substring(1))}? Check out the merch store here: https://store.mtheb.tv`); //TODO: generalize link for other channels
   console.log('* Executed merch command');
 }
 
