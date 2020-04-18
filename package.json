@@ -1,7 +1,7 @@
 {
-  "name": "mtb-twitch-chatbot",
+  "name": "mthebot_",
   "version": "0.0.1",
-  "description": "Chatbot for MtheB_",
+  "description": "Chatbot for Twitch",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
@@ -15,7 +15,7 @@
     "node": "8.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/mthebot"
+    "url": "https://github.com/mitchwadair/mthebot"
   },
   "license": "MIT",
   "keywords": [
