@@ -1,26 +1,29 @@
 {
-  "name": "mthebot_",
-  "version": "0.0.1",
+  "name": "mthebot",
+  "version": "1.0.0",
   "description": "Chatbot for Twitch",
-  "main": "bot.js",
-  "scripts": {
-    "start": "node bot.js"
-  },
+  "main": "app.js",
   "dependencies": {
-    "express": "^4.16.4",
-    "tmi.js": "^1.2.1",
-    "node-fetch": "^2.6.0"
+    "dotenv": "^8.2.0",
+    "tmi.js": "^1.5.0"
   },
-  "engines": {
-    "node": "8.x"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-    "url": "https://github.com/mitchwadair/mthebot"
+    "type": "git",
+    "url": "git+https://github.com/mitchwadair/mthebot.git"
   },
-  "license": "MIT",
   "keywords": [
+    "tmi",
     "twitch",
-    "chatbots",
-    "irc"
-  ]
+    "chatbot"
+  ],
+  "author": "Mitchell Adair",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mitchwadair/mthebot/issues"
+  },
+  "homepage": "https://github.com/mitchwadair/mthebot#readme"
 }
