@@ -5,7 +5,10 @@ const axios = require('axios');
 
 // ===================== DATA =====================
 
-let activeChannels = [];
+let commands = {
+    'mtheb_': {},
+    'godazed': {},
+};
 
 // ===================== HELPER FUNCTIONS =====================
 
@@ -23,6 +26,15 @@ Array.prototype.chunk = function(maxChunkSize) {
 
 const onConnected = (address, port) => {
     console.log(`** MtheBot_ connected to ${address}:${port}`);
+    console.log('** joining all serviced channels...');
+    db.query("SELECT name from channels", (err, results, fields) => {
+        let promises = results.map(res => {
+            return client.join(res.name);
+        });
+        Promise.all(promises).then(() => {
+            console.log('** all serviced channels have been joined');
+        });
+    });
 }
 
 const onChat = (channel, userstate, message, self) => {
@@ -64,27 +76,12 @@ const auditChannels = async () => {
                     return data.user_name.toLowerCase();
                 }));
             });
-            let channelsNoLongerActive = activeChannels.filter(channel => {
+            const channelsNoLongerActive = Object.keys(commands).filter(channel => {
                 return !newActiveChannels.includes(channel);
             });
             channelsNoLongerActive.forEach(channel => {
-                client.part(channel).then(data => {
-                    console.log(`** Left channel: ${data}`);
-                }).catch(err => {
-                    console.log(`** ERROR LEAVING CHANNEL: ${err}`);
-                });
+                delete commands[channel];
             });
-            let newlyActiveChannels = newActiveChannels.filter(channel => {
-                return !activeChannels.includes(channel);
-            });
-            newlyActiveChannels.forEach(channel => {
-                client.join(channel).then(data => {
-                    console.log(`** Joined channel: ${data}`);
-                }).catch(err => {
-                    console.log(`** ERROR JOINING CHANNEL: ${err}`);
-                });
-            });
-            activeChannels = ['mtheb_', ...newActiveChannels];
             console.log('** active channel audit completed');
         });
     });
@@ -126,6 +123,5 @@ db.connect(err => {
     }
 
     console.log('** Connected to DB');
+    auditChannels();
 });
-
-auditChannels();
