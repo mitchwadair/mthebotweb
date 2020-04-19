@@ -5,10 +5,7 @@ const axios = require('axios');
 
 // ===================== DATA =====================
 
-let commands = {
-    'mtheb_': {},
-    'godazed': {},
-};
+let channels = {};
 
 // ===================== HELPER FUNCTIONS =====================
 
@@ -20,6 +17,20 @@ Array.prototype.chunk = function(maxChunkSize) {
         chunks.push(copy.splice(0, size));
     }
     return chunks;
+}
+
+const deleteChannel = channel => {
+    delete channels[channel];
+    console.log(`** removed channel ${channel} from active channels`);
+}
+
+const processChat = (channel, userstate, message) => {
+    const full = message.trim();
+
+    if (full.startsWith('!')) {
+        const args = full.split(' ');
+        const command = args.shift().substring(1);
+    }
 }
 
 // ===================== EVENT HANDLERS =====================
@@ -40,53 +51,26 @@ const onConnected = (address, port) => {
 const onChat = (channel, userstate, message, self) => {
     if (self) return;
 
-    const full = message.trim();
-
-    if (full.startsWith('!')) {
-        const args = full.split(' ');
-        const command = args.shift().substring(1);
+    let channelKey = channel.substring(1);
+    if (channels[channelKey] !== undefined) {
+        clearTimeout(channels[channelKey].timeout);
+        channels[channelKey].timeout = setTimeout(() => {deleteChannel(channelKey)}, 300000);
+        processChat(channel, userstate, message);
+    } else {
+        db.query(`SELECT commands from channels where name='${channelKey}'`, (err, results, fields) => {
+            channels[channelKey] = {
+                commands: results[0].commands,
+                timeout: setTimeout(() => {deleteChannel(channelKey)}, 300000),
+            }
+            console.log(`** added channel ${channelKey} to active channels`);
+            processChat(channel, userstate, message);
+        });
     }
 }
 
 // ===================== BOT LIFECYCLE =====================
 
-// audit list of active channels to save on memory usage
-const auditChannels = async () => {
-    console.log('** auditing active channels...');
-    db.query("SELECT name from channels", (err, results, fields) => {
-        const chunks = results.chunk(100);
-        let promises = chunks.map(chunk => {
-            const headers = {
-                'Client-ID': process.env.CLIENT_ID,
-            }
-            let params = new URLSearchParams();
-            chunk.forEach(data => {
-                params.append('user_login', data.name);
-            });
-            const config = {
-                headers: headers,
-                params: params,
-            }
-            return axios.get('https://api.twitch.tv/helix/streams', config);
-        });
-        Promise.all(promises).then(responses => {
-            let newActiveChannels = [];
-            responses.forEach(res => {
-                newActiveChannels.push(...res.data.data.map(data => {
-                    return data.user_name.toLowerCase();
-                }));
-            });
-            const channelsNoLongerActive = Object.keys(commands).filter(channel => {
-                return !newActiveChannels.includes(channel);
-            });
-            channelsNoLongerActive.forEach(channel => {
-                delete commands[channel];
-            });
-            console.log('** active channel audit completed');
-        });
-    });
-}
-setInterval(auditChannels, 300000);
+
 
 // ===================== INIT CHAT BOT/DB CONNECTION =====================
 
@@ -123,5 +107,4 @@ db.connect(err => {
     }
 
     console.log('** Connected to DB');
-    auditChannels();
 });
