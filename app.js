@@ -1,3 +1,8 @@
+// Copyright (c) 2020 Mitchell Adair
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 require('dotenv').config();
 const tmi = require('tmi.js');
 const mysql = require('mysql');
