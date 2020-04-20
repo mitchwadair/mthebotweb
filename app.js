@@ -9,6 +9,9 @@ let channels = {};
 
 // ===================== HELPER FUNCTIONS =====================
 
+// extend Array to include a 'chunk' function
+// use function rather than arrow func to access 'this'
+// makes shallow copy of current array, then splits the array into chunks of the given max chunk size and returns it
 Array.prototype.chunk = function(maxChunkSize) {
     let copy = [...this];
     let chunks = [];
@@ -19,18 +22,36 @@ Array.prototype.chunk = function(maxChunkSize) {
     return chunks;
 }
 
+// remove a channel from the active channels object
 const deleteChannel = channel => {
     delete channels[channel];
     console.log(`** removed channel ${channel} from active channels`);
 }
 
-const processChat = (channel, userstate, message) => {
-    const full = message.trim();
-
-    if (full.startsWith('!')) {
-        const args = full.split(' ');
-        const command = args.shift().substring(1);
-    }
+// process the given channel
+// either restart the timeout func or add the channel to active channels
+const processChannel = channel => {
+    return new Promise((resolve, reject) => {
+        let channelKey = channel.substring(1);
+        if (channels[channelKey] !== undefined) {
+            clearTimeout(channels[channelKey].timeout);
+            channels[channelKey].timeout = setTimeout(_ => {deleteChannel(channelKey)}, 300000);
+            resolve()
+        } else {
+            db.query(`SELECT commands from channels where name='${channelKey}'`, (err, results, fields) => {
+                if (err) {
+                    return reject(err);
+                } else {
+                    channels[channelKey] = {
+                        commands: results[0].commands,
+                        timeout: setTimeout(_ => {deleteChannel(channelKey)}, 300000),
+                    }
+                    console.log(`** added channel ${channelKey} to active channels`);
+                    resolve()
+                }
+            });
+        }
+    });
 }
 
 // ===================== EVENT HANDLERS =====================
@@ -42,8 +63,10 @@ const onConnected = (address, port) => {
         let promises = results.map(res => {
             return client.join(res.name);
         });
-        Promise.all(promises).then(() => {
+        Promise.all(promises).then(_ => {
             console.log('** all serviced channels have been joined');
+        }).catch(err => {
+            console.log(`** ERROR JOINING CHANNEL: ${err}`);
         });
     });
 }
@@ -51,26 +74,17 @@ const onConnected = (address, port) => {
 const onChat = (channel, userstate, message, self) => {
     if (self) return;
 
-    let channelKey = channel.substring(1);
-    if (channels[channelKey] !== undefined) {
-        clearTimeout(channels[channelKey].timeout);
-        channels[channelKey].timeout = setTimeout(() => {deleteChannel(channelKey)}, 300000);
-        processChat(channel, userstate, message);
-    } else {
-        db.query(`SELECT commands from channels where name='${channelKey}'`, (err, results, fields) => {
-            channels[channelKey] = {
-                commands: results[0].commands,
-                timeout: setTimeout(() => {deleteChannel(channelKey)}, 300000),
-            }
-            console.log(`** added channel ${channelKey} to active channels`);
-            processChat(channel, userstate, message);
-        });
-    }
+    processChannel(channel).then(_ => {
+        const full = message.trim();
+
+        if (full.startsWith('!')) {
+            const args = full.split(' ');
+            const command = args.shift().substring(1);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channel}: ${err}`);
+    });
 }
-
-// ===================== BOT LIFECYCLE =====================
-
-
 
 // ===================== INIT CHAT BOT/DB CONNECTION =====================
 
@@ -105,6 +119,5 @@ db.connect(err => {
         console.error(`** DB Connection failed: ${err.stack}`);
         return;
     }
-
     console.log('** Connected to DB');
 });
