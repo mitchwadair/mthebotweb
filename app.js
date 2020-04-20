@@ -6,7 +6,45 @@
 require('dotenv').config();
 const tmi = require('tmi.js');
 const mysql = require('mysql');
+const http = require('http');
+const url = require('url');
 const axios = require('axios');
+
+// ===================== SIMPLE DATA API =====================
+
+// get users API
+const getUsers = (req, res) => {
+    db.query("SELECT COUNT(*) AS users FROM channels", (err, results) => {
+        if (err) {
+            res.writeHead(500);
+            res.end(`ERROR: ${err}`);
+            return;
+        }
+        res.writeHead(200);
+        res.end(results[0].users.toString());
+    });
+}
+
+// API routes
+const apiRoutes = {
+    '/users': getUsers,
+}
+
+// request handler
+const apiRequestHandler = (req, res) => {
+    const path = url.parse(req.url).pathname;
+    const handler = apiRoutes[path];
+    if (handler) {
+        handler(req, res);
+    } else {
+        res.writeHead(404);
+        res.end('Not Found');
+    }
+}
+
+// basic http server
+const server = http.createServer(apiRequestHandler);
+server.listen(8080);
 
 // ===================== DATA =====================
 
@@ -43,7 +81,7 @@ const processChannel = channel => {
             channels[channelKey].timeout = setTimeout(_ => {deleteChannel(channelKey)}, 300000);
             resolve()
         } else {
-            db.query(`SELECT commands from channels where name='${channelKey}'`, (err, results, fields) => {
+            db.query(`SELECT commands FROM channels WHERE name='${channelKey}'`, (err, results) => {
                 if (err) {
                     return reject(err);
                 } else {
