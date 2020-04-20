@@ -20,8 +20,17 @@ const getUsers = (req, res) => {
             res.end(`ERROR: ${err}`);
             return;
         }
+        const query = url.parse(req.url, true).query;
         res.writeHead(200);
-        res.end(results[0].users.toString());
+        if (query.json !== undefined) {
+            let responseObject = {
+                "schemaVersion": 1,
+                "message": results[0].users,
+            }
+            res.end(JSON.stringify(responseObject));
+        } else {
+            res.end(results[0].users.toString());
+        }
     });
 }
 
