@@ -25,7 +25,7 @@ module.exports = function(db) {
                     let responseObject = {
                         'schemaVersion': 1,
                         'label': 'users',
-                        'message': results[0].users,
+                        'message': results[0].users.toString(),
                         'color': 'blue'
                     }
                     res.end(JSON.stringify(responseObject));
