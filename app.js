@@ -24,8 +24,10 @@ const getUsers = (req, res) => {
         res.writeHead(200);
         if (query.json !== undefined) {
             let responseObject = {
-                "schemaVersion": 1,
-                "message": results[0].users,
+                'schemaVersion': 1,
+                'label': 'users',
+                'message': results[0].users,
+                'color': 'blue'
             }
             res.end(JSON.stringify(responseObject));
         } else {
