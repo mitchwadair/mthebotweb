@@ -1,5 +1,5 @@
-<p align:'center'>
-    <img src='./assets/logo.png' width='100px' height='100px'>
+<p text-align:'center'>
+    <img src='./assets/logo.png' width='300px' height='300px'>
     <h1>MtheBot_</h1>
 </p>
 
