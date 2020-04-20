@@ -44,7 +44,7 @@ const apiRequestHandler = (req, res) => {
 
 // basic http server
 const server = http.createServer(apiRequestHandler);
-server.listen(8080);
+server.listen(process.env.PORT || 8080);
 
 // ===================== DATA =====================
 
