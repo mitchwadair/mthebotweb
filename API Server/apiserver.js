@@ -7,12 +7,9 @@ const http = require('http');
 const url = require('url');
 
 module.exports = function(db) {
-    // get users API
-    const getUsers = (req, res) => {
-        if (req.method !== 'GET') {
-            res.writeHead(400);
-            res.end('Bad Request');
-        } else {
+    // users API
+    const users = (req, res) => {
+        if (req.method === 'GET') {
             db.query("SELECT COUNT(*) AS users FROM channels", (err, results) => {
                 if (err) {
                     res.writeHead(500);
@@ -33,12 +30,15 @@ module.exports = function(db) {
                     res.end(results[0].users.toString());
                 }
             });
+        } else {
+            res.writeHead(400);
+            res.end('Bad Request');
         }
     }
 
     // API routes
     const apiRoutes = {
-        '/users': getUsers,
+        '/users': users,
     }
 
     // request handler
