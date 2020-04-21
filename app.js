@@ -30,6 +30,10 @@ Array.prototype.chunk = function(maxChunkSize) {
 
 // remove a channel from the active channels object
 const deleteChannel = channel => {
+    // clear intervals for timed messages
+    channels[channel].timers.forEach(timer => {
+        clearInterval(timer);
+    });
     delete channels[channel];
     console.log(`** removed channel ${channel} from active channels`);
 }
@@ -43,14 +47,22 @@ const processChannel = channelKey => {
             channels[channelKey].timeout = setTimeout(_ => {deleteChannel(channelKey)}, 300000);
             resolve()
         } else {
-            db.query(`SELECT commands,events FROM channels WHERE name='${channelKey}'`, (err, results) => {
+            db.query(`SELECT commands,events,timers FROM channels WHERE name='${channelKey}'`, (err, results) => {
                 if (err) {
                     return reject(err);
                 } else {
+                    const timers = JSON.parse(results[0].timers);
                     channels[channelKey] = {
                         commands: JSON.parse(results[0].commands),
                         events: JSON.parse(results[0].events),
                         timeout: setTimeout(_ => {deleteChannel(channelKey)}, 300000),
+                        timers: Object.keys(timers).map(key => {
+                            if (timers[key].enabled) {
+                                return setInterval(_ => {
+                                    client.say(`#${channelKey}`, timers[key].message);
+                                }, timers[key].seconds*1000);
+                            }
+                        })
                     }
                     console.log(`** added channel ${channelKey} to active channels`);
                     resolve()
@@ -133,7 +145,9 @@ const onResub = (channel, username, monthStreak, message, userstate, methods) =>
             const months = ~~userstate["msg-param-cumulative-months"];
             let message = data.message
                 .replace(new RegExp('{{user}}', 'g'), username)
-                .replace(new RegExp('{{months}}', 'g'), months);
+                .replace(new RegExp('{{months}}', 'g'), months)
+                .replace(new RegExp('{{streak}}', 'g'), monthStreak)
+                .replace(new RegExp('{{type}}', 'g'), methods.planName);
             client.say(channel, message);
         }
     }).catch(err => {
@@ -141,7 +155,7 @@ const onResub = (channel, username, monthStreak, message, userstate, methods) =>
     });
 }
 
-const onSubGift = (channel, username, streakMonths, recipient, methods, userstate) => {
+const onSubGift = (channel, username, monthStreak, recipient, methods, userstate) => {
     const channelKey = channel.substring(1);
     processChannel(channelKey).then(_ => {
         const data = channels[channelKey].events.subgift;
@@ -150,7 +164,9 @@ const onSubGift = (channel, username, streakMonths, recipient, methods, userstat
             let message = data.message
                 .replace(new RegExp('{{user}}', 'g'), username)
                 .replace(new RegExp('{{total}}', 'g'), total)
-                .replace(new RegExp('{{recipient}}', 'g'), recipient);
+                .replace(new RegExp('{{streak}}', 'g'), monthStreak)
+                .replace(new RegExp('{{recipient}}', 'g'), recipient)
+                .replace(new RegExp('{{type}}', 'g'), methods.planName);
             client.say(channel, message);
         }
     }).catch(err => {
@@ -167,7 +183,8 @@ const onSubMysteryGift = (channel, username, numbOfSubs, methods, userstate) => 
             let message = data.message
                 .replace(new RegExp('{{user}}', 'g'), username)
                 .replace(new RegExp('{{total}}', 'g'), total)
-                .replace(new RegExp('{{count}}', 'g'), numbOfSubs);
+                .replace(new RegExp('{{count}}', 'g'), numbOfSubs)
+                .replace(new RegExp('{{type}}', 'g'), methods.planName);
             client.say(channel, message);
         }
     }).catch(err => {
@@ -175,14 +192,43 @@ const onSubMysteryGift = (channel, username, numbOfSubs, methods, userstate) => 
     });
 }
 
-const onSub = (channel, username, method, message, userstate) => {
+const onSub = (channel, username, methods, message, userstate) => {
     const channelKey = channel.substring(1);
     processChannel(channelKey).then(_ => {
         const data = channels[channelKey].events.sub;
         if (data.enabled) {
             let message = data.message
                 .replace(new RegExp('{{user}}', 'g'), username)
-                .replace(new RegExp('{{type}}', 'g'), method.plan);
+                .replace(new RegExp('{{type}}', 'g'), methods.planName);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onAnonGiftUpgrade = (channel, username, userstate) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.cheer;
+        if (data.enabled) {
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onGiftUpgrade = (channel, username, sender, userstate) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.cheer;
+        if (data.enabled) {
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{gifter}}', 'g'), sender);
             client.say(channel, message);
         }
     }).catch(err => {
@@ -228,6 +274,8 @@ client.on('resub', onResub);
 client.on('subgift', onSubGift);
 client.on('submysterygift', onSubMysteryGift);
 client.on('subscription', onSub);
+client.on('paidgiftupgrade', onGiftUpgrade);
+client.on('anonpaidgiftupgrade', onAnonGiftUpgrade);
 client.on('cheer', onCheer);
 
 client.connect();
