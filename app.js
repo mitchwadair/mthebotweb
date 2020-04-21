@@ -36,20 +36,20 @@ const deleteChannel = channel => {
 
 // process the given channel
 // either restart the timeout func or add the channel to active channels
-const processChannel = channel => {
+const processChannel = channelKey => {
     return new Promise((resolve, reject) => {
-        let channelKey = channel.substring(1);
         if (channels[channelKey] !== undefined) {
             clearTimeout(channels[channelKey].timeout);
             channels[channelKey].timeout = setTimeout(_ => {deleteChannel(channelKey)}, 300000);
             resolve()
         } else {
-            db.query(`SELECT commands FROM channels WHERE name='${channelKey}'`, (err, results) => {
+            db.query(`SELECT commands,events FROM channels WHERE name='${channelKey}'`, (err, results) => {
                 if (err) {
                     return reject(err);
                 } else {
                     channels[channelKey] = {
-                        commands: results[0].commands,
+                        commands: JSON.parse(results[0].commands),
+                        events: JSON.parse(results[0].events),
                         timeout: setTimeout(_ => {deleteChannel(channelKey)}, 300000),
                     }
                     console.log(`** added channel ${channelKey} to active channels`);
@@ -80,7 +80,8 @@ const onConnected = (address, port) => {
 const onChat = (channel, userstate, message, self) => {
     if (self) return;
 
-    processChannel(channel).then(_ => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
         const full = message.trim();
 
         if (full.startsWith('!')) {
@@ -88,7 +89,119 @@ const onChat = (channel, userstate, message, self) => {
             const command = args.shift().substring(1);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channel}: ${err}`);
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onHost = (channel, username, viewers, autohost) => {
+    if (!autohost) {
+        const channelKey = channel.substring(1);
+        processChannel(channelKey).then(_ => {
+            const data = channels[channelKey].events.host;
+            if (data.enabled) {
+                let message = data.message
+                    .replace(new RegExp('{{user}}', 'g'), username)
+                    .replace(new RegExp('{{viewers}}', 'g'), viewers);
+                client.say(channel, message);
+            }
+        }).catch(err => {
+            console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        });
+    }
+}
+
+const onRaid = (channel, username, viewers) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.raid;
+        if (data.enabled) {
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{viewers}}', 'g'), viewers);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onResub = (channel, username, monthStreak, message, userstate, methods) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.resub;
+        if (data.enabled) {
+            const months = ~~userstate["msg-param-cumulative-months"];
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{months}}', 'g'), months);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onSubGift = (channel, username, streakMonths, recipient, methods, userstate) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.subgift;
+        if (data.enabled) {
+            const total = ~~userstate["msg-param-sender-count"];
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{total}}', 'g'), total)
+                .replace(new RegExp('{{recipient}}', 'g'), recipient);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onSubMysteryGift = (channel, username, numbOfSubs, methods, userstate) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.mysterygift;
+        if (data.enabled) {
+            const total = ~~userstate["msg-param-sender-count"];
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{total}}', 'g'), total)
+                .replace(new RegExp('{{count}}', 'g'), numbOfSubs);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onSub = (channel, username, method, message, userstate) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.sub;
+        if (data.enabled) {
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{type}}', 'g'), method.plan);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+    });
+}
+
+const onCheer = (channel, userstate, message) => {
+    const channelKey = channel.substring(1);
+    processChannel(channelKey).then(_ => {
+        const data = channels[channelKey].events.cheer;
+        if (data.enabled) {
+            let message = data.message
+                .replace(new RegExp('{{user}}', 'g'), username)
+                .replace(new RegExp('{{amount}}', 'g'), userstate.bits);
+            client.say(channel, message);
+        }
+    }).catch(err => {
+        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -109,6 +222,13 @@ const client = new tmi.client(opts);
 // EVENT HANDLER REGISTRATION
 client.on('connected', onConnected);
 client.on('chat', onChat);
+client.on('hosted', onHost);
+client.on('raided', onRaid);
+client.on('resub', onResub);
+client.on('subgift', onSubGift);
+client.on('submysterygift', onSubMysteryGift);
+client.on('subscription', onSub);
+client.on('cheer', onCheer);
 
 client.connect();
 
