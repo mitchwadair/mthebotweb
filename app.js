@@ -7,7 +7,6 @@ require('dotenv').config();
 const tmi = require('tmi.js');
 const mysql = require('mysql');
 const APIServer = require('./API Server/apiserver');
-const axios = require('axios');
 
 // ===================== DATA =====================
 
@@ -103,7 +102,14 @@ const onChat = (channel, userstate, message, self) => {
 
         if (full.startsWith('!')) {
             const args = full.split(' ');
-            const command = args.shift().substring(1);
+            const command = channels[channelKey].commands[args.shift().substring(1)];
+            if (command && !command.isOnCooldown) {
+                command.isOnCooldown = true;
+                setTimeout(_ => {command.isOnCooldown = false}, command.cooldown * 1000);
+                let message = command.message
+                    .replace(new RegExp('{{sender}}', 'g'), userstate['display-name']);
+                client.say(channel, message);
+            }
         }
     }).catch(err => {
         console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
