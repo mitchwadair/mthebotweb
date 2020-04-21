@@ -59,10 +59,14 @@ const processChannel = channelKey => {
                         timers: Object.keys(timers).map(key => {
                             if (timers[key].enabled) {
                                 return setInterval(_ => {
-                                    client.say(`#${channelKey}`, timers[key].message);
+                                    if (channels[channelKey].timerMessageCount >= timers[key].messageThreshold) {
+                                        channels[channelKey].timerMessageCount = 0;
+                                        client.say(`#${channelKey}`, timers[key].message);
+                                    }
                                 }, timers[key].seconds*1000);
                             }
-                        })
+                        }),
+                        timerMessageCount: 0,
                     }
                     console.log(`** added channel ${channelKey} to active channels`);
                     resolve()
@@ -94,6 +98,7 @@ const onChat = (channel, userstate, message, self) => {
 
     const channelKey = channel.substring(1);
     processChannel(channelKey).then(_ => {
+        channels[channelKey].timerMessageCount++;
         const full = message.trim();
 
         if (full.startsWith('!')) {
