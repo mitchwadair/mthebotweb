@@ -112,7 +112,7 @@ const onChat = (channel, userstate, message, self) => {
             }
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -128,7 +128,7 @@ const onHost = (channel, username, viewers, autohost) => {
                 client.say(channel, message);
             }
         }).catch(err => {
-            console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+            console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
         });
     }
 }
@@ -144,7 +144,7 @@ const onRaid = (channel, username, viewers) => {
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -162,7 +162,7 @@ const onResub = (channel, username, monthStreak, message, userstate, methods) =>
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -181,7 +181,7 @@ const onSubGift = (channel, username, monthStreak, recipient, methods, userstate
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -199,7 +199,7 @@ const onSubMysteryGift = (channel, username, numbOfSubs, methods, userstate) => 
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -214,7 +214,7 @@ const onSub = (channel, username, methods, message, userstate) => {
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -228,7 +228,7 @@ const onAnonGiftUpgrade = (channel, username, userstate) => {
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -243,7 +243,7 @@ const onGiftUpgrade = (channel, username, sender, userstate) => {
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
@@ -258,7 +258,7 @@ const onCheer = (channel, userstate, message) => {
             client.say(channel, message);
         }
     }).catch(err => {
-        console.log(`** ERROR PROCESSING CHANNEL ${channelKey}: ${err}`);
+        console.log(`** ERROR ON CHANNEL ${channelKey}: ${err}`);
     });
 }
 
