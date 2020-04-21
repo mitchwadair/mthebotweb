@@ -221,7 +221,7 @@ const onSub = (channel, username, methods, message, userstate) => {
 const onAnonGiftUpgrade = (channel, username, userstate) => {
     const channelKey = channel.substring(1);
     processChannel(channelKey).then(_ => {
-        const data = channels[channelKey].events.cheer;
+        const data = channels[channelKey].events.anongiftupgrade;
         if (data.enabled) {
             let message = data.message
                 .replace(new RegExp('{{user}}', 'g'), username);
@@ -235,7 +235,7 @@ const onAnonGiftUpgrade = (channel, username, userstate) => {
 const onGiftUpgrade = (channel, username, sender, userstate) => {
     const channelKey = channel.substring(1);
     processChannel(channelKey).then(_ => {
-        const data = channels[channelKey].events.cheer;
+        const data = channels[channelKey].events.giftupgrade;
         if (data.enabled) {
             let message = data.message
                 .replace(new RegExp('{{user}}', 'g'), username)
