@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary">
+    <v-app-bar app dense flat color="primary">
       <div class="d-flex align-center">
         <v-img
           alt="MtheBot_ Logo"
@@ -8,12 +8,15 @@
           contain
           :src="require('./assets/logo.png')"
           transition="scale-transition"
-          width="40"
+          width="30"
         />
-
         <v-toolbar-title>MtheBot_</v-toolbar-title>
       </div>
     </v-app-bar>
+
+    <v-navigation-drawer v-model='drawer' clipped='true' app>
+
+    </v-navigation-drawer>
 
     <v-content>
       <HelloWorld/>
