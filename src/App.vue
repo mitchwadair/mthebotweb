@@ -1,41 +1,44 @@
 <template>
   <v-app>
-    <v-app-bar app dense flat color="primary">
+    <v-app-bar app clipped-left dense flat color="primary">
       <div class="d-flex align-center">
-        <v-img
-          alt="MtheBot_ Logo"
-          class="shrink mr-2"
-          contain
-          :src="require('./assets/logo.png')"
-          transition="scale-transition"
-          width="30"
-        />
-        <v-toolbar-title>MtheBot_</v-toolbar-title>
+        <app-bar-header/>
       </div>
     </v-app-bar>
 
-    <v-navigation-drawer v-model='drawer' clipped='true' app>
-
+    <v-navigation-drawer clipped app>
+      <v-list>
+        <v-list-item v-for='item in sidebarItems' :key='item.title' link :href='item.route'>
+          <v-list-item-content>
+            <v-list-item-title>{{item.title}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
 
     <v-content>
-      <HelloWorld/>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import AppBarHeader from './components/AppBarHeader';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    AppBarHeader
   },
 
-  data: () => ({
-    //
-  }),
+  data: () => {
+    return {
+      sidebarItems: [
+        {title: 'Dashboard', route: '/dashboard'},
+        {title: 'About', route: '/about'}
+      ]
+    }
+  },
 };
 </script>
