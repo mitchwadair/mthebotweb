@@ -1,5 +1,5 @@
 module.exports = {
-  "publicPath": "/mthebot/",
+  "publicPath": "/",
   "transpileDependencies": [
     "vuetify"
   ]
