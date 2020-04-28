@@ -64,6 +64,14 @@ export default {
       });
       window.location.assign(loginURL);
     }
+  },
+  created() {
+    if (sessionStorage.redirect) {
+      const redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect
+      console.log(redirect);
+      this.$router.push(redirect);
+    }
   }
 };
 </script>
