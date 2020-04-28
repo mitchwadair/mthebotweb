@@ -9,7 +9,7 @@
         <v-icon left>fab fa-twitch</v-icon>Login
       </v-btn>
       <v-btn @click.prevent="logout" v-if="this.$auth.isAuthenticated()" text>
-        <v-avatar size="28" left>
+        <v-avatar class='mr-2' size="36" left>
           <img
             :src="avatar"
             alt="avatar"

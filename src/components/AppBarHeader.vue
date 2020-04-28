@@ -4,7 +4,7 @@
             alt="MtheBot_ Logo"
             class="mr-2"
             :src="require('../assets/logo.png')"
-            width="30"
+            width="40"
         />
         <v-toolbar-title>MtheBot_</v-toolbar-title>
     </div>
@@ -28,6 +28,7 @@
 #appHeader {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 #appHeader:hover {
