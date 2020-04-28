@@ -69,7 +69,7 @@ export default {
     if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
-      this.$router.push(redirect);
+      this.$router.push({path: redirect.pathname, hash: redirect.hash});
     }
   }
 };
