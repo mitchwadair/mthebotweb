@@ -1,7 +1,7 @@
 <template>
     <v-menu offset-y left close-on-click>
         <template v-slot:activator="{on}">
-            <v-btn text v-on="on" :ripple="false">
+            <v-btn text v-on="on" :ripple=false>
                 <v-avatar class='mr-2' size="36" left>
                     <img
                         :src="avatar"
