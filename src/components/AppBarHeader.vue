@@ -1,11 +1,9 @@
 <template>
     <div v-on:click='goHome' id='appHeader'>
-        <v-img
+        <img
             alt="MtheBot_ Logo"
-            class="shrink mr-2"
-            contain
+            class="mr-2"
             :src="require('../assets/logo.png')"
-            transition="scale-transition"
             width="30"
         />
         <v-toolbar-title>MtheBot_</v-toolbar-title>
