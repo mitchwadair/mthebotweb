@@ -6,22 +6,17 @@
       </div>
       <v-spacer></v-spacer>
       <v-btn @click.prevent="login" v-if="!this.$auth.isAuthenticated()" depressed color="#6441A5" style="color: white">
-        <v-icon left>fab fa-twitch</v-icon>Login
+        <v-icon left>mdi-twitch</v-icon>Login
       </v-btn>
-      <v-btn @click.prevent="logout" v-if="this.$auth.isAuthenticated()" text>
-        <v-avatar class='mr-2' size="36" left>
-          <img
-            :src="avatar"
-            alt="avatar"
-          />
-        </v-avatar>
-        Logout
-      </v-btn>
+      <ProfileBadge v-if="this.$auth.isAuthenticated()"/>
     </v-app-bar>
 
     <v-navigation-drawer v-if="this.$auth.isAuthenticated()" clipped app>
       <v-list>
         <v-list-item v-for='item in sidebarItems' :key='item.title' link :href='item.route'>
+          <v-list-item-icon>
+              <v-icon>{{item.icon}}</v-icon>
+          </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{item.title}}</v-list-item-title>
           </v-list-item-content>
@@ -37,28 +32,25 @@
 
 <script>
 import AppBarHeader from './components/AppBarHeader';
+import ProfileBadge from './components/ProfileBadge';
 
 export default {
   name: 'App',
 
   components: {
-    AppBarHeader
+    AppBarHeader,
+    ProfileBadge,
   },
 
   data: function() {
     return {
       sidebarItems: [
-        {title: 'Dashboard', route: '/dashboard'},
-        {title: 'About', route: '/about'}
+        {title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
+        {title: 'About', icon: 'mdi-help', route: '/about'}
       ],
-      avatar: this.$auth.profileData ? this.$auth.profileData.profile_image_url : '',
     }
   },
   methods: {
-    logout: async function() {
-      this.$auth.logout();
-      this.$router.push('/');
-    },
     login: function() {
       let loginURL = new URL('https://id.twitch.tv/oauth2/authorize');
       const params = {

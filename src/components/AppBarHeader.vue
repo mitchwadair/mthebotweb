@@ -11,17 +11,17 @@
 </template>
 
 <script>
-    export default {
-        name: 'app-bar-header',
+export default {
+    name: 'app-bar-header',
 
-        methods: {
-            goHome: function() {
-                if (this.$router.currentRoute.path !== '/') {
-                    this.$router.push({path: '/'})
-                }
+    methods: {
+        goHome: function() {
+            if (this.$router.currentRoute.path !== '/') {
+                this.$router.push({path: '/'})
             }
         }
     }
+}
 </script>
 
 <style>
