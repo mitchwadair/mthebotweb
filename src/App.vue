@@ -68,8 +68,7 @@ export default {
   created() {
     if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect
-      console.log(redirect);
+      delete sessionStorage.redirect;
       this.$router.push(redirect);
     }
   }
