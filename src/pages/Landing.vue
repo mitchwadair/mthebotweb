@@ -11,10 +11,6 @@
 
 <script>
 export default {
-    created() {
-        if (this.$auth.isAuthenticated()) {
-            this.$router.push('/dashboard');
-        }
-    }
+    
 }
 </script>

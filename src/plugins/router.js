@@ -13,7 +13,28 @@ const routes = [
     {path: '/auth', name: 'auth', component: Auth},
 ]
 
-export default new VueRouter({
+const router = new VueRouter({
     mode: 'history',
     routes: routes,
 });
+
+router.beforeEach((to, from, next) => {
+    const auth = router.app.$auth;
+    if (to.path !== '/auth') {
+        if (to.path === '/' && auth.isAuthenticated()) {
+            next('/dashboard');
+        } else if (to.path !== '/' && !auth.isAuthenticated()) {
+            next('/');
+        } else {
+            next();
+        }
+    } else {
+        if (to.hash === '') {
+            next('/');
+        } else {
+            next();
+        }
+    }
+});
+
+export default router;
