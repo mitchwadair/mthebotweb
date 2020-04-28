@@ -24,8 +24,8 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-content>
-      <router-view></router-view>
+    <v-content style='max-height: 100vh'>
+      <router-view style='height: 100%; overflow-y: auto'></router-view>
     </v-content>
   </v-app>
 </template>
