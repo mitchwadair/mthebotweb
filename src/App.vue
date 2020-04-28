@@ -19,7 +19,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer clipped app>
+    <v-navigation-drawer v-if="this.$auth.isAuthenticated()" clipped app>
       <v-list>
         <v-list-item v-for='item in sidebarItems' :key='item.title' link :href='item.route'>
           <v-list-item-content>

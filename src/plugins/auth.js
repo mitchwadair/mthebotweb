@@ -22,6 +22,9 @@ let auth = new Vue({
             this.axios.post(url);
             localStorage.removeItem('uat');
             localStorage.removeItem('profile');
+       },
+       getProfileData: function() {
+           return this.axios.get('https://api.twitch.tv/helix/users', {headers: {'Authorization': `Bearer ${this.$auth.accessToken}`}});
        }
    }
 });

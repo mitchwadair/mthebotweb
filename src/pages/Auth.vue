@@ -9,7 +9,7 @@ export default {
         if (hash !== '') {
             const token = hash.substring(1).split('&')[0].split('=')[1];
             this.$auth.accessToken = token;
-            this.axios.get('https://api.twitch.tv/helix/users', {headers: {'Authorization': `Bearer ${this.$auth.accessToken}`}})
+            this.$auth.getProfileData()
                 .then(res => {
                     this.$auth.profileData = JSON.stringify(res.data.data[0]);
                     this.$router.push('/dashboard');
