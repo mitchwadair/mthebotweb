@@ -16,5 +16,5 @@ const routes = [
 export default new VueRouter({
     mode: 'history',
     routes: routes,
-    base: '/mthebot/',
+    base: process.env.BASE_URL || '/',
 });
