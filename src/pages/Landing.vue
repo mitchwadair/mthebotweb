@@ -20,23 +20,33 @@
         </div>
         <v-container>
             <v-row align="center">
+                <v-spacer></v-spacer>
                 <v-col align="center">
-                    <v-sheet elevation="4" height="10rem">
-                        <h3 class='headline pt-3'>Get Started</h3>
-                        <h4 class='subtitle-1 pb-2'>Login with Twitch to start improving your chat's experience!</h4>
-                        <v-btn @click.prevent="login" depressed color="#6441A5" style="color: white; margin: auto">
-                            <v-icon left>mdi-twitch</v-icon>Login
-                        </v-btn>
-                    </v-sheet>
+                    <v-card flat>
+                        <v-card-title class='justify-center'>GetStarted</v-card-title>
+                        <v-card-text>Login with Twitch to start improving your chat's experience!</v-card-text>
+                        <v-card-text class='pt-0'>
+                            <v-btn @click="login" depressed color="#6441A5" style="color: white; margin: auto">
+                                <v-icon left>mdi-twitch</v-icon>Login
+                            </v-btn>
+                        </v-card-text>
+                    </v-card>
                 </v-col>
                 <v-col align="center" justify="center">
-                    <v-sheet elevation="4" height="10rem">
-                        <h3 class='headline py-3'>Check out MtheBot_ on GitHub</h3>
-                        <v-btn outlined class='my-2' href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
-                            <v-icon left>mdi-github</v-icon>MtheBot_ GitHub
-                        </v-btn>
-                    </v-sheet>
+                    <v-card flat>
+                        <v-card-title class='justify-center'>MtheBot_ on GitHub</v-card-title>
+                        <v-card-text>
+                            MtheBot_ is an open-source project by 
+                            <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>
+                        </v-card-text>
+                        <v-card-text class='pt-0'>
+                            <v-btn outlined href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
+                                <v-icon left>mdi-github</v-icon>MtheBot_
+                            </v-btn>
+                        </v-card-text>
+                    </v-card>
                 </v-col>
+                <v-spacer></v-spacer>
             </v-row>
         </v-container>
     </div>
@@ -53,7 +63,7 @@ export default {
                 {text: 'Custom Commands', img: commandsGif},
                 {text: 'Chat Alerts', img: logo},
                 {text: 'Timed Messages', img: logo},
-            ]
+            ],
         }
     },
     methods: {
