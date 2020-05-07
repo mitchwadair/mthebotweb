@@ -39,12 +39,18 @@ export default {
     name: 'app-bar-profile-badge',
     data: function() {
         return {
-            avatar: this.$store.state.userData ? this.$store.state.userData.profile_image_url : '',
-            displayName: this.$store.state.userData ? this.$store.state.userData.display_name : '',
             items: [
                 {label: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
                 {label: 'About', icon: 'mdi-help', route: '/about'},
             ]
+        }
+    },
+    computed: {
+        avatar() {
+            return this.$store.state.userData ? this.$store.state.userData.profile_image_url : null;
+        },
+        displayName() {
+            return this.$store.state.userData ? this.$store.state.userData.display_name : '';
         }
     },
     methods: {

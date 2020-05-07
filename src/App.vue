@@ -80,6 +80,11 @@ export default {
     }
   },
   created() {
+    if (this.$auth.isAuthenticated()) {
+      this.$auth.getProfileData().then(res => {
+        this.$store.commit('setUserData', res.data.data[0]);
+      });
+    }
     if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
