@@ -13,7 +13,7 @@
 
     <v-navigation-drawer v-if="this.$auth.isAuthenticated()" clipped app>
       <v-list>
-        <v-list-item v-for='item in sidebarItems' :key='item.title' link :href='item.route'>
+        <v-list-item v-for='item in sidebarItems' :key='item.title' link :href='item.route' :class="item.route === $route.path ? 'active-nav-item' : ''">
           <v-list-item-icon>
               <v-icon>{{item.icon}}</v-icon>
           </v-list-item-icon>
@@ -93,3 +93,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.active-nav-item {
+  background-color: rgba(0, 0, 0, .15);
+}
+</style>
