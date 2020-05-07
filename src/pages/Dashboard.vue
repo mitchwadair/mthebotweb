@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col align="center">
-          {{botStatus}}
+          Currently Under Construction
         </v-col>
       </v-row>
     </v-container>
@@ -30,7 +30,7 @@ export default {
   },
   mounted() {
     this.axios.get('https://api.bot.mtheb.tv/users').then(res => {
-      this.botStatus = res;
+      this.botStatus = res.data;
     });
   }
 }
