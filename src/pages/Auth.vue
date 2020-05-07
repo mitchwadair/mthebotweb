@@ -16,7 +16,6 @@ export default {
                     this.$router.go();
                 }).catch(err => {
                     this.$auth.logout();
-                    console.log(err);
                     this.$router.push(`/?error=login&message=${err.response.data.message}`);
                     this.$router.go();
                 });

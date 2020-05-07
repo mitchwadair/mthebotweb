@@ -1,7 +1,7 @@
 <template>
     <div class='landing'>
-        <v-alert v-if="errorData.get('error')" dense outlined dismissible type="error" class='top-error'>
-            {{errors[errorData.get('error')]}} {{errorData.get('message')}}
+        <v-alert v-if="errorData && errorData.get('error')" dense outlined dismissible type="error" class='top-error'>
+            {{errors[errorData.get('error')]}}:{{errorData.get('message')}}
         </v-alert>
         <h1 class='header display-4'>MtheBot_</h1>
         <span class='headline'>An easy-to-use chatbot for your Twitch channel</span>
@@ -23,20 +23,7 @@
         </div>
         <v-container>
             <v-row align="center">
-                <v-col align="center">
-                    <v-card flat>
-                        <v-card-title class='justify-center'>Contact</v-card-title>
-                        <v-card-text>Open an issue, or send an email with questions or concerns</v-card-text>
-                        <v-card-text class='pt-0'>
-                            <v-btn outlined href="mailto:mthebot6969@gmail.com" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-email</v-icon>Email
-                            </v-btn>
-                            <v-btn style="margin-left: .5rem" outlined href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-github</v-icon>Open an Issue
-                            </v-btn>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
+                <v-spacer></v-spacer>
                 <v-col align="center">
                     <v-card flat>
                         <v-card-title class='justify-center'>GetStarted</v-card-title>
@@ -62,6 +49,7 @@
                         </v-card-text>
                     </v-card>
                 </v-col>
+                <v-spacer></v-spacer>
             </v-row>
         </v-container>
     </div>
@@ -80,7 +68,7 @@ export default {
                 {text: 'Timed Messages', img: logo},
             ],
             errors: {
-                login: "There was an error logging you in:",
+                login: "There was an error logging you in",
             },
             errorData: null,
         }
@@ -92,7 +80,6 @@ export default {
     },
     mounted: function() {
         this.errorData = new URLSearchParams(window.location.search);
-        console.log(this.errorData);
     },
 }
 </script>
