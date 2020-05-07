@@ -1,5 +1,8 @@
 <template>
     <div class='landing'>
+        <v-alert v-if="errorData.get('error')" dense outlined dismissible type="error" class='top-error'>
+            {{errors[errorData.get('error')]}} {{errorData.get('message')}}
+        </v-alert>
         <h1 class='header display-4'>MtheBot_</h1>
         <span class='headline'>An easy-to-use chatbot for your Twitch channel</span>
         <div class='feature-container'>
@@ -76,13 +79,21 @@ export default {
                 {text: 'Chat Alerts', img: logo},
                 {text: 'Timed Messages', img: logo},
             ],
+            errors: {
+                login: "There was an error logging you in:",
+            },
+            errorData: null,
         }
     },
     methods: {
         login: function() {
             this.$auth.login();
         }
-    }
+    },
+    mounted: function() {
+        this.errorData = new URLSearchParams(window.location.search);
+        console.log(this.errorData);
+    },
 }
 </script>
 
@@ -99,5 +110,10 @@ export default {
 .feature-container {
     width: 800px;
     padding-top: 1.5rem;
+}
+
+.top-error {
+    position: absolute;
+    top: .5rem;
 }
 </style>

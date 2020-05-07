@@ -31,7 +31,7 @@ let auth = new Vue({
         logout: function() {
             let url = new URL('https://id.twitch.tv/oauth2/revoke')
             url.searchParams.append('client_id', 'cd1q55j22rdxm0o3lp2jwy8osgsjn2');
-            url.searchParams.append('token', localStorage.getItem('uat'));
+            url.searchParams.append('token', this.$auth.accessToken);
             this.axios.post(url);
             localStorage.removeItem('uat');
             localStorage.removeItem('profile');
