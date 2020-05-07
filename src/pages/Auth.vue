@@ -9,15 +9,16 @@ export default {
         if (hash !== '') {
             const token = hash.substring(1).split('&')[0].split('=')[1];
             this.$auth.accessToken = token;
+            console.log(this.$auth.accessToken);
             this.$auth.getProfileData()
                 .then(res => {
-                    this.$auth.profileData = JSON.stringify(res.data.data[0]);
+                    console.log(res);
+                    this.$store.commit('setUserData', res.data.data[0]);
                     this.$router.push('/dashboard');
-                    this.$router.go();
                 }).catch(err => {
                     this.$auth.logout();
+                    console.log(err)
                     this.$router.push(`/?error=login&message=${err.response.data.message}`);
-                    this.$router.go();
                 });
         } else {
             this.$router.push('/');

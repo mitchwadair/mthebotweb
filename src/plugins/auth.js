@@ -6,10 +6,6 @@ let auth = new Vue({
            get: function() {return localStorage.getItem('uat')},
            set: function(token) {localStorage.setItem('uat', token)},
        },
-       profileData: {
-           get: function() {return JSON.parse(localStorage.getItem('profile'))},
-           set: function(data) {localStorage.setItem('profile', data)},
-       }
    },
    methods: {
         isAuthenticated: function() {

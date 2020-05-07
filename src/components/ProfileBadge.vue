@@ -39,8 +39,8 @@ export default {
     name: 'app-bar-profile-badge',
     data: function() {
         return {
-            avatar: this.$auth.profileData ? this.$auth.profileData.profile_image_url : '',
-            displayName: this.$auth.profileData ? this.$auth.profileData.display_name : '',
+            avatar: this.$store.state.userData ? this.$store.state.userData.profile_image_url : '',
+            displayName: this.$store.state.userData ? this.$store.state.userData.display_name : '',
             items: [
                 {label: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
                 {label: 'About', icon: 'mdi-help', route: '/about'},

@@ -7,8 +7,8 @@
 <script>
 export default {
   name: 'Dashboard',
-  data: () => ({
-    
-  }),
+  data: function() {
+    return {};
+  },
 }
 </script>

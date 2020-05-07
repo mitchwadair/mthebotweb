@@ -70,16 +70,17 @@ export default {
             errors: {
                 login: "There was an error logging you in",
             },
-            errorData: null,
+        }
+    },
+    computed: {
+        errorData() {
+            return new URLSearchParams(window.location.search)
         }
     },
     methods: {
         login: function() {
             this.$auth.login();
         }
-    },
-    mounted: function() {
-        this.errorData = new URLSearchParams(window.location.search);
     },
 }
 </script>
