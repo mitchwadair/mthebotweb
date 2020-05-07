@@ -41,7 +41,7 @@ export default {
         return {
             items: [
                 {label: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
-                {label: 'About', icon: 'mdi-help', route: '/about'},
+                {label: 'About', icon: 'mdi-help-box', route: '/about'},
             ]
         }
     },

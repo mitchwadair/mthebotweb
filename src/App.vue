@@ -64,7 +64,7 @@ export default {
     return {
       sidebarItems: [
         {title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
-        {title: 'About', icon: 'mdi-help', route: '/about'}
+        {title: 'About', icon: 'mdi-help-box', route: '/about'}
       ],
       footerIcons: [
         {icon: 'mdi-github', link: 'https://github.com/mitchwadair/mthebot'},
