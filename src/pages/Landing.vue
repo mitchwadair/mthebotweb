@@ -22,34 +22,47 @@
             </v-carousel-->
         </div>
         <v-container>
-            <v-row align="center">
-                <v-spacer></v-spacer>
-                <v-col align="center">
-                    <v-card flat>
-                        <v-card-title class='justify-center'>GetStarted</v-card-title>
-                        <v-card-text>Login with Twitch to start improving your chat's experience!</v-card-text>
-                        <v-card-text class='pt-0'>
-                            <v-btn @click="login" depressed color="#6441A5" style="color: white; margin: auto">
-                                <v-icon left>mdi-twitch</v-icon>Login
-                            </v-btn>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
+            <v-row>
+                <v-spacer/>
                 <v-col align="center" justify="center">
-                    <v-card flat>
-                        <v-card-title class='justify-center'>MtheBot_ on GitHub</v-card-title>
+                    <v-card flat height="100%" class='d-flex flex-column'>
+                        <v-card-title class='justify-center' style="word-break: normal">MtheBot_ on GitHub</v-card-title>
                         <v-card-text>
                             MtheBot_ is an open-source project by 
                             <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>
                         </v-card-text>
-                        <v-card-text class='pt-0'>
+                        <v-card-text class='pt-0 mt-auto'>
                             <v-btn outlined href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-github</v-icon>MtheBot_
                             </v-btn>
                         </v-card-text>
                     </v-card>
                 </v-col>
-                <v-spacer></v-spacer>
+                <v-col align="center" justify="center">
+                    <v-card flat height="100%" class='d-flex flex-column'>
+                        <v-card-title class='justify-center'>GetStarted</v-card-title>
+                        <v-card-text>Login with Twitch to start improving your chat's experience!</v-card-text>
+                        <v-card-text class='pt-0 mt-auto'>
+                            <v-btn @click="login" depressed color="#6441A5" style="color: white">
+                                <v-icon left>mdi-twitch</v-icon>Login
+                            </v-btn>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-col align="center" justify="center">
+                    <v-card flat height="100%" class='d-flex flex-column'>
+                        <v-card-title class='justify-center'>Support MtheBot_</v-card-title>
+                        <v-card-text>
+                            MtheBot_ is currently being developed by a one-person team, and being paid for out-of-pocket.  Any help supporting the project is appreciated!
+                        </v-card-text>
+                        <v-card-text class='pt-0 mt-auto'>
+                            <v-btn outlined href="https://www.patreon.com/mitchdev" target="_blank" rel="noopener noreferrer">
+                                <v-icon left>mdi-patreon</v-icon>MtheBot_ on Patreon
+                            </v-btn>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-spacer/>
             </v-row>
         </v-container>
     </div>
