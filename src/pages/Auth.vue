@@ -9,7 +9,6 @@ export default {
         if (hash !== '') {
             const token = hash.substring(1).split('&')[0].split('=')[1];
             this.$auth.accessToken = token;
-            console.log(this.$auth.accessToken);
             this.$auth.getProfileData()
                 .then(res => {
                     console.log(res);

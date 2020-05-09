@@ -87,6 +87,8 @@ export default {
         this.$store.commit('setUserData', res.data.data[0]);
         this.storeLoaded = true;
       });
+    } else {
+      this.storeLoaded = true;
     }
     if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
