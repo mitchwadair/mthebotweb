@@ -29,7 +29,7 @@
     </v-content>
 
     <v-footer app fixed padless width="100%" style="bottom: 0">
-      <v-card flat tile width="100%" class='text-center' style="background-color: #ffd42a">
+      <v-card flat tile width="100%" class='text-center' color="primary">
         <v-card-text class="pb-0">
           <v-btn class="mx-4" icon small to="/">
             <v-icon>mdi-home</v-icon>
