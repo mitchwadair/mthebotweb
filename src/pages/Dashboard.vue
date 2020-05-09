@@ -13,7 +13,7 @@
             <v-btn @click="disableBot" depressed color="primary">Disable MtheBot_</v-btn>
           </div>
           <div v-else>
-
+            MtheBot_ is currently disabled in your chat!
           </div>
         </v-col>
       </v-row>
