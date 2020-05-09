@@ -53,7 +53,7 @@
             <v-card-title>Support</v-card-title>
             <v-card-text>Consider supporting the development and maintenance of MtheBot_ by supporting me on Patreon!</v-card-text>
             <v-card-actions class='mt-auto'>
-                <v-btn text color="primary" href='https://www.patreon.com/mthebot_' target="_blank" rel="noopener noreferrer">MtheBot_ on Patreon</v-btn>
+                <v-btn text color="primary" href='https://www.patreon.com/mitchdev' target="_blank" rel="noopener noreferrer">MtheBot_ on Patreon</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
