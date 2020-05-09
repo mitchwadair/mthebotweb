@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="storeLoaded">
     <v-app-bar app clipped-left flat color="primary">
       <div class="d-flex align-center">
         <app-bar-header/>
@@ -62,6 +62,7 @@ export default {
 
   data: function() {
     return {
+      storeLoaded: false,
       sidebarItems: [
         {title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
         {title: 'About', icon: 'mdi-help-box', route: '/about'}
@@ -83,6 +84,7 @@ export default {
     if (this.$auth.isAuthenticated()) {
       this.$auth.getProfileData().then(res => {
         this.$store.commit('setUserData', res.data.data[0]);
+        this.storeLoaded = true;
       });
     }
     if (sessionStorage.redirect) {

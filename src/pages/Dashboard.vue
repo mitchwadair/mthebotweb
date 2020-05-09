@@ -8,7 +8,13 @@
       </v-row>
       <v-row>
         <v-col align="center">
-          Currently Under Construction
+          <div v-if="botStatus">
+            MtheBot_ is currently enabled in your chat!
+            <v-btn @click="disableBot" depressed color="primary">Disable MtheBot_</v-btn>
+          </div>
+          <div v-else>
+
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -29,9 +35,18 @@ export default {
     },
   },
   mounted() {
-    this.axios.get('https://api.bot.mtheb.tv/users').then(res => {
-      this.botStatus = res.data;
+    const channel = this.$store.state.userData.login;
+    this.axios.get(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
+      this.botStatus = !!res.data;
     });
+  },
+  methods: {
+    disableBot: function() {
+      const channel = this.$store.state.userData.login;
+      this.axios.delete(`https://api.bot.mtheb.tv/chats/${channel}`).then(() => {
+        this.botStatus = false;
+      })
+    }
   }
 }
 </script>
