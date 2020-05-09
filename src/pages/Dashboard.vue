@@ -39,12 +39,21 @@
       </v-row>
       <v-row class='mt-5'>
         <v-spacer></v-spacer>
-        <v-col v-for="(cardData, i) in infoCardData" :key="i">
+        <v-col>
           <v-card height="100%" class='d-flex flex-column'>
-            <v-card-title>{{cardData.title}}</v-card-title>
-            <v-card-text>{{cardData.content}}</v-card-text>
+            <v-card-title>About</v-card-title>
+            <v-card-text>Learn more about MtheBot_</v-card-text>
             <v-card-actions class='mt-auto'>
-                <v-btn text color="primary" :to="cardData.route">{{cardData.action}}</v-btn>
+                <v-btn text color="primary" to="/about">About</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card height="100%" class='d-flex flex-column'>
+            <v-card-title>Support</v-card-title>
+            <v-card-text>Consider supporting the development and maintenance of MtheBot_ by supporting me on Patreon!</v-card-text>
+            <v-card-actions class='mt-auto'>
+                <v-btn text color="primary" href='https://www.patreon.com/mthebot_' target="_blank" rel="noopener noreferrer">MtheBot_ on Patreon</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -67,10 +76,6 @@ export default {
         {title: 'Events', content: 'Modify MtheBot_\'s channel event messages', route:'/events', action: 'Go to Events'},
         {title: 'Timed Messages', content: 'Modify MtheBot_\'s timed channel messages', route:'/timers', action: 'Go to Timers'},
       ],
-      infoCardData: [
-        {title: 'About', content: 'Learn more about MtheBot_', route:'/about', action: 'About'},
-        {title: 'Support', content: 'Consider supporting the development and maintenance of MtheBot_ by supporting me on Patreon!', route:'#', action: 'MtheBot_ on Patreon'},
-      ]
     };
   },
   computed: {

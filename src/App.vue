@@ -31,7 +31,7 @@
     <v-footer app fixed padless width="100%" style="bottom: 0">
       <v-card flat tile width="100%" class='text-center' style="background-color: #ffd42a">
         <v-card-text class="pb-0">
-          <v-btn class="mx-4" icon small href="/">
+          <v-btn class="mx-4" icon small to="/">
             <v-icon>mdi-home</v-icon>
           </v-btn>
           <v-btn v-for="icon in footerIcons" :key="icon.icon" class="mx-4" icon small :href="icon.link" target="_blank" rel="noopener noreferrer">
@@ -71,7 +71,8 @@ export default {
         {icon: 'mdi-github', link: 'https://github.com/mitchwadair/mthebot'},
         {icon: 'mdi-linkedin', link: 'https://www.linkedin.com/in/mitchell-adair/'},
         {icon: 'mdi-twitch', link: 'https://twitch.tv/mtheb_'},
-        {icon: 'mdi-email', link: 'mailto:mthebot6969@gmail.com'}
+        {icon: 'mdi-patreon', link: 'https://www.patreon.com/mthebot_'},
+        {icon: 'mdi-email', link: 'mailto:mthebot6969@gmail.com'},
       ],
     }
   },
