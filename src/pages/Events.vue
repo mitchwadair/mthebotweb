@@ -2,7 +2,7 @@
     <div id="events">
         <v-container>
             <v-row>
-                <v-col>
+                <v-col class='mx-6'>
                     <h1 class='display-2 font-weight-light'>Channel Events</h1>
                     <h2 class='subtitle-1 font-weight-light'>Configure the messages sent to chat by MtheBot_ for various channel events.</h2>
                 </v-col>
@@ -24,7 +24,7 @@
             </v-row>
             <v-row v-else>
                 <v-col>
-                    <v-sheet tile elevation="4" class='mx-4'>
+                    <v-sheet tile elevation="4" class='mx-12'>
                         <v-list>
                             <template v-for="(event, name, i) in channelData">
                                 <v-list-item :key="name">
@@ -48,6 +48,29 @@
                                                     </template>
                                                     <v-card>
                                                         <v-card-title>Modify {{eventLabels[name]}}</v-card-title>
+                                                        <v-card-subtitle>Update the message displayed when a {{eventLabels[name]}} happens.</v-card-subtitle>
+                                                        <v-card-text align="right">
+                                                            <v-menu offset-y left close-on-click open-on-hover>
+                                                                <template v-slot:activator="{on}">
+                                                                    <v-btn text outlined v-on="on" :ripple=false>
+                                                                        Insert Data Value
+                                                                    </v-btn>
+                                                                </template>
+
+                                                                <v-list dense>
+                                                                    <v-list-item v-for='tag in dataTags.general' :key='tag.label' @click="insertDataTag(name, tag)">
+                                                                        <v-list-item-content>
+                                                                            <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                        </v-list-item-content>
+                                                                    </v-list-item>
+                                                                    <v-list-item v-for='tag in dataTags[name]' :key='tag.label' @click="insertDataTag(name, tag)">
+                                                                        <v-list-item-content>
+                                                                            <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                        </v-list-item-content>
+                                                                    </v-list-item>
+                                                                </v-list>
+                                                            </v-menu>
+                                                        </v-card-text>
                                                         <v-card-text>
                                                             <v-text-field v-model="event.message" hide-details="auto" label="Message" outlined dense></v-text-field>
                                                         </v-card-text>
@@ -154,6 +177,9 @@ export default {
         },
         cancelModify: function() {
             this.channelData = JSON.parse(JSON.stringify(this.dataCache));
+        },
+        insertDataTag: function(event, tag) {
+            this.channelData[event].message = `${this.channelData[event].message}${tag.tag}`;
         }
     },
     mounted() {
