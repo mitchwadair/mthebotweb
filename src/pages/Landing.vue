@@ -26,7 +26,7 @@
                 <v-spacer/>
                 <v-col align="center" justify="center">
                     <v-card flat height="100%" class='d-flex flex-column'>
-                        <v-card-title class='justify-center' style="word-break: normal">MtheBot_ Project</v-card-title>
+                        <v-card-title class='justify-center'>MtheBot_ Project</v-card-title>
                         <v-card-text>
                             MtheBot_ is an open-source project by 
                             <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>
