@@ -156,9 +156,7 @@ export default {
         },
         updateData: function() {
             const channel = this.$store.state.userData.login;
-            this.axios.post(`https://api.bot.mtheb.tv/events/${channel}`, this.channelData).then(res => {
-                console.log(`${res.status}: update data`);
-            }).catch(err => {
+            this.axios.post(`https://api.bot.mtheb.tv/events/${channel}`, this.channelData).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
         },
