@@ -109,7 +109,7 @@ export default {
         if (res.status === 404) {
           promises.push(this.axios.post(`https://api.bot.mtheb.tv/commands/${channel}`, {}));
           promises.push(this.axios.post(`https://api.bot.mtheb.tv/timers/${channel}`, {}));
-          promises.push(this.axios.post(`https://api.bot.mtheb.tv/commands/${channel}`, defaultEvents));
+          promises.push(this.axios.post(`https://api.bot.mtheb.tv/events/${channel}`, defaultEvents));
         }
         Promise.all(promises).then(() => {
           this.axios.post(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
