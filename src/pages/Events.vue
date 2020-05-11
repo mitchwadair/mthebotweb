@@ -4,7 +4,7 @@
             <v-row>
                 <v-col class='mx-6'>
                     <h1 class='display-2 font-weight-light'>Channel Events</h1>
-                    <h2 class='subtitle-1 font-weight-light'>Configure the messages sent to chat by MtheBot_ for various channel events.</h2>
+                    <h2 class='subtitle-1 font-weight-light mx-2'>Configure the messages sent to chat by MtheBot_ for various channel events.</h2>
                 </v-col>
             </v-row>
             <v-row v-if="!channelExists">
@@ -29,7 +29,7 @@
                             <template v-for="(event, name, i) in channelData">
                                 <v-list-item :key="name">
                                     <v-list-item-content>
-                                        <v-list-item-title>
+                                        <v-list-item-title class='font-weight-medium'>
                                             {{eventLabels[name]}}
                                         </v-list-item-title>
                                         <v-row>
