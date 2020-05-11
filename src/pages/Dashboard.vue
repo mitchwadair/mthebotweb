@@ -86,6 +86,10 @@ export default {
   mounted() {
     const channel = this.$store.state.userData.login;
     this.axios.get(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
+      if (res.status === 404) {
+        this.botStatus = false;
+        return;
+      }
       this.botStatus = !!res.data;
     });
   },
