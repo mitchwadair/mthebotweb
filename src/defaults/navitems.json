@@ -1,0 +1,5 @@
+[
+    {"title": "Dashboard", "icon": "mdi-view-dashboard", "route": "/dashboard"},
+    {"title": "Events", "icon": "mdi-alert-circle-check", "route": "/events"},
+    {"title": "About", "icon": "mdi-help-box", "route": "/about"}
+]

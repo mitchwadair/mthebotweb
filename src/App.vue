@@ -13,7 +13,7 @@
 
     <v-navigation-drawer v-if="this.$auth.isAuthenticated()" clipped app>
       <v-list>
-        <v-list-item v-for='item in sidebarItems' :key='item.title' link :href='item.route' :class="item.route === $route.path ? 'active-nav-item' : ''">
+        <v-list-item v-for='item in sidebarItems' :key='item.title' link :to='item.route'>
           <v-list-item-icon>
               <v-icon>{{item.icon}}</v-icon>
           </v-list-item-icon>
@@ -51,6 +51,7 @@
 <script>
 import AppBarHeader from './components/AppBarHeader';
 import ProfileBadge from './components/ProfileBadge';
+import navItems from './defaults/navitems.json';
 
 export default {
   name: 'App',
@@ -63,10 +64,7 @@ export default {
   data: function() {
     return {
       storeLoaded: false,
-      sidebarItems: [
-        {title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
-        {title: 'About', icon: 'mdi-help-box', route: '/about'}
-      ],
+      sidebarItems: navItems,
       footerIcons: [
         {icon: 'mdi-github', link: 'https://github.com/mitchwadair/mthebot'},
         {icon: 'mdi-linkedin', link: 'https://www.linkedin.com/in/mitchell-adair/'},
@@ -98,9 +96,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.active-nav-item {
-  background-color: rgba(0, 0, 0, .15);
-}
-</style>

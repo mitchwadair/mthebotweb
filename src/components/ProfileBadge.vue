@@ -13,12 +13,12 @@
         </template>
 
         <v-list dense>
-            <v-list-item v-for='item in items' :key='item.label' link :href='item.route'>
+            <v-list-item v-for='item in items' :key='item.title' :to='item.route'>
                 <v-list-item-icon>
                     <v-icon left dense>{{item.icon}}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                    <v-list-item-title>{{item.label}}</v-list-item-title>
+                    <v-list-item-title>{{item.title}}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
             <v-divider></v-divider>
@@ -35,14 +35,13 @@
 </template>
 
 <script>
+import navItems from '../defaults/navitems.json';
+
 export default {
     name: 'app-bar-profile-badge',
     data: function() {
         return {
-            items: [
-                {label: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard'},
-                {label: 'About', icon: 'mdi-help-box', route: '/about'},
-            ]
+            items: navItems,
         }
     },
     computed: {
