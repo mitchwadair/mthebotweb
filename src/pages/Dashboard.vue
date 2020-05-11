@@ -92,8 +92,10 @@ export default {
   methods: {
     disableBot: function() {
       const channel = this.$store.state.userData.login;
-      this.axios.delete(`https://api.bot.mtheb.tv/chats/${channel}`).then(() => {
-        this.botStatus = false;
+      this.axios.delete(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
+        if (res.status === 200) {
+          this.botStatus = false;
+        }
       });
     },
     enableBot: function() {
@@ -106,9 +108,13 @@ export default {
           promises.push(this.axios.post(`https://api.bot.mtheb.tv/commands/${channel}`, defaultEvents));
         }
         Promise.all(promises).then(() => {
-          this.axios.post(`https://api.bot.mtheb.tv/chats/${channel}`).then(() => {
-            this.botStatus = true;
+          this.axios.post(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
+            if (res.status === 200) {
+              this.botStatus = true;
+            }
           });
+        }).catch(err => {
+          console.log(`ERROR: ${err}`);
         });
       });
     }
