@@ -73,8 +73,6 @@
 </template>
 
 <script>
-import defaultEvents from '../defaults/events.json';
-
 export default {
     name: 'Events',
     data: function() {
@@ -137,16 +135,10 @@ export default {
     methods: {
         enableBot: function() {
             const channel = this.$store.state.userData.login;
-            let promises = []
-            promises.push(this.axios.post(`https://api.bot.mtheb.tv/commands/${channel}`, {}));
-            promises.push(this.axios.post(`https://api.bot.mtheb.tv/timers/${channel}`, {}));
-            promises.push(this.axios.post(`https://api.bot.mtheb.tv/events/${channel}`, defaultEvents));
-            Promise.all(promises).then(() => {
-                this.axios.post(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
-                    if (res.status === 200) {
-                        this.channelExists = true;
-                    }
-                });
+            this.axios.post(`https://api.bot.mtheb.tv/init/${channel}`, {}).then(res => {
+                if (res.status === 200) {
+                    this.botStatus = true;
+                }
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
