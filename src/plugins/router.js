@@ -4,6 +4,7 @@ import Dashboard from '../pages/Dashboard';
 import Landing from '../pages/Landing';
 import Auth from '../pages/Auth';
 import Events from '../pages/Events';
+import Commands from '../pages/Commands';
 
 Vue.use(VueRouter);
 
@@ -13,6 +14,7 @@ const routes = [
     {path: '/about', redirect: '/dashboard'},
     {path: '/auth', name: 'auth', component: Auth},
     {path: '/events', name: 'events', component: Events},
+    {path: '/commands', name: 'commands', component: Commands},
 ]
 
 const router = new VueRouter({
