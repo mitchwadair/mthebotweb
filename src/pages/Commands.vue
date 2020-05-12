@@ -2,7 +2,7 @@
     <div id='commands'>
         <v-container>
             <v-row>
-                <v-col class='mx-6'>
+                <v-col class='mx-3'>
                     <h1 class='display-2 font-weight-light'>Channel Commands</h1>
                     <h2 class='subtitle-1 font-weight-light mx-2'>Configure MtheBot_'s commands for your channel.</h2>
                 </v-col>

@@ -30,7 +30,7 @@
 
     <v-footer app fixed padless width="100%" style="bottom: 0">
       <v-card flat tile width="100%" class='text-center' color="primary">
-        <v-card-text class="pb-0">
+        <v-card-text class="pt-2 pb-0">
           <v-btn class="mx-4" icon small to="/">
             <v-icon>mdi-home</v-icon>
           </v-btn>
@@ -38,7 +38,7 @@
             <v-icon>{{icon.icon}}</v-icon>
           </v-btn>
         </v-card-text>
-        <v-card-text>
+        <v-card-text class='py-2'>
           <v-icon small>mdi-copyright</v-icon>
           {{ new Date().getFullYear() }} - 
           <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>

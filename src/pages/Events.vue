@@ -2,7 +2,7 @@
     <div id="events">
         <v-container>
             <v-row>
-                <v-col class='mx-6'>
+                <v-col class='mx-3'>
                     <h1 class='display-2 font-weight-light'>Channel Events</h1>
                     <h2 class='subtitle-1 font-weight-light mx-2'>Configure the messages sent to chat by MtheBot_ for various channel events.</h2>
                 </v-col>
