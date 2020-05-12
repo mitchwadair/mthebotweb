@@ -32,10 +32,10 @@
                                         <v-list-item-title class='font-weight-medium'>
                                             {{eventLabels[name]}}
                                         </v-list-item-title>
-                                        <v-row>
+                                        <v-row class='mb-n4 mt-n2'>
                                             <v-col class='flex-grow-0'>
                                                 <v-list-item-subtitle>Enabled</v-list-item-subtitle>
-                                                <v-checkbox dense hide-details="auto" v-model="event.enabled" v-on:change="updateData" class="mt-0 pt-0"/>
+                                                <v-checkbox dense hide-details="auto" v-model="event.enabled" v-on:change="updateData" class="mt-0 pt-0 mb-n2"/>
                                             </v-col>
                                             <v-col>
                                                 <v-list-item-subtitle>Message</v-list-item-subtitle>
