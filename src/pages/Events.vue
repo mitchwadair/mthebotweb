@@ -149,7 +149,6 @@ export default {
                 cheer: 'Cheer'
             },
             channelExists: false,
-            dataFetched: false,
             channelData: {},
             dataCache: {},
             modifyDialog: {},
