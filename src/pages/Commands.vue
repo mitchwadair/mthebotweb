@@ -29,17 +29,18 @@
                             <v-tab>Custom</v-tab>
                             <v-tab>Default</v-tab>
                         </v-tabs>
+                        <v-divider/>
                         <v-tabs-items v-model="tab">
                             <v-tab-item>
                                 <v-list>
                                     <template v-for="(command, i) in channelData">
-                                        <v-list-item :key="command.alias">
+                                        <v-list-item :key="'command' + i">
                                             <v-list-item-content>
                                                 <v-list-item-title class='font-weight-medium'>
                                                     !{{command.alias}}
                                                 </v-list-item-title>
                                                 <v-row class='mb-n4 mt-n2'>
-                                                    <v-col>
+                                                    <v-col style="word-break: break-word">
                                                         <v-list-item-subtitle>Message</v-list-item-subtitle>
                                                         "{{command.message}}"
                                                     </v-col>
@@ -49,49 +50,57 @@
                                                     </v-col>
                                                     <v-col class='flex-grow-0'>
                                                         <v-list-item-subtitle>User Level</v-list-item-subtitle>
-                                                        {{command.userLevel}}
+                                                        {{userLevels.find(ul => ul.value === command.userLevel).text}}+
                                                     </v-col>
                                                     <v-col class='flex-grow-0'>
-                                                        <v-dialog v-model="modifyDialog[command.alias]" attach="#commands" persistent max-width="50rem">
+                                                        <v-dialog v-model="modifyDialog[i]" attach="#commands" persistent max-width="50rem">
                                                             <template v-slot:activator="{ on }">
                                                                 <v-btn color="primary" v-on="on" @click="cacheCurrentData">Modify</v-btn>
                                                             </template>
                                                             <v-card>
                                                                 <v-card-title>Modify !{{command.alias}}</v-card-title>
                                                                 <v-card-subtitle>Update the properties of the !{{command.alias}} command.</v-card-subtitle>
-                                                                <v-card-text>
+                                                                <v-card-text class='mb-n4'>
                                                                     <v-text-field 
                                                                         v-model="command.alias"
                                                                         label="Command Alias"
-                                                                        hint="The name of this command"
-                                                                        outlined dense persistent-hint/>
+                                                                        hide-details="auto"
+                                                                        maxlength="15"
+                                                                        outlined dense counter
+                                                                        class='flex-grow-0'/>
                                                                 </v-card-text>
-                                                                <v-card-text>
+                                                                <v-card-text class='mb-n4'>
                                                                     <v-text-field
                                                                         v-model="command.message"
                                                                         label="Message"
-                                                                        hint="The message to be displayed by this command"
-                                                                        outlined dense persistent-hint/>
+                                                                        hide-details="auto"
+                                                                        maxlength="500"
+                                                                        outlined dense counter/>
                                                                 </v-card-text>
                                                                 <v-card-text>
                                                                     <v-text-field
+                                                                        type="number"
                                                                         v-model="command.cooldown"
                                                                         label="Cooldown Time"
-                                                                        hint="The number of seconds until this command can be used again"
-                                                                        outlined dense persistent-hint/>
+                                                                        suffix="seconds"
+                                                                        hide-details="auto"
+                                                                        min="0"
+                                                                        outlined dense/>
+                                                                    <v-spacer/>
                                                                 </v-card-text>
                                                                 <v-card-text>
                                                                     <v-select
                                                                         v-model="command.userLevel"
                                                                         :items="userLevels"
                                                                         label="User Level"
-                                                                        hint="The required user type to use this command"
-                                                                        outlined dense persistent-hint/>
+                                                                        hide-details="auto"
+                                                                        outlined dense/>
+                                                                    <v-spacer/>
                                                                 </v-card-text>
                                                                 <v-card-actions>
                                                                     <v-spacer/>
-                                                                    <v-btn color="primary" text @click.stop="$set(modifyDialog, command.alias, false); cancelModify()">Cancel</v-btn>
-                                                                    <v-btn color="primary" text @click.stop="$set(modifyDialog, command.alias, false); updateData()">Save</v-btn>
+                                                                    <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
+                                                                    <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); updateData()">Save</v-btn>
                                                                 </v-card-actions>
                                                             </v-card>
                                                         </v-dialog>
