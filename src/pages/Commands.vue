@@ -113,7 +113,10 @@
                                 </v-list>
                             </v-tab-item>
                             <v-tab-item>
-
+                                <div class='pa-4'>
+                                    <h3 class='display-1 font-weight-light'>Default commands are currently in development</h3>
+                                    <h4 class='subtitle-1 font-weight-light'>Stay tuned to start using handy built-in commands for MtheBot_ in your channel!</h4>
+                                </div>
                             </v-tab-item>
                         </v-tabs-items>
                     </v-sheet>
