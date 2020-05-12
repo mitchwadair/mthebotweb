@@ -38,7 +38,7 @@
                                                 <v-list-item-title class='font-weight-medium'>
                                                     !{{command.alias}}
                                                 </v-list-item-title>
-                                                <v-row>
+                                                <v-row class='mb-n4 mt-n2'>
                                                     <v-col>
                                                         <v-list-item-subtitle>Message</v-list-item-subtitle>
                                                         "{{command.message}}"
@@ -58,15 +58,35 @@
                                                             </template>
                                                             <v-card>
                                                                 <v-card-title>Modify !{{command.alias}}</v-card-title>
-                                                                <v-card-subtitle>Update the message displayed when the !{{command.alias}} command is executed.</v-card-subtitle>
+                                                                <v-card-subtitle>Update the properties of the !{{command.alias}} command.</v-card-subtitle>
                                                                 <v-card-text>
-                                                                    <v-text-field v-model="command.alias" hide-details="auto" label="Command Alias" outlined dense></v-text-field>
+                                                                    <v-text-field 
+                                                                        v-model="command.alias"
+                                                                        label="Command Alias"
+                                                                        hint="The name of this command"
+                                                                        outlined dense persistent-hint/>
                                                                 </v-card-text>
                                                                 <v-card-text>
-                                                                    <v-text-field v-model="command.message" hide-details="auto" label="Message" outlined dense></v-text-field>
+                                                                    <v-text-field
+                                                                        v-model="command.message"
+                                                                        label="Message"
+                                                                        hint="The message to be displayed by this command"
+                                                                        outlined dense persistent-hint/>
                                                                 </v-card-text>
                                                                 <v-card-text>
-                                                                    <v-text-field v-model="command.cooldown" hide-details="auto" label="Cooldown Time" outlined dense></v-text-field>
+                                                                    <v-text-field
+                                                                        v-model="command.cooldown"
+                                                                        label="Cooldown Time"
+                                                                        hint="The number of seconds until this command can be used again"
+                                                                        outlined dense persistent-hint/>
+                                                                </v-card-text>
+                                                                <v-card-text>
+                                                                    <v-select
+                                                                        v-model="command.userLevel"
+                                                                        :items="userLevels"
+                                                                        label="User Level"
+                                                                        hint="The required user type to use this command"
+                                                                        outlined dense persistent-hint/>
                                                                 </v-card-text>
                                                                 <v-card-actions>
                                                                     <v-spacer/>
@@ -99,6 +119,12 @@ export default {
     name: 'Commands',
     data: function() {
         return {
+            userLevels: [
+                {text: "User", value: 0},
+                {text: "VIP", value: 1},
+                {text: "Subscriber", value: 2},
+                {text: "Moderator", value: 3},
+            ],
             channelExists: false,
             channelData: {},
             dataCache: {},
