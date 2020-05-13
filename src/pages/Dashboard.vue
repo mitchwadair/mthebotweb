@@ -17,7 +17,10 @@
         <v-col>
           <v-card v-if="botStatus" flat style="margin: 0 6rem">
             <v-card-title>MtheBot_ is Enabled</v-card-title>
-            <v-card-text>MtheBot_ is currently sitting in your chat awaiting commands! You may disable MtheBot_ and it will leave your chat.</v-card-text>
+            <v-card-text>
+              MtheBot_ is currently sitting in your chat awaiting commands! Please ensure MtheBot_ has moderator status in your chat
+              to ensure everything works. You may disable MtheBot_ and it will leave your chat.
+            </v-card-text>
             <v-card-actions>
                 <v-btn @click="disableBot" text color="primary">Disable MtheBot_</v-btn>
             </v-card-actions>
