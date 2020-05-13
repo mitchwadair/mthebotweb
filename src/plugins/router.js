@@ -6,13 +6,14 @@ import Auth from '../pages/Auth';
 import Events from '../pages/Events';
 import Commands from '../pages/Commands';
 import Timers from '../pages/Timers';
+import About from '../pages/About';
 
 Vue.use(VueRouter);
 
 const routes = [
     {path: '/', name: 'landing', component: Landing},
     {path: '/dashboard', name: 'dashboard', component: Dashboard},
-    {path: '/about', redirect: '/dashboard'},
+    {path: '/about', name: 'about', component: About},
     {path: '/auth', name: 'auth', component: Auth},
     {path: '/events', name: 'events', component: Events},
     {path: '/commands', name: 'commands', component: Commands},
