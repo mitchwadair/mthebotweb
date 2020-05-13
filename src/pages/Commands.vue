@@ -106,7 +106,7 @@
                                                 </v-row>
                                             </v-list-item-content>
                                         </v-list-item>
-                                        <v-divider v-if="i < Object.keys(channelData).length - 1" :key="i" class='mx-4'/>
+                                        <v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/>
                                     </template>
                                 </v-list>
                             </v-tab-item>

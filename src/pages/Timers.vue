@@ -100,6 +100,7 @@
                                          </v-row>
                                      </v-list-item-content>
                                  </v-list-item>
+                                 <v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/>
                             </template>
                         </v-list>
                     </v-sheet>
