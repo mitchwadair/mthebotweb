@@ -1,3 +1,10 @@
+<!--
+  Copyright (c) 2020 Mitchell Adair
+
+  This software is released under the MIT License.
+  https://opensource.org/licenses/MIT
+-->
+
 <template>
     <v-menu offset-y left close-on-click>
         <template v-slot:activator="{on}">

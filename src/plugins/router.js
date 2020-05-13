@@ -1,3 +1,8 @@
+// Copyright (c) 2020 Mitchell Adair
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '../pages/Dashboard';
