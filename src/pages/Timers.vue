@@ -54,12 +54,12 @@
                                                             class='flex-grow-0'/>
                                                     </v-card-text>
                                                     <v-card-text class='mb-n4'>
-                                                        <v-text-field
-                                                            v-model="newTimerData.message"
-                                                            label="Message"
-                                                            hide-details="auto"
-                                                            maxlength="500"
-                                                            outlined dense counter/>
+                                                        <v-textarea
+                                                                v-model="newTimerData.message"
+                                                                label="Message"
+                                                                hide-details="auto"
+                                                                maxlength="500"
+                                                                outlined dense counter auto-grow/>
                                                     </v-card-text>
                                                     <v-card-text>
                                                         <v-text-field
