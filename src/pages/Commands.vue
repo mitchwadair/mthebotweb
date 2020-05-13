@@ -33,6 +33,71 @@
                         <v-tabs-items v-model="tab">
                             <v-tab-item>
                                 <v-list>
+                                    <v-list-item key="actions">
+                                        <v-list-item-content>
+                                            <v-row>
+                                                <v-col class='d-flex py-0'>
+                                                    <v-dialog v-model="newDialog" attach="#commands" persistent max-width="50rem">
+                                                        <template v-slot:activator="{ on: dialog }">
+                                                            <v-tooltip left>
+                                                                <template v-slot:activator="{ on: tooltip }">
+                                                                    <v-btn color="primary" v-on="{...dialog, ...tooltip}" @click="createNewCommand" depressed fab x-small class='ml-auto'>
+                                                                        <v-icon>mdi-plus</v-icon>
+                                                                    </v-btn>
+                                                                </template>
+                                                                <span>Add a new command</span>
+                                                            </v-tooltip>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-card-title>New Command</v-card-title>
+                                                            <v-card-subtitle>Create a new command for your chat</v-card-subtitle>
+                                                            <v-card-text class='mb-n4'>
+                                                                <v-text-field 
+                                                                    v-model="newCommandData.alias"
+                                                                    label="Alias"
+                                                                    hide-details="auto"
+                                                                    maxlength="15"
+                                                                    outlined dense counter
+                                                                    class='flex-grow-0'/>
+                                                            </v-card-text>
+                                                            <v-card-text class='mb-n4'>
+                                                                <v-textarea
+                                                                        v-model="newCommandData.message"
+                                                                        label="Message"
+                                                                        hide-details="auto"
+                                                                        maxlength="500"
+                                                                        outlined dense counter auto-grow/>
+                                                            </v-card-text>
+                                                            <v-card-text>
+                                                                <v-text-field
+                                                                    type="number"
+                                                                    v-model="newCommandData.cooldown"
+                                                                    label="Cooldown Time"
+                                                                    suffix="seconds"
+                                                                    hide-details="auto"
+                                                                    min="0"
+                                                                    outlined dense/>
+                                                            </v-card-text>
+                                                            <v-card-text>
+                                                                <v-select
+                                                                        v-model="newCommandData.userLevel"
+                                                                        :items="userLevels"
+                                                                        label="User Level"
+                                                                        hide-details="auto"
+                                                                        outlined dense/>
+                                                            </v-card-text>
+                                                            <v-card-actions>
+                                                                <v-spacer/>
+                                                                <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
+                                                                <v-btn color="primary" text @click="newDialog = false; addNew()">Save</v-btn>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-col>
+                                            </v-row>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-divider/>
                                     <template v-for="(command, i) in channelData">
                                         <v-list-item :key="'command' + i">
                                             <v-list-item-content>
@@ -66,16 +131,15 @@
                                                                         label="Command Alias"
                                                                         hide-details="auto"
                                                                         maxlength="15"
-                                                                        outlined dense counter
-                                                                        class='flex-grow-0'/>
+                                                                        outlined dense counter/>
                                                                 </v-card-text>
                                                                 <v-card-text class='mb-n4'>
-                                                                    <v-text-field
+                                                                    <v-textarea
                                                                         v-model="command.message"
                                                                         label="Message"
                                                                         hide-details="auto"
                                                                         maxlength="500"
-                                                                        outlined dense counter/>
+                                                                        outlined dense counter auto-grow/>
                                                                 </v-card-text>
                                                                 <v-card-text>
                                                                     <v-text-field
@@ -96,9 +160,41 @@
                                                                         outlined dense/>
                                                                 </v-card-text>
                                                                 <v-card-actions>
+                                                                    <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
+                                                                        <template v-slot:activator="{ on }">
+                                                                            <v-btn color="error" v-on="on" text>Remove</v-btn>
+                                                                        </template>
+                                                                        <v-card>
+                                                                            <v-card-title>Remove Command</v-card-title>
+                                                                            <v-card-text>Are you sure you would like to remove the <strong>!{{command.alias}}</strong> command?</v-card-text>
+                                                                            <v-card-actions>
+                                                                                <v-spacer/>
+                                                                                <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
+                                                                                <v-btn color="error" text @click="$set(removeDialog, i, false); removeCommand(i)">Remove</v-btn>
+                                                                            </v-card-actions>
+                                                                        </v-card>
+                                                                    </v-dialog>
                                                                     <v-spacer/>
-                                                                    <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
-                                                                    <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); updateData()">Save</v-btn>
+                                                                    <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
+                                                                    <v-btn color="primary" text @click="$set(modifyDialog, i, false); updateData()">Save</v-btn>
+                                                                </v-card-actions>
+                                                            </v-card>
+                                                        </v-dialog>
+                                                    </v-col>
+                                                    <v-col class='flex-grow-0'>
+                                                        <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
+                                                            <template v-slot:activator="{ on }">
+                                                                <v-btn color="error" v-on="on" icon>
+                                                                    <v-icon>mdi-delete</v-icon>
+                                                                </v-btn>
+                                                            </template>
+                                                            <v-card>
+                                                                <v-card-title>Remove Command</v-card-title>
+                                                                <v-card-text>Are you sure you would like to remove the <strong>!{{command.alias}}</strong> command?</v-card-text>
+                                                                <v-card-actions>
+                                                                    <v-spacer/>
+                                                                    <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
+                                                                    <v-btn color="error" text @click="$set(removeDialog, i, false); removeCommand(i)">Remove</v-btn>
                                                                 </v-card-actions>
                                                             </v-card>
                                                         </v-dialog>
@@ -136,9 +232,12 @@ export default {
                 {text: "Moderator", value: 3},
             ],
             channelExists: false,
-            channelData: {},
-            dataCache: {},
+            channelData: [],
+            dataCache: [],
+            newCommandData: {},
             modifyDialog: {},
+            newDialog: false,
+            removeDialog: {},
             tab: null,
         };
     },
@@ -165,6 +264,25 @@ export default {
         cancelModify: function() {
             this.channelData = JSON.parse(JSON.stringify(this.dataCache));
         },
+        createNewCommand: function() {
+            this.newCommandData = {
+                alias: '',
+                message: '',
+                cooldown: 5,
+                userLevel: 0,
+            }
+        },
+        cancelNew: function() {
+            this.newCommandData = {}
+        },
+        addNew: function() {
+            this.channelData.push(this.newCommandData);
+            this.updateData();
+        },
+        removeCommand: function(index) {
+            this.channelData.splice(index, 1);
+            this.updateData();
+        }
     },
     mounted() {
         const channel = this.$store.state.userData.login;
