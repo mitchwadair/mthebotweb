@@ -63,12 +63,12 @@
                                                                 </template>
 
                                                                 <v-list dense>
-                                                                    <v-list-item v-for='tag in dataTags.general' :key='tag.label' @click="insertDataTag(name, tag)">
+                                                                    <v-list-item v-for='tag in dataTags.general' :key='tag.label' @click="insertDataTag(name, tag, i)">
                                                                         <v-list-item-content>
                                                                             <v-list-item-title>{{tag.label}}</v-list-item-title>
                                                                         </v-list-item-content>
                                                                     </v-list-item>
-                                                                    <v-list-item v-for='tag in dataTags[name]' :key='tag.label' @click="insertDataTag(name, tag)">
+                                                                    <v-list-item v-for='tag in dataTags[name]' :key='tag.label' @click="insertDataTag(name, tag, i)">
                                                                         <v-list-item-content>
                                                                             <v-list-item-title>{{tag.label}}</v-list-item-title>
                                                                         </v-list-item-content>
@@ -82,6 +82,7 @@
                                                                 hide-details="auto"
                                                                 label="Message"
                                                                 maxlength="500"
+                                                                :ref="'textarea' + i"
                                                                 outlined dense counter auto-grow/>
                                                         </v-card-text>
                                                         <v-card-actions>
@@ -188,8 +189,18 @@ export default {
         cancelModify: function() {
             this.channelData = JSON.parse(JSON.stringify(this.dataCache));
         },
-        insertDataTag: function(event, tag) {
-            this.channelData[event].message = `${this.channelData[event].message}${tag.tag}`;
+        insertDataTag: function(event, tag, index) {
+            const el = this.$refs[`textarea${index}`][0].$el.querySelector('textarea');
+
+            let cursorPos = el.selectionEnd;
+            this.channelData[event].message = `${this.channelData[event].message.substring(0, cursorPos)}${tag.tag}${this.channelData[event].message.substring(cursorPos)}`;
+
+            cursorPos += tag.tag.length;
+            console.log(cursorPos);
+            this.$nextTick(() => {
+                el.focus();
+                el.selectionEnd = cursorPos
+            });
         }
     },
     mounted() {
