@@ -3,9 +3,17 @@
         <v-alert v-if="errorData && errorData.get('error')" dense outlined dismissible type="error" class='top-error'>
             {{errors[errorData.get('error')]}}:{{errorData.get('message')}}
         </v-alert>
-        <h1 class='header display-4'>MtheBot_</h1>
-        <span class='headline'>An easy-to-use chatbot for your Twitch channel</span>
         <v-container>
+            <v-row>
+                <v-col align="center" class='pt-0'>
+                    <h1 class='display-4'>MtheBot_</h1>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col align="center" class='pt-0'>
+                    <h2 class='headline'>An easy-to-use chatbot for your Twitch channel</h2>
+                </v-col>
+            </v-row>
             <v-row>
                 <v-col align="center" justify="center">
                     <v-card flat height="100%" class='d-flex flex-column'>
@@ -16,7 +24,7 @@
                         </v-card-text>
                         <v-card-actions class='pt-0 mt-auto'>
                             <v-spacer/>
-                            <v-btn outlined href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
+                            <v-btn outlined small href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-github</v-icon>MtheBot_ on GitHub
                             </v-btn>
                             <v-spacer/>
@@ -29,7 +37,7 @@
                         <v-card-text>Login with Twitch to start improving your chat's experience!</v-card-text>
                         <v-card-actions class='pt-0 mt-auto'>
                             <v-spacer/>
-                            <v-btn @click="login" depressed color="#6441A5" style="color: white">
+                            <v-btn @click="login" depressed small color="#6441A5" style="color: white">
                                 <v-icon left>mdi-twitch</v-icon>Login
                             </v-btn>
                             <v-spacer/>
@@ -44,7 +52,7 @@
                         </v-card-text>
                         <v-card-actions class='pt-0 mt-auto'>
                             <v-spacer/>
-                            <v-btn outlined href="https://www.patreon.com/mitchdev" target="_blank" rel="noopener noreferrer">
+                            <v-btn outlined small href="https://www.patreon.com/mitchdev" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-patreon</v-icon>MtheBot_ on Patreon
                             </v-btn>
                             <v-spacer/>
@@ -92,9 +100,6 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-.header {
-    padding: 2rem 0 2rem 0;
 }
 .top-error {
     position: absolute;

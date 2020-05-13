@@ -29,7 +29,7 @@
             </v-row>
             <v-row v-else>
                 <v-col>
-                    <v-sheet tile elevation="4" class='mx-12'>
+                    <v-sheet tile elevation="4" class='mx-4'>
                         <v-list>
                             <v-list-item key="actions">
                                 <v-list-item-content>

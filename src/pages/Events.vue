@@ -29,7 +29,7 @@
             </v-row>
             <v-row v-else>
                 <v-col>
-                    <v-sheet tile elevation="4" class='mx-12'>
+                    <v-sheet tile elevation="4" class='mx-4'>
                         <v-list>
                             <template v-for="(event, name, i) in channelData">
                                 <v-list-item :key="name">
@@ -37,7 +37,7 @@
                                         <v-list-item-title class='font-weight-medium'>
                                             {{eventLabels[name]}}
                                         </v-list-item-title>
-                                        <v-row class='mb-n4 mt-n2'>
+                                        <v-row class='mb-n4 mt-n2 flex-nowrap'>
                                             <v-col class='flex-grow-0'>
                                                 <v-list-item-subtitle>Enabled</v-list-item-subtitle>
                                                 <v-checkbox dense hide-details="auto" v-model="event.enabled" v-on:change="updateData" class="mt-0 pt-0 mb-n2"/>

@@ -29,7 +29,7 @@
             </v-row>
             <v-row v-else>
                 <v-col>
-                    <v-sheet tile elevation="4" class='mx-12'>
+                    <v-sheet tile elevation="4" class='mx-4'>
                         <v-tabs v-model="tab">
                             <v-tab>Custom</v-tab>
                             <v-tab>Default</v-tab>
