@@ -89,7 +89,7 @@
                                                             v-model="newTimerData.messageThreshold"
                                                             label="Message Threshold"
                                                             hint="The number of chats required before being able to send the timed message"
-                                                            suffix="seconds"
+                                                            suffix="messages"
                                                             hide-details="auto"
                                                             min="0"
                                                             outlined dense/>
@@ -167,7 +167,7 @@
                                                                 v-model="timer.messageThreshold"
                                                                 label="Message Threshold"
                                                                 hint="The number of chats required before being able to send the timed message"
-                                                                suffix="seconds"
+                                                                suffix="messages"
                                                                 hide-details="auto"
                                                                 min="0"
                                                                 outlined dense/>
