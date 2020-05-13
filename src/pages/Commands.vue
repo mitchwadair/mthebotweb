@@ -190,10 +190,15 @@
                                                     </v-col>
                                                     <v-col class='flex-grow-0'>
                                                         <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
-                                                            <template v-slot:activator="{ on }">
-                                                                <v-btn color="error" v-on="on" icon>
-                                                                    <v-icon>mdi-delete</v-icon>
-                                                                </v-btn>
+                                                            <template v-slot:activator="{ on: dialog }">
+                                                                <v-tooltip top>
+                                                                    <template v-slot:activator="{ on: tooltip }">
+                                                                        <v-btn color="error" v-on="{...dialog, ...tooltip}" icon>
+                                                                            <v-icon>mdi-delete</v-icon>
+                                                                        </v-btn>
+                                                                    </template>
+                                                                    <span>Remove command</span>
+                                                                </v-tooltip>
                                                             </template>
                                                             <v-card>
                                                                 <v-card-title>Remove Command</v-card-title>
