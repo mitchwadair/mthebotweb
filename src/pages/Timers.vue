@@ -161,7 +161,7 @@
                                                                 outlined dense/>
                                                         </v-card-text>
                                                         <v-card-actions>
-                                                            <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
+                                                            <v-dialog v-model="removeDialog[i]" attach="#timers" persistent max-width="20rem">
                                                                 <template v-slot:activator="{ on }">
                                                                     <v-btn color="error" v-on="on" text>Remove</v-btn>
                                                                 </template>
@@ -170,8 +170,8 @@
                                                                     <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
                                                                     <v-card-actions>
                                                                         <v-spacer/>
-                                                                        <v-btn color="primary" text @click="removeDialog = false">Cancel</v-btn>
-                                                                        <v-btn color="error" text @click="removeDialog = false; $set(modifyDialog, i, false); removeTimer(i)">Remove</v-btn>
+                                                                        <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
+                                                                        <v-btn color="error" text @click="$set(removeDialog, i, false); $set(modifyDialog, i, false); removeTimer(i)">Remove</v-btn>
                                                                     </v-card-actions>
                                                                 </v-card>
                                                             </v-dialog>
@@ -183,7 +183,7 @@
                                                 </v-dialog>
                                             </v-col>
                                             <v-col class='flex-grow-0'>
-                                                <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
+                                                <v-dialog v-model="removeDialog[i]" attach="#timers" persistent max-width="20rem">
                                                     <template v-slot:activator="{ on }">
                                                         <v-btn color="error" v-on="on" icon>
                                                             <v-icon>mdi-delete</v-icon>
@@ -194,8 +194,8 @@
                                                         <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
-                                                            <v-btn color="primary" text @click="removeDialog = false">Cancel</v-btn>
-                                                            <v-btn color="error" text @click="removeDialog = false; removeTimer(i)">Remove</v-btn>
+                                                            <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
+                                                            <v-btn color="error" text @click="$set(removeDialog, i, false); removeTimer(i)">Remove</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>
@@ -224,7 +224,7 @@ export default {
             newTimerData: {},
             modifyDialog: {},
             newDialog: false,
-            removeDialog: false,
+            removeDialog: {},
         };
     },
     methods: {
