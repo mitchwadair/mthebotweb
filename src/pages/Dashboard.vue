@@ -13,9 +13,9 @@
           <h1 class='display-3'>Welcome {{userData.display_name}}</h1>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class='mx-4'>
         <v-col>
-          <v-card v-if="botStatus" flat style="margin: 0 6rem">
+          <v-card v-if="botStatus" flat>
             <v-card-title>MtheBot_ is Enabled</v-card-title>
             <v-card-text>
               MtheBot_ is currently sitting in your chat awaiting commands! Please ensure MtheBot_ has moderator status in your chat
@@ -25,7 +25,7 @@
                 <v-btn @click="disableBot" text color="primary">Disable MtheBot_</v-btn>
             </v-card-actions>
           </v-card>
-          <v-card v-else flat style="margin: 0 6rem">
+          <v-card v-else flat>
             <v-card-title>MtheBot_ is Disabled</v-card-title>
             <v-card-text>MtheBot_ must be enabled in order to enhance your chat experience.  Enable MtheBot_ so it can join your chat and make sure to give it moderator status to avoid any issues.</v-card-text>
             <v-card-actions>
@@ -34,8 +34,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="botStatus" class='mt-5'>
-        <v-spacer></v-spacer>
+      <v-row v-if="botStatus" class='mt-5 mx-4 justify-around'>
         <v-col v-for="(cardData, i) in navCardData" :key="i">
           <v-card height="100%" class='d-flex flex-column'>
             <v-card-title>{{cardData.title}}</v-card-title>
@@ -45,10 +44,8 @@
             </v-card-actions>
           </v-card>
         </v-col>
-        <v-spacer></v-spacer>
       </v-row>
-      <v-row class='mt-5'>
-        <v-spacer></v-spacer>
+      <v-row class='mt-5 mx-4'>
         <v-col>
           <v-card height="100%" class='d-flex flex-column'>
             <v-card-title>About</v-card-title>
@@ -67,7 +64,6 @@
             </v-card-actions>
           </v-card>
         </v-col>
-        <v-spacer></v-spacer>
       </v-row>
     </v-container>
   </div>

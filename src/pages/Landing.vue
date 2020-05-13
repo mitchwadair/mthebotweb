@@ -5,25 +5,8 @@
         </v-alert>
         <h1 class='header display-4'>MtheBot_</h1>
         <span class='headline'>An easy-to-use chatbot for your Twitch channel</span>
-        <div class='feature-container'>
-            <!--v-carousel cycle show-arrows-on-hover hide-delimiter-background height="20rem">
-                <v-carousel-item v-for="(slide, i) in slides" :key="i">
-                    <v-sheet height="100%" tile>
-                        <v-row class='fill-height' align="center">
-                            <v-col align='center' justify="center">
-                                <span class='headline'>{{slide.text}}</span>
-                            </v-col>
-                            <v-col align="center">
-                                <v-img :src="slide.img" max-width="25rem" max-height="18rem"/>
-                            </v-col>
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-            </v-carousel-->
-        </div>
         <v-container>
             <v-row>
-                <v-spacer/>
                 <v-col align="center" justify="center">
                     <v-card flat height="100%" class='d-flex flex-column'>
                         <v-card-title class='justify-center'>MtheBot_ Project</v-card-title>
@@ -68,7 +51,6 @@
                         </v-card-actions>
                     </v-card>
                 </v-col>
-                <v-spacer/>
             </v-row>
         </v-container>
     </div>
@@ -114,11 +96,6 @@ export default {
 .header {
     padding: 2rem 0 2rem 0;
 }
-.feature-container {
-    width: 800px;
-    padding-top: 1.5rem;
-}
-
 .top-error {
     position: absolute;
     top: .5rem;
