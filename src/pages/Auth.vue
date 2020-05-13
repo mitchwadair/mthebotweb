@@ -11,12 +11,10 @@ export default {
             this.$auth.accessToken = token;
             this.$auth.getProfileData()
                 .then(res => {
-                    console.log(res);
                     this.$store.commit('setUserData', res.data.data[0]);
                     this.$router.push('/dashboard');
                 }).catch(err => {
                     this.$auth.logout();
-                    console.log(err)
                     this.$router.push(`/?error=login&message=${err.response.data.message}`);
                 });
         } else {
