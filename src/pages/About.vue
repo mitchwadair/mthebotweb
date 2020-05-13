@@ -11,11 +11,14 @@
                     <v-card tile elevation="0" class='mx-12'>
                         <v-card-title class='headline pt-0'>What is MtheBot_?</v-card-title>
                         <v-card-text class='body-1'>
-                            MtheBot_ is an open-source project by <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>, aiming 
-                            to build an easy-to-use chat bot for Twitch.  Chat bots on Twitch help to provide a rewarding and engaging experience for a broadcaster's viewers.  In 
-                            order to provide such an experience, often times a broadcaster must do a lot of additional work and research to allow for complicated commands to work
-                            in their chat.  The goal of MtheBot_ is to minimize the amount of extra work a broadcaster must to in order to provide their chat with an enjoyable
-                            experience.  The project started as a way to make a uniquely customizable bot for my own 
+                            MtheBot_ is an 
+                            <a href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">open-source</a> 
+                            project by 
+                            <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>
+                            , aiming to build an easy-to-use chat bot for Twitch.  Chat bots on Twitch help to provide a rewarding and engaging experience for a broadcaster's 
+                            viewers.  In order to provide such an experience, often times a broadcaster must do a lot of additional work and research to allow for complicated 
+                            commands to work in their chat.  The goal of MtheBot_ is to minimize the amount of extra work a broadcaster must to in order to provide their chat 
+                            with an enjoyable experience.  The project started as a way to make a uniquely customizable bot for my own 
                             <a href="https://www.twitch.tv/mtheb_" target="_blank" rel="noopener noreferrer">Twitch channel</a>.  
                             I quickly realized that I could generalize the bot and make it available for other people to use as well.
                         </v-card-text>

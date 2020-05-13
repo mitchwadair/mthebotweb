@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
     if (to.path !== '/auth') {
         if (to.path === '/' && auth.isAuthenticated()) {
             next('/dashboard');
-        } else if (to.path !== '/' && !auth.isAuthenticated()) {
+        } else if (to.path !== '/' && to.path !== '/about' && !auth.isAuthenticated()) {
             next('/');
         } else {
             next();

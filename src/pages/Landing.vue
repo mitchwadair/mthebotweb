@@ -24,8 +24,8 @@
                         </v-card-text>
                         <v-card-actions class='pt-0 mt-auto'>
                             <v-spacer/>
-                            <v-btn outlined small href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-github</v-icon>MtheBot_ on GitHub
+                            <v-btn outlined small to="/about">
+                                <v-icon left>mdi-help-box</v-icon>About MtheBot_
                             </v-btn>
                             <v-spacer/>
                         </v-card-actions>
