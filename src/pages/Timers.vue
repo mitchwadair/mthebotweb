@@ -185,7 +185,7 @@
                                             <v-col class='flex-grow-0'>
                                                 <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
                                                     <template v-slot:activator="{ on }">
-                                                        <v-btn color="error" v-on="on" depressed icon>
+                                                        <v-btn color="error" v-on="on" icon>
                                                             <v-icon>mdi-delete</v-icon>
                                                         </v-btn>
                                                     </template>
