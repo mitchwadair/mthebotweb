@@ -55,7 +55,7 @@
                                                     <v-col class='flex-grow-0'>
                                                         <v-dialog v-model="modifyDialog[i]" attach="#commands" persistent max-width="50rem">
                                                             <template v-slot:activator="{ on }">
-                                                                <v-btn color="primary" v-on="on" @click="cacheCurrentData">Modify</v-btn>
+                                                                <v-btn color="primary" v-on="on" @click="cacheCurrentData" depressed>Modify</v-btn>
                                                             </template>
                                                             <v-card>
                                                                 <v-card-title>Modify !{{command.alias}}</v-card-title>
