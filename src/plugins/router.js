@@ -5,6 +5,7 @@ import Landing from '../pages/Landing';
 import Auth from '../pages/Auth';
 import Events from '../pages/Events';
 import Commands from '../pages/Commands';
+import Timers from '../pages/Timers';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,7 @@ const routes = [
     {path: '/auth', name: 'auth', component: Auth},
     {path: '/events', name: 'events', component: Events},
     {path: '/commands', name: 'commands', component: Commands},
+    {path: '/timers', name: 'timers', component: Timers},
 ]
 
 const router = new VueRouter({
