@@ -1,20 +1,18 @@
 <template>
     <div id='timers'>
-        <v-container v-if="loadingData" style="height: 100%">
-            <v-row style="height: 100%" align="center">
-                <v-col align="center">
-                    <v-progress-circular indeterminate color="primary" size="100" width="8"/>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-container v-else>
+        <v-container>
             <v-row>
                 <v-col class='mx-3'>
                     <h1 class='display-2 font-weight-light'>Channel Timers</h1>
                     <h2 class='subtitle-1 font-weight-light mx-2'>Configure the timed messages sent to your chat by MtheBot_!</h2>
                 </v-col>
             </v-row>
-            <v-row v-if="!channelExists">
+            <v-row v-if="loadingData">
+                <v-col align="center">
+                    <v-progress-circular indeterminate color="primary" size="100" width="8"/>
+                </v-col>
+            </v-row>
+            <v-row v-else-if="!channelExists">
                 <v-col>
                     <v-card flat>
                         <v-card-title>Channel Not Activated</v-card-title>
