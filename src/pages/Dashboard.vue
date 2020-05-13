@@ -1,6 +1,13 @@
 <template>
   <div id="dashboard">
-    <v-container>
+    <v-container v-if="loadingData" style="height: 100%">
+        <v-row style="height: 100%" align="center">
+            <v-col align="center">
+                <v-progress-circular indeterminate color="primary" size="100" width="8"/>
+            </v-col>
+        </v-row>
+    </v-container>
+    <v-container v-else>
       <v-row>
         <v-col align="center">
           <h1 class='display-3'>Welcome {{userData.display_name}}</h1>
@@ -74,6 +81,7 @@ export default {
         {title: 'Events', content: 'Modify MtheBot_\'s channel event messages', route:'/events', action: 'Go to Events'},
         {title: 'Timed Messages', content: 'Modify MtheBot_\'s timed channel messages', route:'/timers', action: 'Go to Timers'},
       ],
+      loadingData: true,
     };
   },
   computed: {
@@ -84,6 +92,7 @@ export default {
   mounted() {
     const channel = this.$store.state.userData.login;
     this.axios.get(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
+      this.loadingData = false;
       if (res.status === 404) {
         this.botStatus = false;
         return;

@@ -1,6 +1,13 @@
 <template>
     <div id='timers'>
-        <v-container>
+        <v-container v-if="loadingData" style="height: 100%">
+            <v-row style="height: 100%" align="center">
+                <v-col align="center">
+                    <v-progress-circular indeterminate color="primary" size="100" width="8"/>
+                </v-col>
+            </v-row>
+        </v-container>
+        <v-container v-else>
             <v-row>
                 <v-col class='mx-3'>
                     <h1 class='display-2 font-weight-light'>Channel Timers</h1>
@@ -225,6 +232,7 @@ export default {
             modifyDialog: {},
             newDialog: false,
             removeDialog: {},
+            loadingData: true,
         };
     },
     methods: {
@@ -276,11 +284,13 @@ export default {
         this.axios.get(`https://api.bot.mtheb.tv/chats/${channel}`).then(res => {
             if (res.status === 404) {
                 this.channelExists = false;
+                this.loadingData = false;
                 return;
             }
             this.axios.get(`https://api.bot.mtheb.tv/timers/${channel}`).then(res => {
                 this.channelData = res.data;
                 this.channelExists = true;
+                this.loadingData = false;
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
