@@ -1,6 +1,6 @@
 <template>
   <v-app v-if="storeLoaded">
-    <v-app-bar app clipped-left flat color="primary">
+    <v-app-bar app clipped-left flat color="accent">
       <div class="d-flex align-center">
         <app-bar-header/>
       </div>
@@ -29,7 +29,7 @@
     </v-content>
 
     <v-footer app fixed padless width="100%" style="bottom: 0">
-      <v-card flat tile width="100%" class='text-center' color="primary">
+      <v-card flat tile width="100%" class='text-center' color="accent">
         <v-card-text class="pt-2 pb-0">
           <v-btn class="mx-4" icon small to="/">
             <v-icon>mdi-home</v-icon>
@@ -41,7 +41,7 @@
         <v-card-text class='py-2'>
           <v-icon small>mdi-copyright</v-icon>
           {{ new Date().getFullYear() }} - 
-          <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer">Mitchell Adair</a>
+          <a href="https://github.com/mitchwadair" target="_blank" rel="noopener noreferrer" style="color: rgba(0, 0, 0, 0.54)">Mitchell Adair</a>
         </v-card-text>
       </v-card>
     </v-footer>
