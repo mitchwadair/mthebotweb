@@ -194,8 +194,8 @@
                                                         <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
-                                                            <v-btn color="primary" text @click.stop="removeDialog = false">Cancel</v-btn>
-                                                            <v-btn color="error" text @click.stop="removeDialog = false; removeTimer(i)">Remove</v-btn>
+                                                            <v-btn color="primary" text @click="removeDialog = false">Cancel</v-btn>
+                                                            <v-btn color="error" text @click="removeDialog = false; removeTimer(i)">Remove</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>
