@@ -86,7 +86,6 @@
                                                                         hide-details="auto"
                                                                         min="0"
                                                                         outlined dense/>
-                                                                    <v-spacer/>
                                                                 </v-card-text>
                                                                 <v-card-text>
                                                                     <v-select
@@ -95,7 +94,6 @@
                                                                         label="User Level"
                                                                         hide-details="auto"
                                                                         outlined dense/>
-                                                                    <v-spacer/>
                                                                 </v-card-text>
                                                                 <v-card-actions>
                                                                     <v-spacer/>

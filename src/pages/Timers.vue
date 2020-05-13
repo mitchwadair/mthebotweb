@@ -77,7 +77,6 @@
                                                                 hide-details="auto"
                                                                 min="0"
                                                                 outlined dense/>
-                                                            <v-spacer/>
                                                         </v-card-text>
                                                         <v-card-text>
                                                             <v-text-field
@@ -89,7 +88,6 @@
                                                                 hide-details="auto"
                                                                 min="0"
                                                                 outlined dense/>
-                                                            <v-spacer/>
                                                         </v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
