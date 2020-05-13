@@ -26,11 +26,83 @@
                 <v-col>
                     <v-sheet tile elevation="4" class='mx-12'>
                         <v-list>
+                            <v-list-item key="actions">
+                                <v-list-item-content>
+                                    <v-row>
+                                        <v-col class='d-flex py-0'>
+                                            <v-dialog v-model="newDialog" attach="#timers" persistent max-width="50rem">
+                                                <template v-slot:activator="{ on: dialog }">
+                                                    <v-tooltip left>
+                                                        <template v-slot:activator="{ on: tooltip }">
+                                                            <v-btn color="primary" v-on="{...dialog, ...tooltip}" @click="createNewTimer" depressed fab x-small class='ml-auto'>
+                                                                <v-icon>mdi-plus</v-icon>
+                                                            </v-btn>
+                                                        </template>
+                                                        <span>Add a new timer</span>
+                                                    </v-tooltip>
+                                                </template>
+                                                <v-card>
+                                                    <v-card-title>New Timer</v-card-title>
+                                                    <v-card-subtitle>Create a new timer for your chat</v-card-subtitle>
+                                                    <v-card-text class='mb-n4'>
+                                                        <v-text-field 
+                                                            v-model="newTimerData.name"
+                                                            label="Name"
+                                                            hide-details="auto"
+                                                            maxlength="15"
+                                                            outlined dense counter
+                                                            class='flex-grow-0'/>
+                                                    </v-card-text>
+                                                    <v-card-text class='mb-n4'>
+                                                        <v-text-field
+                                                            v-model="newTimerData.message"
+                                                            label="Message"
+                                                            hide-details="auto"
+                                                            maxlength="500"
+                                                            outlined dense counter/>
+                                                    </v-card-text>
+                                                    <v-card-text>
+                                                        <v-text-field
+                                                            type="number"
+                                                            v-model="newTimerData.seconds"
+                                                            label="Message Interval"
+                                                            suffix="seconds"
+                                                            hide-details="auto"
+                                                            min="0"
+                                                            outlined dense/>
+                                                    </v-card-text>
+                                                    <v-card-text>
+                                                        <v-text-field
+                                                            type="number"
+                                                            v-model="newTimerData.messageThreshold"
+                                                            label="Message Threshold"
+                                                            hint="The number of chats required before being able to send the timed message"
+                                                            suffix="seconds"
+                                                            hide-details="auto"
+                                                            min="0"
+                                                            outlined dense/>
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer/>
+                                                        <v-btn color="primary" text @click.stop="newDialog = false; cancelNew()">Cancel</v-btn>
+                                                        <v-btn color="primary" text @click.stop="newDialog = false; addNew()">Save</v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                        </v-col>
+                                    </v-row>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-divider/>
                             <template v-for="(timer, i) in channelData">
                                  <v-list-item :key="'timer' + i">
                                      <v-list-item-content>
                                          <v-list-item-title class='font-weight-medium'>{{timer.name}}</v-list-item-title>
                                          <v-row class='mb-n4 mt-n2'>
+                                             <v-col class='flex-grow-0'>
+                                                <v-list-item-subtitle>Enabled</v-list-item-subtitle>
+                                                <v-checkbox dense hide-details="auto" v-model="timer.enabled" v-on:change="updateData" class="mt-0 pt-0 mb-n2"/>
+                                            </v-col>
                                              <v-col style="word-break: break-word">
                                                 <v-list-item-subtitle>Message</v-list-item-subtitle>
                                                 "{{timer.message}}"
@@ -46,7 +118,7 @@
                                             <v-col class='flex-grow-0'>
                                                 <v-dialog v-model="modifyDialog[i]" attach="#timers" persistent max-width="50rem">
                                                     <template v-slot:activator="{ on }">
-                                                        <v-btn color="primary" v-on="on" @click="cacheCurrentData">Modify</v-btn>
+                                                        <v-btn color="primary" v-on="on" @click="cacheCurrentData" depressed>Modify</v-btn>
                                                     </template>
                                                     <v-card>
                                                         <v-card-title>Modify {{timer.name}}</v-card-title>
@@ -57,16 +129,15 @@
                                                                 label="Name"
                                                                 hide-details="auto"
                                                                 maxlength="15"
-                                                                outlined dense counter
-                                                                class='flex-grow-0'/>
+                                                                outlined dense counter/>
                                                         </v-card-text>
                                                         <v-card-text class='mb-n4'>
-                                                            <v-text-field
+                                                            <v-textarea
                                                                 v-model="timer.message"
                                                                 label="Message"
                                                                 hide-details="auto"
                                                                 maxlength="500"
-                                                                outlined dense counter/>
+                                                                outlined dense counter auto-grow/>
                                                         </v-card-text>
                                                         <v-card-text>
                                                             <v-text-field
@@ -90,9 +161,41 @@
                                                                 outlined dense/>
                                                         </v-card-text>
                                                         <v-card-actions>
+                                                            <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
+                                                                <template v-slot:activator="{ on }">
+                                                                    <v-btn color="error" v-on="on" text>Remove</v-btn>
+                                                                </template>
+                                                                <v-card>
+                                                                    <v-card-title>Remove Message</v-card-title>
+                                                                    <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
+                                                                    <v-card-actions>
+                                                                        <v-spacer/>
+                                                                        <v-btn color="primary" text @click.stop="removeDialog = false">Cancel</v-btn>
+                                                                        <v-btn color="error" text @click.stop="removeDialog = false; $set(modifyDialog, i, false); removeTimer(i)">Remove</v-btn>
+                                                                    </v-card-actions>
+                                                                </v-card>
+                                                            </v-dialog>
                                                             <v-spacer/>
                                                             <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
                                                             <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); updateData()">Save</v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </v-col>
+                                            <v-col class='flex-grow-0'>
+                                                <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
+                                                    <template v-slot:activator="{ on }">
+                                                        <v-btn color="error" v-on="on" depressed icon>
+                                                            <v-icon>mdi-delete</v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <v-card>
+                                                        <v-card-title>Remove Message</v-card-title>
+                                                        <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
+                                                        <v-card-actions>
+                                                            <v-spacer/>
+                                                            <v-btn color="primary" text @click.stop="removeDialog = false">Cancel</v-btn>
+                                                            <v-btn color="error" text @click.stop="removeDialog = false; removeTimer(i)">Remove</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>
@@ -116,9 +219,12 @@ export default {
     data: function() {
         return {
             channelExists: false,
-            channelData: {},
-            dataCache: {},
+            channelData: [],
+            dataCache: [],
+            newTimerData: {},
             modifyDialog: {},
+            newDialog: false,
+            removeDialog: false,
         };
     },
     methods: {
@@ -144,6 +250,26 @@ export default {
         cancelModify: function() {
             this.channelData = JSON.parse(JSON.stringify(this.dataCache));
         },
+        createNewTimer: function() {
+            this.newTimerData = {
+                name: '',
+                enabled: true,
+                message: '',
+                seconds: 300,
+                messageThreshold: 5,
+            }
+        },
+        cancelNew: function() {
+            this.newTimerData = {}
+        },
+        addNew: function() {
+            this.channelData.push(this.newTimerData);
+            this.updateData();
+        },
+        removeTimer: function(index) {
+            this.channelData.splice(index, 1);
+            this.updateData();
+        }
     },
     mounted() {
         const channel = this.$store.state.userData.login;
