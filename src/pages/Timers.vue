@@ -84,8 +84,8 @@
                                                     </v-card-text>
                                                     <v-card-actions>
                                                         <v-spacer/>
-                                                        <v-btn color="primary" text @click.stop="newDialog = false; cancelNew()">Cancel</v-btn>
-                                                        <v-btn color="primary" text @click.stop="newDialog = false; addNew()">Save</v-btn>
+                                                        <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
+                                                        <v-btn color="primary" text @click="newDialog = false; addNew()">Save</v-btn>
                                                     </v-card-actions>
                                                 </v-card>
                                             </v-dialog>
@@ -170,14 +170,14 @@
                                                                     <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
                                                                     <v-card-actions>
                                                                         <v-spacer/>
-                                                                        <v-btn color="primary" text @click.stop="removeDialog = false">Cancel</v-btn>
-                                                                        <v-btn color="error" text @click.stop="removeDialog = false; $set(modifyDialog, i, false); removeTimer(i)">Remove</v-btn>
+                                                                        <v-btn color="primary" text @click="removeDialog = false">Cancel</v-btn>
+                                                                        <v-btn color="error" text @click="removeDialog = false; $set(modifyDialog, i, false); removeTimer(i)">Remove</v-btn>
                                                                     </v-card-actions>
                                                                 </v-card>
                                                             </v-dialog>
                                                             <v-spacer/>
-                                                            <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
-                                                            <v-btn color="primary" text @click.stop="$set(modifyDialog, i, false); updateData()">Save</v-btn>
+                                                            <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
+                                                            <v-btn color="primary" text @click="$set(modifyDialog, i, false); updateData()">Save</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>

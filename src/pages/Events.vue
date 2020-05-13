@@ -81,8 +81,8 @@
                                                         </v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
-                                                            <v-btn color="primary" text @click.stop="$set(modifyDialog, name, false); cancelModify()">Cancel</v-btn>
-                                                            <v-btn color="primary" text @click.stop="$set(modifyDialog, name, false); updateData()">Save</v-btn>
+                                                            <v-btn color="primary" text @click="$set(modifyDialog, name, false); cancelModify()">Cancel</v-btn>
+                                                            <v-btn color="primary" text @click="$set(modifyDialog, name, false); updateData()">Save</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>
