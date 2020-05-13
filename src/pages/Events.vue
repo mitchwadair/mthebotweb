@@ -72,7 +72,12 @@
                                                             </v-menu>
                                                         </v-card-text>
                                                         <v-card-text>
-                                                            <v-text-field v-model="event.message" hide-details="auto" label="Message" outlined dense></v-text-field>
+                                                            <v-textarea
+                                                                v-model="event.message"
+                                                                hide-details="auto"
+                                                                label="Message"
+                                                                maxlength="500"
+                                                                outlined dense counter auto-grow/>
                                                         </v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
