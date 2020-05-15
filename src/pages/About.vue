@@ -50,7 +50,7 @@
                             <v-btn outlined small href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-github</v-icon>Submit an Issue
                             </v-btn>
-                            <v-btn outlined small href="mailto:mthebot6969@gmail.com" target="_blank" rel="noopener noreferrer">
+                            <v-btn outlined small href="mailto:mitch@mtheb.tv" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-email</v-icon>Send an Email
                             </v-btn>
                         </v-card-actions>
