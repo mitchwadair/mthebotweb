@@ -123,10 +123,27 @@
                                                         {{userLevels.find(ul => ul.value === command.userLevel).text}}+
                                                     </v-col>
                                                     <v-col class='flex-grow-0'>
-                                                        <v-dialog v-model="modifyDialog[i]" attach="#commands" persistent max-width="50rem">
-                                                            <template v-slot:activator="{ on }">
-                                                                <v-btn color="primary" v-on="on" @click="cacheCurrentData" depressed>Modify</v-btn>
+                                                        <v-menu offset-y left>
+                                                            <template v-slot:activator="{on}">
+                                                                <v-btn icon v-on="on" :ripple=false>
+                                                                    <v-icon>mdi-dots-vertical</v-icon>
+                                                                </v-btn>
                                                             </template>
+
+                                                            <v-list dense>
+                                                                <v-list-item @click="cacheCurrentData(); $set(modifyDialog, i, true);">
+                                                                    <v-list-item-content>
+                                                                        <v-list-item-title>Modify</v-list-item-title>
+                                                                    </v-list-item-content>
+                                                                </v-list-item>
+                                                                <v-list-item @click="cacheCurrentData(); $set(removeDialog, i, true);" color="error">
+                                                                    <v-list-item-content>
+                                                                        <v-list-item-title style="color: #FF5252">Remove</v-list-item-title>
+                                                                    </v-list-item-content>
+                                                                </v-list-item>
+                                                            </v-list>
+                                                        </v-menu>
+                                                        <v-dialog v-model="modifyDialog[i]" attach="#commands" persistent max-width="50rem">
                                                             <v-card>
                                                                 <v-card-title>Modify !{{command.alias}}</v-card-title>
                                                                 <v-card-subtitle>Update the properties of the !{{command.alias}} command.</v-card-subtitle>
@@ -185,19 +202,7 @@
                                                                 </v-card-actions>
                                                             </v-card>
                                                         </v-dialog>
-                                                    </v-col>
-                                                    <v-col class='flex-grow-0'>
                                                         <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
-                                                            <template v-slot:activator="{ on: dialog }">
-                                                                <v-tooltip top>
-                                                                    <template v-slot:activator="{ on: tooltip }">
-                                                                        <v-btn color="error" v-on="{...dialog, ...tooltip}" icon>
-                                                                            <v-icon>mdi-delete</v-icon>
-                                                                        </v-btn>
-                                                                    </template>
-                                                                    <span>Remove command</span>
-                                                                </v-tooltip>
-                                                            </template>
                                                             <v-card>
                                                                 <v-card-title>Remove Command</v-card-title>
                                                                 <v-card-text>Are you sure you would like to remove the <strong>!{{command.alias}}</strong> command?</v-card-text>
