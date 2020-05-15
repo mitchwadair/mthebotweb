@@ -1,10 +1,3 @@
-<!--
-  Copyright (c) 2020 Mitchell Adair
-
-  This software is released under the MIT License.
-  https://opensource.org/licenses/MIT
--->
-
 <template>
     <div class='landing'>
         <v-alert v-if="errorData && errorData.get('error')" dense outlined dismissible type="error" class='top-error'>

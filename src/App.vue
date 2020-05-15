@@ -1,10 +1,3 @@
-<!--
-  Copyright (c) 2020 Mitchell Adair
-
-  This software is released under the MIT License.
-  https://opensource.org/licenses/MIT
--->
-
 <template>
   <v-app v-if="storeLoaded">
     <v-app-bar app clipped-left flat color="accent">
