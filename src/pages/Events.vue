@@ -77,18 +77,21 @@
                                                             </v-menu>
                                                         </v-card-text>
                                                         <v-card-text>
-                                                            <v-textarea
-                                                                v-model="event.message"
-                                                                hide-details="auto"
-                                                                label="Message"
-                                                                maxlength="500"
-                                                                :ref="'textarea' + i"
-                                                                outlined dense counter auto-grow/>
+                                                            <v-form v-model="modifyValid[i]">
+                                                                <v-textarea
+                                                                    v-model="event.message"
+                                                                    hide-details="auto"
+                                                                    label="Message"
+                                                                    maxlength="500"
+                                                                    :ref="'textarea' + i"
+                                                                    :rules="[validationRules.required]"
+                                                                    outlined dense counter auto-grow required/>
+                                                            </v-form>
                                                         </v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
                                                             <v-btn color="primary" text @click="$set(modifyDialog, name, false); cancelModify()">Cancel</v-btn>
-                                                            <v-btn color="primary" text @click="$set(modifyDialog, name, false); updateData()">Save</v-btn>
+                                                            <v-btn color="primary" text @click="if (modifyValid[i]) {$set(modifyDialog, name, false); updateData()}">Save</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>
@@ -107,6 +110,8 @@
 </template>
 
 <script>
+import validationRules from '../defaults/validationRules';
+
 export default {
     name: 'Events',
     data: function() {
@@ -163,6 +168,8 @@ export default {
             channelData: {},
             dataCache: {},
             modifyDialog: {},
+            modifyValid: {},
+            validationRules: validationRules,
             loadingData: true,
         };
     },

@@ -49,48 +49,58 @@
                                                 <v-card>
                                                     <v-card-title>New Timer</v-card-title>
                                                     <v-card-subtitle>Create a new timer for your chat</v-card-subtitle>
-                                                    <v-card-text class='mb-n4'>
-                                                        <v-text-field 
-                                                            v-model="newTimerData.name"
-                                                            label="Name"
-                                                            hide-details="auto"
-                                                            maxlength="15"
-                                                            outlined dense counter
-                                                            class='flex-grow-0'/>
-                                                    </v-card-text>
-                                                    <v-card-text class='mb-n4'>
-                                                        <v-textarea
-                                                                v-model="newTimerData.message"
-                                                                label="Message"
+                                                    <v-form v-model="newFormValid">
+                                                        <v-card-text class='mb-n4'>
+                                                            <v-text-field 
+                                                                v-model="newTimerData.name"
+                                                                label="Name"
                                                                 hide-details="auto"
-                                                                maxlength="500"
-                                                                outlined dense counter auto-grow/>
-                                                    </v-card-text>
-                                                    <v-card-text>
-                                                        <v-text-field
-                                                            type="number"
-                                                            v-model="newTimerData.seconds"
-                                                            label="Message Interval"
-                                                            suffix="seconds"
-                                                            hide-details="auto"
-                                                            min="0"
-                                                            outlined dense/>
-                                                    </v-card-text>
-                                                    <v-card-text>
-                                                        <v-text-field
-                                                            type="number"
-                                                            v-model="newTimerData.messageThreshold"
-                                                            label="Message Threshold"
-                                                            hint="The number of chats required before being able to send the timed message"
-                                                            suffix="messages"
-                                                            hide-details="auto"
-                                                            min="0"
-                                                            outlined dense/>
-                                                    </v-card-text>
+                                                                maxlength="15"
+                                                                :rules="[
+                                                                    validationRules.required,
+                                                                    validationRules.noSpaces,
+                                                                    validationRules.nameExists(channelData.map(t => t.name))
+                                                                ]"
+                                                                outlined dense counter required
+                                                                class='flex-grow-0'/>
+                                                        </v-card-text>
+                                                        <v-card-text class='mb-n4'>
+                                                            <v-textarea
+                                                                    v-model="newTimerData.message"
+                                                                    label="Message"
+                                                                    hide-details="auto"
+                                                                    maxlength="500"
+                                                                    :rules="[validationRules.required]"
+                                                                    outlined dense counter auto-grow required/>
+                                                        </v-card-text>
+                                                        <v-card-text>
+                                                            <v-text-field
+                                                                type="number"
+                                                                v-model="newTimerData.seconds"
+                                                                label="Message Interval"
+                                                                suffix="seconds"
+                                                                hide-details="auto"
+                                                                min="0"
+                                                                :rules="[validationRules.required]"
+                                                                outlined dense required/>
+                                                        </v-card-text>
+                                                        <v-card-text>
+                                                            <v-text-field
+                                                                type="number"
+                                                                v-model="newTimerData.messageThreshold"
+                                                                label="Message Threshold"
+                                                                hint="The number of chats required before being able to send the timed message"
+                                                                suffix="messages"
+                                                                hide-details="auto"
+                                                                min="0"
+                                                                :rules="[validationRules.required]"
+                                                                outlined dense required/>
+                                                        </v-card-text>
+                                                    </v-form>
                                                     <v-card-actions>
                                                         <v-spacer/>
                                                         <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
-                                                        <v-btn color="primary" text @click="newDialog = false; addNew()">Save</v-btn>
+                                                        <v-btn color="primary" text @click="if (newFormValid) {newDialog = false; addNew()}">Save</v-btn>
                                                     </v-card-actions>
                                                 </v-card>
                                             </v-dialog>
@@ -144,43 +154,53 @@
                                                     <v-card>
                                                         <v-card-title>Modify {{timer.name}}</v-card-title>
                                                         <v-card-subtitle>Update the properties of the {{timer.name}} timer.</v-card-subtitle>
-                                                        <v-card-text class='mb-n4'>
-                                                            <v-text-field 
-                                                                v-model="timer.name"
-                                                                label="Name"
-                                                                hide-details="auto"
-                                                                maxlength="15"
-                                                                outlined dense counter/>
-                                                        </v-card-text>
-                                                        <v-card-text class='mb-n4'>
-                                                            <v-textarea
-                                                                v-model="timer.message"
-                                                                label="Message"
-                                                                hide-details="auto"
-                                                                maxlength="500"
-                                                                outlined dense counter auto-grow/>
-                                                        </v-card-text>
-                                                        <v-card-text>
-                                                            <v-text-field
-                                                                type="number"
-                                                                v-model="timer.seconds"
-                                                                label="Message Interval"
-                                                                suffix="seconds"
-                                                                hide-details="auto"
-                                                                min="0"
-                                                                outlined dense/>
-                                                        </v-card-text>
-                                                        <v-card-text>
-                                                            <v-text-field
-                                                                type="number"
-                                                                v-model="timer.messageThreshold"
-                                                                label="Message Threshold"
-                                                                hint="The number of chats required before being able to send the timed message"
-                                                                suffix="messages"
-                                                                hide-details="auto"
-                                                                min="0"
-                                                                outlined dense/>
-                                                        </v-card-text>
+                                                        <v-form v-model="modifyFormValid[i]">
+                                                            <v-card-text class='mb-n4'>
+                                                                <v-text-field 
+                                                                    v-model="timer.name"
+                                                                    label="Name"
+                                                                    hide-details="auto"
+                                                                    maxlength="15"
+                                                                    :rules="[
+                                                                        validationRules.required,
+                                                                        validationRules.noSpaces,
+                                                                        validationRules.nameExists(channelData.map(t => t.name))
+                                                                    ]"
+                                                                    outlined dense counter required/>
+                                                            </v-card-text>
+                                                            <v-card-text class='mb-n4'>
+                                                                <v-textarea
+                                                                    v-model="timer.message"
+                                                                    label="Message"
+                                                                    hide-details="auto"
+                                                                    maxlength="500"
+                                                                    :rules="[validationRules.required]"
+                                                                    outlined dense counter auto-grow required/>
+                                                            </v-card-text>
+                                                            <v-card-text>
+                                                                <v-text-field
+                                                                    type="number"
+                                                                    v-model="timer.seconds"
+                                                                    label="Message Interval"
+                                                                    suffix="seconds"
+                                                                    hide-details="auto"
+                                                                    min="0"
+                                                                    :rules="[validationRules.required]"
+                                                                    outlined dense required/>
+                                                            </v-card-text>
+                                                            <v-card-text>
+                                                                <v-text-field
+                                                                    type="number"
+                                                                    v-model="timer.messageThreshold"
+                                                                    label="Message Threshold"
+                                                                    hint="The number of chats required before being able to send the timed message"
+                                                                    suffix="messages"
+                                                                    hide-details="auto"
+                                                                    min="0"
+                                                                    :rules="[validationRules.required]"
+                                                                    outlined dense required/>
+                                                            </v-card-text>
+                                                        </v-form>
                                                         <v-card-actions>
                                                             <v-dialog v-model="removeDialog[i]" attach="#timers" persistent max-width="20rem">
                                                                 <template v-slot:activator="{ on }">
@@ -198,7 +218,7 @@
                                                             </v-dialog>
                                                             <v-spacer/>
                                                             <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
-                                                            <v-btn color="primary" text @click="$set(modifyDialog, i, false); updateData()">Save</v-btn>
+                                                            <v-btn color="primary" text @click="if (modifyFormValid[i]) {$set(modifyDialog, i, false); updateData()}">Save</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
                                                 </v-dialog>
@@ -228,16 +248,21 @@
 </template>
 
 <script>
+import validationRules from '../defaults/validationRules';
+
 export default {
     name: "Timers",
     data: function() {
         return {
+            validationRules: validationRules,
             channelExists: false,
             channelData: [],
             dataCache: [],
             newTimerData: {},
             modifyDialog: {},
+            modifyFormValid: {},
             newDialog: false,
+            newFormValid: true,
             removeDialog: {},
             loadingData: true,
         };
