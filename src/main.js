@@ -4,12 +4,11 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './plugins/router';
 import auth from './plugins/auth';
-import axios from 'axios';
-import VueAxios from 'vue-axios'
+import axios from './plugins/axios';
 
 Vue.use(Vuex);
-Vue.use(VueAxios, axios);
 Vue.use(auth);
+Vue.use(axios);
 
 Vue.config.productionTip = false;
 

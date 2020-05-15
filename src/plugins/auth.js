@@ -15,7 +15,7 @@ let auth = new Vue({
             let loginURL = new URL('https://id.twitch.tv/oauth2/authorize');
             const params = {
                 client_id: 'cd1q55j22rdxm0o3lp2jwy8osgsjn2',
-                redirect_uri: process.env.NODE_ENV == 'development' ? 'http://localhost:8080/auth' : 'https://bot.mtheb.tv/auth',
+                redirect_uri: process.env.NODE_ENV == 'development' ? 'http://localhost:8081/auth' : 'https://bot.mtheb.tv/auth',
                 response_type: 'token',
                 force_verify: true,
             }
