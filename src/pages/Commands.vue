@@ -283,7 +283,7 @@ export default {
     methods: {
         enableBot: function() {
             const channel = this.$store.state.userData.login;
-            this.axios.post(`/init/${channel}`, {}).then(res => {
+            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 if (res.status === 200) {
                     this.botStatus = true;
                 }
@@ -296,7 +296,7 @@ export default {
         },
         updateData: function() {
             const channel = this.$store.state.userData.login;
-            this.axios.post(`/commands/${channel}`, this.channelData).catch(err => {
+            this.axios.post(`/commands/${channel}`, this.channelData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
         },
@@ -325,13 +325,13 @@ export default {
     },
     mounted() {
         const channel = this.$store.state.userData.login;
-        this.axios.get(`/chats/${channel}`).then(res => {
+        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
             if (res.status === 404) {
                 this.loadingData = false;
                 this.channelExists = false;
                 return;
             }
-            this.axios.get(`/commands/${channel}`).then(res => {
+            this.axios.get(`/commands/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 this.channelData = res.data;
                 this.channelExists = true;
                 this.loadingData = false;

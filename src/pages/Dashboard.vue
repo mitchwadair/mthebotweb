@@ -90,7 +90,7 @@ export default {
   },
   mounted() {
     const channel = this.$store.state.userData.login;
-    this.axios.get(`/chats/${channel}`).then(res => {
+    this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
       this.loadingData = false;
       if (res.status === 404) {
         this.botStatus = false;
@@ -102,7 +102,7 @@ export default {
   methods: {
     disableBot: function() {
       const channel = this.$store.state.userData.login;
-      this.axios.delete(`/chats/${channel}`).then(res => {
+      this.axios.delete(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
         if (res.status === 200) {
           this.botStatus = false;
         }
@@ -110,9 +110,9 @@ export default {
     },
     enableBot: function() {
       const channel = this.$store.state.userData.login;
-      this.axios.get(`/chats/${channel}`).then(res => {
+      this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
         if (res.status === 404) {
-          this.axios.post(`/init/${channel}`, {}).then(res => {
+          this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
             if (res.status === 200) {
               this.botStatus = true;
             }
@@ -120,7 +120,7 @@ export default {
               console.log(`ERROR: ${err}`);
           });
         } else {
-          this.axios.post(`/chats/${channel}`).then(res => {
+          this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
             if (res.status === 200) {
               this.botStatus = true;
             }
