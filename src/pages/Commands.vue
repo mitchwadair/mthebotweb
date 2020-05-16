@@ -56,45 +56,54 @@
                                                         <v-card>
                                                             <v-card-title>New Command</v-card-title>
                                                             <v-card-subtitle>Create a new command for your chat</v-card-subtitle>
-                                                            <v-card-text class='mb-n4'>
-                                                                <v-text-field 
-                                                                    v-model="newCommandData.alias"
-                                                                    label="Alias"
-                                                                    hide-details="auto"
-                                                                    maxlength="15"
-                                                                    outlined dense counter
-                                                                    class='flex-grow-0'/>
-                                                            </v-card-text>
-                                                            <v-card-text class='mb-n4'>
-                                                                <v-textarea
-                                                                        v-model="newCommandData.message"
-                                                                        label="Message"
+                                                            <v-form v-model="newFormValid">
+                                                                <v-card-text class='mb-n4'>
+                                                                    <v-text-field 
+                                                                        v-model="newCommandData.alias"
+                                                                        label="Alias"
                                                                         hide-details="auto"
-                                                                        maxlength="500"
-                                                                        outlined dense counter auto-grow/>
-                                                            </v-card-text>
-                                                            <v-card-text>
-                                                                <v-text-field
-                                                                    type="number"
-                                                                    v-model="newCommandData.cooldown"
-                                                                    label="Cooldown Time"
-                                                                    suffix="seconds"
-                                                                    hide-details="auto"
-                                                                    min="0"
-                                                                    outlined dense/>
-                                                            </v-card-text>
-                                                            <v-card-text>
-                                                                <v-select
-                                                                        v-model="newCommandData.userLevel"
-                                                                        :items="userLevels"
-                                                                        label="User Level"
+                                                                        maxlength="15"
+                                                                        :rules="[
+                                                                            validationRules.required,
+                                                                            validationRules.noSpaces,
+                                                                            validationRules.nameExists(channelData.map(c => c.alias))
+                                                                        ]"
+                                                                        outlined dense counter required
+                                                                        class='flex-grow-0'/>
+                                                                </v-card-text>
+                                                                <v-card-text class='mb-n4'>
+                                                                    <v-textarea
+                                                                            v-model="newCommandData.message"
+                                                                            label="Message"
+                                                                            hide-details="auto"
+                                                                            maxlength="500"
+                                                                            :rules="[validationRules.required]"
+                                                                            outlined dense counter auto-grow required/>
+                                                                </v-card-text>
+                                                                <v-card-text>
+                                                                    <v-text-field
+                                                                        type="number"
+                                                                        v-model="newCommandData.cooldown"
+                                                                        label="Cooldown Time"
+                                                                        suffix="seconds"
                                                                         hide-details="auto"
-                                                                        outlined dense/>
-                                                            </v-card-text>
+                                                                        min="0"
+                                                                        :rules="[validationRules.required]"
+                                                                        outlined dense required/>
+                                                                </v-card-text>
+                                                                <v-card-text>
+                                                                    <v-select
+                                                                            v-model="newCommandData.userLevel"
+                                                                            :items="userLevels"
+                                                                            label="User Level"
+                                                                            hide-details="auto"
+                                                                            outlined dense/>
+                                                                </v-card-text>
+                                                            </v-form>
                                                             <v-card-actions>
                                                                 <v-spacer/>
                                                                 <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
-                                                                <v-btn color="primary" text @click="newDialog = false; addNew()">Save</v-btn>
+                                                                <v-btn color="primary" text @click="if (newFormValid) {newDialog = false; addNew();}">Save</v-btn>
                                                             </v-card-actions>
                                                         </v-card>
                                                     </v-dialog>
@@ -147,40 +156,49 @@
                                                             <v-card>
                                                                 <v-card-title>Modify !{{command.alias}}</v-card-title>
                                                                 <v-card-subtitle>Update the properties of the !{{command.alias}} command.</v-card-subtitle>
-                                                                <v-card-text class='mb-n4'>
-                                                                    <v-text-field 
-                                                                        v-model="command.alias"
-                                                                        label="Command Alias"
-                                                                        hide-details="auto"
-                                                                        maxlength="15"
-                                                                        outlined dense counter/>
-                                                                </v-card-text>
-                                                                <v-card-text class='mb-n4'>
-                                                                    <v-textarea
-                                                                        v-model="command.message"
-                                                                        label="Message"
-                                                                        hide-details="auto"
-                                                                        maxlength="500"
-                                                                        outlined dense counter auto-grow/>
-                                                                </v-card-text>
-                                                                <v-card-text>
-                                                                    <v-text-field
-                                                                        type="number"
-                                                                        v-model="command.cooldown"
-                                                                        label="Cooldown Time"
-                                                                        suffix="seconds"
-                                                                        hide-details="auto"
-                                                                        min="0"
-                                                                        outlined dense/>
-                                                                </v-card-text>
-                                                                <v-card-text>
-                                                                    <v-select
-                                                                        v-model="command.userLevel"
-                                                                        :items="userLevels"
-                                                                        label="User Level"
-                                                                        hide-details="auto"
-                                                                        outlined dense/>
-                                                                </v-card-text>
+                                                                <v-form v-model="modifyFormValid[i]">
+                                                                    <v-card-text class='mb-n4'>
+                                                                        <v-text-field 
+                                                                            v-model="command.alias"
+                                                                            label="Command Alias"
+                                                                            hide-details="auto"
+                                                                            maxlength="15"
+                                                                            :rules="[
+                                                                                validationRules.required,
+                                                                                validationRules.noSpaces,
+                                                                                validationRules.nameExists(channelData.map(c => c.alias))
+                                                                            ]"
+                                                                            outlined dense counter required/>
+                                                                    </v-card-text>
+                                                                    <v-card-text class='mb-n4'>
+                                                                        <v-textarea
+                                                                            v-model="command.message"
+                                                                            label="Message"
+                                                                            hide-details="auto"
+                                                                            maxlength="500"
+                                                                            :rules="[validationRules.required]"
+                                                                            outlined dense counter auto-grow required/>
+                                                                    </v-card-text>
+                                                                    <v-card-text>
+                                                                        <v-text-field
+                                                                            type="number"
+                                                                            v-model="command.cooldown"
+                                                                            label="Cooldown Time"
+                                                                            suffix="seconds"
+                                                                            hide-details="auto"
+                                                                            min="0"
+                                                                            :rules="[validationRules.required]"
+                                                                            outlined dense required/>
+                                                                    </v-card-text>
+                                                                    <v-card-text>
+                                                                        <v-select
+                                                                            v-model="command.userLevel"
+                                                                            :items="userLevels"
+                                                                            label="User Level"
+                                                                            hide-details="auto"
+                                                                            outlined dense/>
+                                                                    </v-card-text>
+                                                                </v-form>
                                                                 <v-card-actions>
                                                                     <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
                                                                         <template v-slot:activator="{ on }">
@@ -198,7 +216,7 @@
                                                                     </v-dialog>
                                                                     <v-spacer/>
                                                                     <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
-                                                                    <v-btn color="primary" text @click="$set(modifyDialog, i, false); updateData()">Save</v-btn>
+                                                                    <v-btn color="primary" text @click="if (modifyFormValid[i]) {$set(modifyDialog, i, false); updateData()}">Save</v-btn>
                                                                 </v-card-actions>
                                                             </v-card>
                                                         </v-dialog>
@@ -236,6 +254,8 @@
 </template>
 
 <script>
+import validationRules from '../defaults/validationRules';
+
 export default {
     name: 'Commands',
     data: function() {
@@ -246,12 +266,15 @@ export default {
                 {text: "Subscriber", value: 2},
                 {text: "Moderator", value: 3},
             ],
+            validationRules: validationRules,
             channelExists: false,
             channelData: [],
             dataCache: [],
             newCommandData: {},
             modifyDialog: {},
+            modifyFormValid: {},
             newDialog: false,
+            newFormValid: true,
             removeDialog: {},
             tab: null,
             loadingData: true,
@@ -260,7 +283,7 @@ export default {
     methods: {
         enableBot: function() {
             const channel = this.$store.state.userData.login;
-            this.axios.post(`/init/${channel}`, {}).then(res => {
+            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 if (res.status === 200) {
                     this.botStatus = true;
                 }
@@ -273,7 +296,7 @@ export default {
         },
         updateData: function() {
             const channel = this.$store.state.userData.login;
-            this.axios.post(`/commands/${channel}`, this.channelData).catch(err => {
+            this.axios.post(`/commands/${channel}`, this.channelData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
         },
@@ -302,13 +325,13 @@ export default {
     },
     mounted() {
         const channel = this.$store.state.userData.login;
-        this.axios.get(`/chats/${channel}`).then(res => {
+        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
             if (res.status === 404) {
                 this.loadingData = false;
                 this.channelExists = false;
                 return;
             }
-            this.axios.get(`/commands/${channel}`).then(res => {
+            this.axios.get(`/commands/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 this.channelData = res.data;
                 this.channelExists = true;
                 this.loadingData = false;
