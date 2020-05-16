@@ -97,6 +97,13 @@ export default {
         return;
       }
       this.botStatus = !!res.data;
+    }).catch(err => {
+      this.loadingData = false;
+      if (err.response.status === 404) {
+        this.botStatus = false;
+        return;
+      }
+      console.log(`ERROR: ${err}`);
     });
   },
   methods: {
@@ -117,7 +124,7 @@ export default {
               this.botStatus = true;
             }
           }).catch(err => {
-              console.log(`ERROR: ${err}`);
+            console.log(`ERROR: ${err}`);
           });
         } else {
           this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
@@ -125,8 +132,20 @@ export default {
               this.botStatus = true;
             }
           }).catch(err => {
-              console.log(`ERROR: ${err}`);
+            console.log(`ERROR: ${err}`);
           });
+        }
+      }).catch(err => {
+        if (err.response.status === 404) {
+          this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
+            if (res.status === 200) {
+              this.botStatus = true;
+            }
+          }).catch(err => {
+            console.log(`ERROR: ${err}`);
+          });
+        } else {
+          console.log(`ERROR: ${err}`);
         }
       });
     }

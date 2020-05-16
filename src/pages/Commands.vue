@@ -338,6 +338,13 @@ export default {
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
+        }).catch(err => {
+            this.loadingData = false;
+            if (err.response.status === 404) {
+                this.channelExists = false;
+                return;
+            }
+            console.log(`ERROR: ${err}`);
         });
     },
 }
