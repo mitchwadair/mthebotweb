@@ -30,7 +30,7 @@
             <v-row v-else>
                 <v-col>
                     <v-sheet tile elevation="4" class='mx-4'>
-                        <v-list>
+                        <v-list class='pt-0'>
                             <template v-for="(event, name, i) in channelData">
                                 <v-list-item :key="name">
                                     <v-list-item-content>
