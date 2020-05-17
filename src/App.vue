@@ -31,13 +31,13 @@
     <v-footer app fixed padless width="100%" style="bottom: 0">
       <v-card flat tile width="100%" class='text-center' color="accent">
         <v-card-text class="pt-2 pb-0">
-          <v-btn class="mx-4" icon small to="/">
+          <v-btn class="mx-2" icon small to="/">
             <v-icon>mdi-home</v-icon>
           </v-btn>
-          <v-btn v-for="icon in footerIcons" :key="icon.icon" class="mx-4" icon small :href="icon.link" target="_blank" rel="noopener noreferrer">
+          <v-btn v-for="icon in footerIcons" :key="icon.icon" class="mx-2" icon small :href="icon.link" target="_blank" rel="noopener noreferrer">
             <v-icon>{{icon.icon}}</v-icon>
           </v-btn>
-          <v-btn class="mx-4" icon small @click="openContactDialog">
+          <v-btn class="mx-2" icon small @click="openContactDialog">
             <v-icon>mdi-email</v-icon>
           </v-btn>
         </v-card-text>

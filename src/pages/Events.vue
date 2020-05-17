@@ -30,27 +30,41 @@
             <v-row v-else>
                 <v-col>
                     <v-sheet tile elevation="4" class='mx-4'>
-                        <v-list>
+                        <v-list class='pt-0'>
                             <template v-for="(event, name, i) in channelData">
                                 <v-list-item :key="name">
                                     <v-list-item-content>
                                         <v-list-item-title class='font-weight-medium'>
                                             {{eventLabels[name]}}
+                                            <v-chip v-if="event.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
+                                            <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
                                         </v-list-item-title>
                                         <v-row class='mb-n4 mt-n2 flex-nowrap'>
-                                            <v-col class='flex-grow-0'>
-                                                <v-list-item-subtitle>Enabled</v-list-item-subtitle>
-                                                <v-checkbox dense hide-details="auto" v-model="event.enabled" v-on:change="updateData" class="mt-0 pt-0 mb-n2"/>
-                                            </v-col>
                                             <v-col>
                                                 <v-list-item-subtitle>Message</v-list-item-subtitle>
                                                 "{{event.message}}"
                                             </v-col>
                                             <v-col class='flex-grow-0'>
-                                                <v-dialog v-model="modifyDialog[name]" attach="#events" persistent max-width="50rem">
-                                                    <template v-slot:activator="{ on }">
-                                                        <v-btn color="primary" v-on="on" @click="cacheCurrentData" depressed>Modify</v-btn>
+                                                <v-menu offset-y left>
+                                                    <template v-slot:activator="{on}">
+                                                        <v-btn icon v-on="on" :ripple=false>
+                                                            <v-icon>mdi-dots-vertical</v-icon>
+                                                        </v-btn>
                                                     </template>
+                                                    <v-list dense>
+                                                        <v-list-item @click="flipEventStatus(event)">
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>{{event.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                        <v-list-item @click="cacheCurrentData(); $set(modifyDialog, name, true);">
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>Modify</v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                    </v-list>
+                                                </v-menu>
+                                                <v-dialog v-model="modifyDialog[name]" attach="#events" persistent max-width="50rem">
                                                     <v-card>
                                                         <v-card-title>Modify {{eventLabels[name]}}</v-card-title>
                                                         <v-card-subtitle>Update the message displayed when a {{eventLabels[name]}} happens.</v-card-subtitle>
@@ -183,6 +197,10 @@ export default {
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
+        },
+        flipEventStatus: function(event) {
+            event.enabled = !event.enabled;
+            this.updateData();
         },
         cacheCurrentData: function() {
             this.dataCache = JSON.parse(JSON.stringify(this.channelData));
