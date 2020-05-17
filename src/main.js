@@ -15,10 +15,14 @@ Vue.config.productionTip = false;
 const store = new Vuex.Store({
   state: {
     userData: null,
+    contactDialog: false,
   },
   mutations: {
     setUserData(state, data) {
       state.userData = data;
+    },
+    setContactDialog(state, visible) {
+      state.contactDialog = visible;
     }
   }
 });

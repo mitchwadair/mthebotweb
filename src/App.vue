@@ -37,6 +37,9 @@
           <v-btn v-for="icon in footerIcons" :key="icon.icon" class="mx-4" icon small :href="icon.link" target="_blank" rel="noopener noreferrer">
             <v-icon>{{icon.icon}}</v-icon>
           </v-btn>
+          <v-btn class="mx-4" icon small @click="openContactDialog">
+            <v-icon>mdi-email</v-icon>
+          </v-btn>
         </v-card-text>
         <v-card-text class='py-2'>
           <v-icon small>mdi-copyright</v-icon>
@@ -45,12 +48,15 @@
         </v-card-text>
       </v-card>
     </v-footer>
+
+    <ContactDialog/>
   </v-app>
 </template>
 
 <script>
 import AppBarHeader from './components/AppBarHeader';
 import ProfileBadge from './components/ProfileBadge';
+import ContactDialog from './components/ContactDialog';
 import navItems from './defaults/navitems.json';
 
 export default {
@@ -59,6 +65,7 @@ export default {
   components: {
     AppBarHeader,
     ProfileBadge,
+    ContactDialog,
   },
 
   data: function() {
@@ -70,13 +77,15 @@ export default {
         {icon: 'mdi-linkedin', link: 'https://www.linkedin.com/in/mitchell-adair/'},
         {icon: 'mdi-twitch', link: 'https://twitch.tv/mtheb_'},
         {icon: 'mdi-patreon', link: 'https://www.patreon.com/mitchdev'},
-        {icon: 'mdi-email', link: 'mailto:mitch@mtheb.tv'},
       ],
     }
   },
   methods: {
     login: function() {
       this.$auth.login();
+    },
+    openContactDialog: function() {
+      this.$store.commit('setContactDialog', true);
     }
   },
   created() {

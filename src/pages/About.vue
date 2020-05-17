@@ -44,14 +44,14 @@
                     <v-card tile elevation="0" class='d-flex flex-column mx-12'>
                         <v-card-title class='headline pt-0'>Report an Issue</v-card-title>
                         <v-card-text class='body-1'>
-                            If you encounter an issue or bug, you can submit an issue on GitHub or send me an email to get help resolving it.
+                            If you encounter an issue or bug, you can submit an issue on GitHub or contact me to get help resolving it.
                         </v-card-text>
                         <v-card-actions class='pt-0 pl-4 mt-auto'>
                             <v-btn outlined small href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-github</v-icon>Submit an Issue
                             </v-btn>
-                            <v-btn outlined small href="mailto:mitch@mtheb.tv" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-email</v-icon>Send an Email
+                            <v-btn outlined small @click="openContactDialog">
+                                <v-icon left>mdi-email</v-icon>Contact
                             </v-btn>
                         </v-card-actions>
                     </v-card>
@@ -96,6 +96,11 @@ export default {
         return {
 
         };
-    }
+    },
+    methods: {
+        openContactDialog: function() {
+            this.$store.commit('setContactDialog', true);
+        }
+    },
 }
 </script>
