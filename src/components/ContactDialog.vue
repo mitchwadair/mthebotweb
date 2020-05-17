@@ -4,7 +4,7 @@
             <v-card width="100%">
                 <v-card-title>Contact</v-card-title>
                 <v-card-text v-if="contactError" style="color: #FF5252">There was an error sending your message.  Please try again later.</v-card-text>
-                <v-form v-model="contactFormValid">
+                <v-form ref="contactForm" v-model="contactFormValid">
                     <v-card-text class='mb-n4'>
                         <v-text-field 
                             v-model="contactData.name"
@@ -100,6 +100,7 @@ export default {
             this.contactError = false;
             this.isSending = false;
             this.$store.commit('setContactDialog', false);
+            this.$refs.contactForm.resetValidation();
         },
         sendContact: function() {
             if (this.contactFormValid) {
