@@ -54,7 +54,7 @@
                                 <v-card>
                                     <v-card-title>New Command</v-card-title>
                                     <v-card-subtitle>Create a new command for your chat</v-card-subtitle>
-                                    <v-form v-model="newFormValid">
+                                    <v-form ref="newForm" v-model="newFormValid">
                                         <v-card-text class='mb-n4'>
                                             <v-text-field 
                                                 v-model="newCommandData.alias"
@@ -308,9 +308,10 @@ export default {
                 cooldown: 5,
                 userLevel: 0,
             }
+            this.$refs.newForm.resetValidation();
         },
         cancelNew: function() {
-            this.newCommandData = {}
+            this.newCommandData = {};
         },
         addNew: function() {
             this.channelData.push(this.newCommandData);

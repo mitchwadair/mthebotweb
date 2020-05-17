@@ -49,7 +49,7 @@
                                                 <v-card>
                                                     <v-card-title>New Timer</v-card-title>
                                                     <v-card-subtitle>Create a new timer for your chat</v-card-subtitle>
-                                                    <v-form v-model="newFormValid">
+                                                    <v-form ref="newForm" v-model="newFormValid">
                                                         <v-card-text class='mb-n4'>
                                                             <v-text-field 
                                                                 v-model="newTimerData.name"
@@ -307,9 +307,10 @@ export default {
                 seconds: 300,
                 messageThreshold: 5,
             }
+            this.$refs.newForm.resetValidation();
         },
         cancelNew: function() {
-            this.newTimerData = {}
+            this.newTimerData = {};
         },
         addNew: function() {
             this.channelData.push(this.newTimerData);
