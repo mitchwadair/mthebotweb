@@ -30,88 +30,86 @@
             <v-row v-else>
                 <v-col>
                     <v-sheet tile elevation="4" class='mx-4'>
-                        <v-tabs v-model="tab">
-                            <v-tab>Custom</v-tab>
-                            <v-tab>Default</v-tab>
-                        </v-tabs>
+                        <v-toolbar flat dense>
+                            <v-toolbar-title class='ml-n4 align-self-end'>
+                                <v-tabs v-model="tab">
+                                    <v-tab>Custom</v-tab>
+                                    <v-tab>Default</v-tab>
+                                </v-tabs>
+                            </v-toolbar-title>
+                            <v-spacer/>
+                            <v-dialog v-model="newDialog" attach="#commands" persistent max-width="50rem">
+                                <template v-slot:activator="{ on: dialog }">
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on: tooltip }">
+                                            <v-fab-transition>
+                                                <v-btn color="primary" v-show="tab == 0" v-on="{...dialog, ...tooltip}" @click="createNewCommand" depressed fab x-small class='ml-auto'>
+                                                    <v-icon>mdi-plus</v-icon>
+                                                </v-btn>
+                                            </v-fab-transition>
+                                        </template>
+                                        <span>Add a new command</span>
+                                    </v-tooltip>
+                                </template>
+                                <v-card>
+                                    <v-card-title>New Command</v-card-title>
+                                    <v-card-subtitle>Create a new command for your chat</v-card-subtitle>
+                                    <v-form v-model="newFormValid">
+                                        <v-card-text class='mb-n4'>
+                                            <v-text-field 
+                                                v-model="newCommandData.alias"
+                                                label="Alias"
+                                                hide-details="auto"
+                                                maxlength="15"
+                                                :rules="[
+                                                    validationRules.required,
+                                                    validationRules.noSpaces,
+                                                    validationRules.nameExists(channelData.map(c => c.alias))
+                                                ]"
+                                                outlined dense counter required
+                                                class='flex-grow-0'/>
+                                        </v-card-text>
+                                        <v-card-text class='mb-n4'>
+                                            <v-textarea
+                                                    v-model="newCommandData.message"
+                                                    label="Message"
+                                                    hide-details="auto"
+                                                    maxlength="500"
+                                                    :rules="[validationRules.required]"
+                                                    outlined dense counter auto-grow required/>
+                                        </v-card-text>
+                                        <v-card-text>
+                                            <v-text-field
+                                                type="number"
+                                                v-model="newCommandData.cooldown"
+                                                label="Cooldown Time"
+                                                suffix="seconds"
+                                                hide-details="auto"
+                                                min="0"
+                                                :rules="[validationRules.required]"
+                                                outlined dense required/>
+                                        </v-card-text>
+                                        <v-card-text>
+                                            <v-select
+                                                    v-model="newCommandData.userLevel"
+                                                    :items="userLevels"
+                                                    label="User Level"
+                                                    hide-details="auto"
+                                                    outlined dense/>
+                                        </v-card-text>
+                                    </v-form>
+                                    <v-card-actions>
+                                        <v-spacer/>
+                                        <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
+                                        <v-btn color="primary" text @click="if (newFormValid) {newDialog = false; addNew();}">Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-toolbar>
                         <v-divider/>
                         <v-tabs-items v-model="tab">
                             <v-tab-item>
                                 <v-list>
-                                    <v-list-item key="actions">
-                                        <v-list-item-content>
-                                            <v-row>
-                                                <v-col class='d-flex py-0'>
-                                                    <v-dialog v-model="newDialog" attach="#commands" persistent max-width="50rem">
-                                                        <template v-slot:activator="{ on: dialog }">
-                                                            <v-tooltip left>
-                                                                <template v-slot:activator="{ on: tooltip }">
-                                                                    <v-btn color="primary" v-on="{...dialog, ...tooltip}" @click="createNewCommand" depressed fab x-small class='ml-auto'>
-                                                                        <v-icon>mdi-plus</v-icon>
-                                                                    </v-btn>
-                                                                </template>
-                                                                <span>Add a new command</span>
-                                                            </v-tooltip>
-                                                        </template>
-                                                        <v-card>
-                                                            <v-card-title>New Command</v-card-title>
-                                                            <v-card-subtitle>Create a new command for your chat</v-card-subtitle>
-                                                            <v-form v-model="newFormValid">
-                                                                <v-card-text class='mb-n4'>
-                                                                    <v-text-field 
-                                                                        v-model="newCommandData.alias"
-                                                                        label="Alias"
-                                                                        hide-details="auto"
-                                                                        maxlength="15"
-                                                                        :rules="[
-                                                                            validationRules.required,
-                                                                            validationRules.noSpaces,
-                                                                            validationRules.nameExists(channelData.map(c => c.alias))
-                                                                        ]"
-                                                                        outlined dense counter required
-                                                                        class='flex-grow-0'/>
-                                                                </v-card-text>
-                                                                <v-card-text class='mb-n4'>
-                                                                    <v-textarea
-                                                                            v-model="newCommandData.message"
-                                                                            label="Message"
-                                                                            hide-details="auto"
-                                                                            maxlength="500"
-                                                                            :rules="[validationRules.required]"
-                                                                            outlined dense counter auto-grow required/>
-                                                                </v-card-text>
-                                                                <v-card-text>
-                                                                    <v-text-field
-                                                                        type="number"
-                                                                        v-model="newCommandData.cooldown"
-                                                                        label="Cooldown Time"
-                                                                        suffix="seconds"
-                                                                        hide-details="auto"
-                                                                        min="0"
-                                                                        :rules="[validationRules.required]"
-                                                                        outlined dense required/>
-                                                                </v-card-text>
-                                                                <v-card-text>
-                                                                    <v-select
-                                                                            v-model="newCommandData.userLevel"
-                                                                            :items="userLevels"
-                                                                            label="User Level"
-                                                                            hide-details="auto"
-                                                                            outlined dense/>
-                                                                </v-card-text>
-                                                            </v-form>
-                                                            <v-card-actions>
-                                                                <v-spacer/>
-                                                                <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
-                                                                <v-btn color="primary" text @click="if (newFormValid) {newDialog = false; addNew();}">Save</v-btn>
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                </v-col>
-                                            </v-row>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                    <v-divider/>
                                     <template v-for="(command, i) in channelData">
                                         <v-list-item :key="'command' + i">
                                             <v-list-item-content>
