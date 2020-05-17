@@ -112,12 +112,12 @@
                             <template v-for="(timer, i) in channelData">
                                  <v-list-item :key="'timer' + i">
                                      <v-list-item-content>
-                                         <v-list-item-title class='font-weight-medium'>{{timer.name}}</v-list-item-title>
+                                         <v-list-item-title class='font-weight-medium'>
+                                            {{timer.name}}
+                                            <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
+                                            <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
+                                        </v-list-item-title>
                                          <v-row class='mb-n4 mt-n2'>
-                                             <v-col class='flex-grow-0'>
-                                                <v-list-item-subtitle>Enabled</v-list-item-subtitle>
-                                                <v-checkbox dense hide-details="auto" v-model="timer.enabled" v-on:change="updateData" class="mt-0 pt-0 mb-n2"/>
-                                            </v-col>
                                              <v-col style="word-break: break-word">
                                                 <v-list-item-subtitle>Message</v-list-item-subtitle>
                                                 "{{timer.message}}"
@@ -127,7 +127,7 @@
                                                 {{timer.seconds}} seconds
                                             </v-col>
                                             <v-col class='flex-grow-0'>
-                                                <v-list-item-subtitle>Message Threshold</v-list-item-subtitle>
+                                                <v-list-item-subtitle>Threshold</v-list-item-subtitle>
                                                 {{timer.messageThreshold}}
                                             </v-col>
                                             <v-col class='flex-grow-0'>
@@ -138,6 +138,11 @@
                                                         </v-btn>
                                                     </template>
                                                     <v-list dense>
+                                                        <v-list-item @click="flipTimerStatus(timer)">
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>{{timer.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
                                                         <v-list-item @click="cacheCurrentData(); $set(modifyDialog, i, true);">
                                                             <v-list-item-content>
                                                                 <v-list-item-title>Modify</v-list-item-title>
@@ -277,6 +282,10 @@ export default {
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
+        },
+        flipTimerStatus: function(timer) {
+            timer.enabled = !timer.enabled;
+            this.updateData();
         },
         cacheCurrentData: function() {
             this.dataCache = JSON.parse(JSON.stringify(this.channelData));
