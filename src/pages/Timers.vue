@@ -30,9 +30,9 @@
             <v-row v-else>
                 <v-col>
                     <v-sheet tile elevation="4" class='mx-4'>
-                        <v-list>
+                        <v-list class='pt-0'>
                             <v-list-item key="actions">
-                                <v-list-item-content>
+                                <v-list-item-content class='py-0'>
                                     <v-row>
                                         <v-col class='d-flex py-0'>
                                             <v-dialog v-model="newDialog" attach="#timers" persistent max-width="50rem">
