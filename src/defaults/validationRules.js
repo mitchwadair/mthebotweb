@@ -13,7 +13,7 @@ module.exports = {
     },
     nameExists: valueList => {
         return value => {
-            if (valueList.includes(value)) {
+            if (valueList.filter(v => v === value).length > 1) {
                 return 'There is an existing item with that name';
             }
             return true;
