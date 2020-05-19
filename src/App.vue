@@ -89,6 +89,10 @@ export default {
     }
   },
   created() {
+    if (!localStorage.getItem('version') || localStorage.getItem('version') !== 'scopeUpgrade') {
+      this.$auth.logout();
+      localStorage.setItem('version', 'scopeUpgrade');
+    }
     if (this.$auth.isAuthenticated()) {
       this.$auth.getProfileData().then(res => {
         this.$store.commit('setUserData', res.data.data[0]);
