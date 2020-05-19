@@ -25,12 +25,7 @@ let auth = new Vue({
             window.location.assign(loginURL);
         },
         logout: function() {
-            let url = new URL('https://id.twitch.tv/oauth2/revoke');
-            url.searchParams.append('client_id', 'cd1q55j22rdxm0o3lp2jwy8osgsjn2');
-            url.searchParams.append('token', this.$auth.accessToken);
-            this.axios.post(url);
             localStorage.removeItem('uat');
-            localStorage.removeItem('profile');
         },
         getProfileData: function() {
             return this.axios.get('https://api.twitch.tv/helix/users', {
