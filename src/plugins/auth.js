@@ -23,7 +23,6 @@ let auth = new Vue({
             Object.keys(params).forEach(key => {
                 loginURL.searchParams.append(key, params[key]);
             });
-            console.log(decodeURIComponent(loginURL.href));
             window.location.assign(decodeURIComponent(loginURL.href));
         },
         logout: function() {
