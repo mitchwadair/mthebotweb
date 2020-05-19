@@ -7,7 +7,7 @@ import auth from './plugins/auth';
 import axios from './plugins/axios';
 
 Vue.use(Vuex);
-Vue.use(auth);
+Vue.use(auth, router);
 Vue.use(axios);
 
 Vue.config.productionTip = false;
