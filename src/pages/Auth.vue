@@ -14,25 +14,25 @@ export default {
                     this.$store.commit('setUserData', res.data.data[0]);
                     this.axios.get(`/chats/${this.$store.state.userData.login}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                         if (res.status === 404) {
-                            this.$router.push('/dashboard');
+                            this.$router.replace('/dashboard');
                             return;
                         }
                         this.axios.post(`/auth/${this.$store.state.userData.login}`, {token: token}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                            this.$router.push('/dashboard');
+                            this.$router.replace('/dashboard');
                         });
                     }).catch(err => {
                         if (err.response.status === 404) {
-                            this.$router.push('/dashboard');
+                            this.$router.replace('/dashboard');
                             return;
                         }
                         console.log(`ERROR: ${err}`);
                     });
                 }).catch(err => {
                     this.$auth.logout();
-                    this.$router.push(`/?error=login&message=${err.response.data.message}`);
+                    this.$router.replace(`/?error=login&message=${err.response.data.message}`);
                 });
         } else {
-            this.$router.push('/');
+            this.$router.replace('/');
         }
     }
 }
