@@ -55,6 +55,9 @@
                             <v-btn outlined small href="https://www.patreon.com/mitchdev" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-patreon</v-icon>MtheBot_ on Patreon
                             </v-btn>
+                            <v-btn outlined small href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD&source=url" target="_blank" rel="noopener noreferrer">
+                                <v-icon left>mdi-gift</v-icon>Donate to MtheBot_
+                            </v-btn>
                             <v-spacer/>
                         </v-card-actions>
                     </v-card>

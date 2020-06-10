@@ -77,6 +77,7 @@ export default {
         {icon: 'mdi-linkedin', link: 'https://www.linkedin.com/in/mitchell-adair/'},
         {icon: 'mdi-twitch', link: 'https://twitch.tv/mtheb_'},
         {icon: 'mdi-patreon', link: 'https://www.patreon.com/mitchdev'},
+        {icon: 'mdi-gift', link: 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD&source=url'},
       ],
     }
   },
