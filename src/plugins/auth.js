@@ -10,7 +10,7 @@ function createAuth(router) {
         },
         methods: {
             isAuthenticated: function() {
-            return localStorage.getItem('uat') !== null;
+                return localStorage.getItem('uat') !== null;
             },
             login: function() {
                 let loginURL = new URL('https://id.twitch.tv/oauth2/authorize');

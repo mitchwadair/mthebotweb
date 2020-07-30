@@ -97,6 +97,9 @@ export default {
       this.$auth.getProfileData().then(res => {
         this.$store.commit('setUserData', res.data.data[0]);
         this.storeLoaded = true;
+      }).catch(() => {
+        localStorage.removeItem('uat');
+        this.$router.go('/');
       });
     } else {
       this.storeLoaded = true;
