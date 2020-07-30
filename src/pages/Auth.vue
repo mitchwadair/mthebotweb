@@ -12,13 +12,13 @@ export default {
             this.$auth.getProfileData()
                 .then(res => {
                     this.$store.commit('setUserData', res.data.data[0]);
-                    this.axios.get(`/chats/${this.$store.state.userData.login}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
+                    this.axios.get(`/chats/${this.$store.state.userData.id}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                         if (res.status === 404) {
                             this.$router.push('/dashboard');
                             return;
                         }
-                        this.axios.post(`/auth/${this.$store.state.userData.login}`, {token: token}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                            this.$router.push('/dashboard');
+                        this.axios.post(`/auth/${this.$store.state.userData.id}`, {token: token}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                            this.$router.replace('/dashboard');
                         });
                     }).catch(err => {
                         if (err.response.status === 404) {

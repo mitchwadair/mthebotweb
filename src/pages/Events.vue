@@ -31,11 +31,11 @@
                 <v-col>
                     <v-sheet tile elevation="4" class='mx-4'>
                         <v-list class='pt-0'>
-                            <template v-for="(event, name, i) in channelData">
-                                <v-list-item :key="name">
+                            <template v-for="(event, i) in channelData">
+                                <v-list-item :key="'event' + i">
                                     <v-list-item-content>
                                         <v-list-item-title class='font-weight-medium'>
-                                            {{eventLabels[name]}}
+                                            {{eventLabels[event.name]}}
                                             <v-chip v-if="event.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
                                             <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
                                         </v-list-item-title>
@@ -57,17 +57,17 @@
                                                                 <v-list-item-title>{{event.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
                                                             </v-list-item-content>
                                                         </v-list-item>
-                                                        <v-list-item @click="cacheCurrentData(); $set(modifyDialog, name, true);">
+                                                        <v-list-item @click="cacheCurrentData(event); $set(modifyDialog, event.name, true);">
                                                             <v-list-item-content>
                                                                 <v-list-item-title>Modify</v-list-item-title>
                                                             </v-list-item-content>
                                                         </v-list-item>
                                                     </v-list>
                                                 </v-menu>
-                                                <v-dialog v-model="modifyDialog[name]" attach="#events" persistent max-width="50rem">
+                                                <v-dialog v-model="modifyDialog[event.name]" attach="#events" persistent max-width="50rem">
                                                     <v-card>
-                                                        <v-card-title>Modify {{eventLabels[name]}}</v-card-title>
-                                                        <v-card-subtitle>Update the message displayed when a {{eventLabels[name]}} happens.</v-card-subtitle>
+                                                        <v-card-title>Modify {{eventLabels[event.name]}}</v-card-title>
+                                                        <v-card-subtitle>Update the message displayed when a {{eventLabels[event.name]}} happens.</v-card-subtitle>
                                                         <v-card-text align="right">
                                                             <v-menu offset-y left close-on-click open-on-hover>
                                                                 <template v-slot:activator="{on}">
@@ -82,7 +82,7 @@
                                                                             <v-list-item-title>{{tag.label}}</v-list-item-title>
                                                                         </v-list-item-content>
                                                                     </v-list-item>
-                                                                    <v-list-item v-for='tag in dataTags[name]' :key='tag.label' @click="insertDataTag(name, tag, i)">
+                                                                    <v-list-item v-for='tag in dataTags[event.name]' :key='tag.label' @click="insertDataTag(name, tag, i)">
                                                                         <v-list-item-content>
                                                                             <v-list-item-title>{{tag.label}}</v-list-item-title>
                                                                         </v-list-item-content>
@@ -104,10 +104,13 @@
                                                         </v-card-text>
                                                         <v-card-actions>
                                                             <v-spacer/>
-                                                            <v-btn color="primary" text @click="$set(modifyDialog, name, false); cancelModify()">Cancel</v-btn>
-                                                            <v-btn color="primary" text @click="if (modifyValid[i]) {$set(modifyDialog, name, false); updateData()}">Save</v-btn>
+                                                            <v-btn color="primary" text @click="$set(modifyDialog, event.name, false); cancelModify()">Cancel</v-btn>
+                                                            <v-btn color="primary" text @click="if (modifyValid[i]) {updateData(event)}">Save</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
+                                                    <v-overlay :value="isSending" opacity=".15" absolute>
+                                                        <v-progress-circular indeterminate color="primary" size="64"/>
+                                                    </v-overlay>
                                                 </v-dialog>
                                             </v-col>
                                         </v-row>
@@ -185,34 +188,49 @@ export default {
             modifyValid: {},
             validationRules: validationRules,
             loadingData: true,
+            isSending: false,
+            responseError: null,
         };
     },
     methods: {
         enableBot: function() {
-            const channel = this.$store.state.userData.login;
-            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-                if (res.status === 200) {
-                    this.botStatus = true;
-                }
+            const channel = this.$store.state.userData.id;
+            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.$router.go();
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
         },
         flipEventStatus: function(event) {
+            const channel = this.$store.state.userData.id;
             event.enabled = !event.enabled;
-            this.updateData();
+            this.axios.put(`/events/${channel}/${event.name}`, {message: event.message, enabled: event.enabled}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.isSending = false;
+            }).catch(() => {
+                this.isSending = false;
+                event.enabled = !event.enabled;
+            });
         },
-        cacheCurrentData: function() {
-            this.dataCache = JSON.parse(JSON.stringify(this.channelData));
+        cacheCurrentData: function(event) {
+            this.responseError = null;
+            this.dataCache = JSON.parse(JSON.stringify(event));
         },
-        updateData: function() {
-            const channel = this.$store.state.userData.login;
-            this.axios.post(`/events/${channel}`, this.channelData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).catch(err => {
-                console.log(`ERROR: ${err}`);
+        updateData: function(eventData) {
+            const channel = this.$store.state.userData.id;
+            this.isSending = true;
+            this.axios.put(`/events/${channel}/${this.dataCache.name}`, {message: eventData.message, enabled: eventData.enabled}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.isSending = false;
+                this.modifyDialog[eventData.name] = false;
+            }).catch(err => {
+                this.isSending = false;
+                this.responseError = err.response.data;
             });
         },
         cancelModify: function() {
-            this.channelData = JSON.parse(JSON.stringify(this.dataCache));
+            let undo = this.channelData.find(e => e.name === this.dataCache.name);
+            undo.name = this.dataCache.name;
+            undo.message = this.dataCache.message;
+            undo.enabled = this.dataCache.enabled;
         },
         insertDataTag: function(event, tag, index) {
             const el = this.$refs[`textarea${index}`][0].$el.querySelector('textarea');
@@ -229,7 +247,7 @@ export default {
         }
     },
     mounted() {
-        const channel = this.$store.state.userData.login;
+        const channel = this.$store.state.userData.id;
         this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
             if (res.status === 404) {
                 this.channelExists = false;

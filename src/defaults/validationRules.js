@@ -11,9 +11,9 @@ module.exports = {
         }
         return true;
     },
-    nameExists: valueList => {
+    nameExists: (valueList, isNew) => {
         return value => {
-            if (valueList.filter(v => v === value).length > 1) {
+            if (valueList.filter(v => v === value).length > (isNew ? 0 : 1)) {
                 return 'There is an existing item with that name';
             }
             return true;

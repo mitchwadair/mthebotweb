@@ -89,7 +89,7 @@ export default {
     },
   },
   mounted() {
-    const channel = this.$store.state.userData.login;
+    const channel = this.$store.state.userData.id;
     this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
       this.loadingData = false;
       if (res.status === 404) {
@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     disableBot: function() {
-      const channel = this.$store.state.userData.login;
+      const channel = this.$store.state.userData.id;
       this.axios.delete(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
         if (res.status === 200) {
           this.botStatus = false;
@@ -116,7 +116,7 @@ export default {
       });
     },
     enableBot: function() {
-      const channel = this.$store.state.userData.login;
+      const channel = this.$store.state.userData.id;
       this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
         if (res.status === 404) {
           this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
