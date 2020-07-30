@@ -97,9 +97,10 @@ export default {
       this.$auth.getProfileData().then(res => {
         this.$store.commit('setUserData', res.data.data[0]);
         this.storeLoaded = true;
-      }).catch(() => {
+      }).catch(err => {
         localStorage.removeItem('uat');
-        this.$router.go('/');
+        this.$router.push(`/?error=auth&message=${err.response.data.message}`);
+        this.$router.go();
       });
     } else {
       this.storeLoaded = true;

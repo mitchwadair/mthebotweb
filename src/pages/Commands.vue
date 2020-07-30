@@ -372,21 +372,13 @@ export default {
     },
     mounted() {
         const channel = this.$store.state.userData.id;
-        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-            if (res.status === 404) {
-                this.loadingData = false;
-                this.channelExists = false;
-                return;
-            }else if (res.status === 401) {
-                localStorage.removeItem('uat');
-                this.$router.go('/');
-                return;
-            }
+        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
             this.axios.get(`/commands/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 this.channelData = res.data;
                 this.channelExists = true;
                 this.loadingData = false;
             }).catch(err => {
+                this.loadingData = false;
                 console.log(`ERROR: ${err}`);
             });
         }).catch(err => {
@@ -396,7 +388,8 @@ export default {
                 return;
             } else if (err.response.status === 401) {
                 localStorage.removeItem('uat');
-                this.$router.go('/');
+                this.$router.push(`/?error=auth&message=${err.response.data}`);
+                this.$router.go();
                 return;
             }
             console.log(`ERROR: ${err}`);

@@ -92,14 +92,6 @@ export default {
     const channel = this.$store.state.userData.id;
     this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
       this.loadingData = false;
-      if (res.status === 404) {
-        this.botStatus = false;
-        return;
-      } else if (res.status === 401) {
-        localStorage.removeItem('uat');
-        this.$router.go('/');
-        return;
-      }
       this.botStatus = !!res.data;
     }).catch(err => {
       this.loadingData = false;
@@ -108,7 +100,8 @@ export default {
         return;
       } else if (err.response.status === 401) {
         localStorage.removeItem('uat');
-        this.$router.go('/');
+        this.$router.push(`/?error=auth&message=${err.response.data}`);
+        this.$router.go();
         return;
       }
       console.log(`ERROR: ${err}`);
