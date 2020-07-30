@@ -95,12 +95,20 @@ export default {
       if (res.status === 404) {
         this.botStatus = false;
         return;
+      } else if (res.status === 401) {
+        localStorage.removeItem('uat');
+        this.$router.go('/');
+        return;
       }
       this.botStatus = !!res.data;
     }).catch(err => {
       this.loadingData = false;
       if (err.response.status === 404) {
         this.botStatus = false;
+        return;
+      } else if (err.response.status === 401) {
+        localStorage.removeItem('uat');
+        this.$router.go('/');
         return;
       }
       console.log(`ERROR: ${err}`);

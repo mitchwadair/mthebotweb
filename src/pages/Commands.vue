@@ -377,6 +377,10 @@ export default {
                 this.loadingData = false;
                 this.channelExists = false;
                 return;
+            }else if (res.status === 401) {
+                localStorage.removeItem('uat');
+                this.$router.go('/');
+                return;
             }
             this.axios.get(`/commands/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 this.channelData = res.data;
@@ -389,6 +393,10 @@ export default {
             this.loadingData = false;
             if (err.response.status === 404) {
                 this.channelExists = false;
+                return;
+            } else if (err.response.status === 401) {
+                localStorage.removeItem('uat');
+                this.$router.go('/');
                 return;
             }
             console.log(`ERROR: ${err}`);
