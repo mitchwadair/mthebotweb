@@ -219,21 +219,7 @@
                                                             </v-card-text>
                                                         </v-form>
                                                         <v-card-actions>
-                                                            <v-dialog v-model="removeDialog[i]" attach="#timers" persistent max-width="20rem">
-                                                                <template v-slot:activator="{ on }">
-                                                                    <v-btn color="error" v-on="on" text>Remove</v-btn>
-                                                                </template>
-                                                                <v-card>
-                                                                    <v-card-title>Remove Message</v-card-title>
-                                                                    <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
-                                                                    <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
-                                                                    <v-card-actions>
-                                                                        <v-spacer/>
-                                                                        <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
-                                                                        <v-btn color="error" text @click="removeTimer(i)">Remove</v-btn>
-                                                                    </v-card-actions>
-                                                                </v-card>
-                                                            </v-dialog>
+                                                            <v-btn color="error" text @click="$set(removeDialog, i, true)">Remove</v-btn>
                                                             <v-spacer/>
                                                             <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify(i)">Cancel</v-btn>
                                                             <v-btn color="primary" text @click="if (modifyFormValid[i]) {updateData(i, timer)}">Save</v-btn>

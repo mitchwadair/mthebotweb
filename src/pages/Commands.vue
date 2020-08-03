@@ -70,12 +70,34 @@
                                                 outlined dense counter required
                                                 class='flex-grow-0'/>
                                         </v-card-text>
+                                        <v-card-actions class='mb-n4 mr-2'>
+                                            <v-card-text class='py-0 font-weight-medium' align="right">Data Tags:</v-card-text>
+                                            <v-menu v-for="key in Object.keys(dataTags)" :key="key" offset-y left open-on-hover>
+                                                <template v-slot:activator="{on}">
+                                                    <v-btn text outlined class='ml-2' v-on="on" :ripple=false>{{key}}</v-btn>
+                                                </template>
+
+                                                <v-list dense>
+                                                    <v-list-item v-for="tag in dataTags[key]" :key="tag.tag" @click="insertDataTag(tag, '-new')">
+                                                        <v-tooltip left nudge-left=10>
+                                                            <template v-slot:activator="{on}">
+                                                                <v-list-item-content v-on="on">
+                                                                    <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                </v-list-item-content>
+                                                            </template>
+                                                            <span>{{tag.info}}</span>
+                                                        </v-tooltip>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </v-card-actions>
                                         <v-card-text class='mb-n4'>
                                             <v-textarea
                                                     v-model="newCommandData.message"
                                                     label="Message"
                                                     hide-details="auto"
                                                     maxlength="500"
+                                                    :ref="'textarea-new'"
                                                     :rules="[validationRules.required]"
                                                     outlined dense counter auto-grow required/>
                                         </v-card-text>
@@ -180,12 +202,34 @@
                                                                             ]"
                                                                             outlined dense counter required/>
                                                                     </v-card-text>
+                                                                    <v-card-actions class='mb-n4 mr-2'>
+                                                                        <v-card-text class='py-0 font-weight-medium' align="right">Data Tags:</v-card-text>
+                                                                        <v-menu v-for="key in Object.keys(dataTags)" :key="key" offset-y left open-on-hover>
+                                                                            <template v-slot:activator="{on}">
+                                                                                <v-btn text outlined class='ml-2' v-on="on" :ripple=false>{{key}}</v-btn>
+                                                                            </template>
+
+                                                                            <v-list dense>
+                                                                                <v-list-item v-for="tag in dataTags[key]" :key="tag.tag" @click="insertDataTag(tag, i)">
+                                                                                    <v-tooltip left nudge-left=10>
+                                                                                        <template v-slot:activator="{on}">
+                                                                                            <v-list-item-content v-on="on">
+                                                                                                <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                                            </v-list-item-content>
+                                                                                        </template>
+                                                                                        <span>{{tag.info}}</span>
+                                                                                    </v-tooltip>
+                                                                                </v-list-item>
+                                                                            </v-list>
+                                                                        </v-menu>
+                                                                    </v-card-actions>
                                                                     <v-card-text class='mb-n4'>
                                                                         <v-textarea
                                                                             v-model="command.message"
                                                                             label="Message"
                                                                             hide-details="auto"
                                                                             maxlength="500"
+                                                                            :ref="'textarea' + i"
                                                                             :rules="[validationRules.required]"
                                                                             outlined dense counter auto-grow required/>
                                                                     </v-card-text>
@@ -210,21 +254,7 @@
                                                                     </v-card-text>
                                                                 </v-form>
                                                                 <v-card-actions>
-                                                                    <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
-                                                                        <template v-slot:activator="{ on }">
-                                                                            <v-btn color="error" v-on="on" text>Remove</v-btn>
-                                                                        </template>
-                                                                        <v-card>
-                                                                            <v-card-title>Remove Command</v-card-title>
-                                                                            <v-card-text>Are you sure you would like to remove the <strong>!{{command.alias}}</strong> command?</v-card-text>
-                                                                            <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
-                                                                            <v-card-actions>
-                                                                                <v-spacer/>
-                                                                                <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
-                                                                                <v-btn color="error" text @click="removeCommand(i)">Remove</v-btn>
-                                                                            </v-card-actions>
-                                                                        </v-card>
-                                                                    </v-dialog>
+                                                                    <v-btn color="error" text @click="$set(removeDialog, i, true)">Remove</v-btn>
                                                                     <v-spacer/>
                                                                     <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify(i)">Cancel</v-btn>
                                                                     <v-btn color="primary" text @click="if (modifyFormValid[i]) {updateData(i, command)}">Save</v-btn>
@@ -273,6 +303,7 @@
 
 <script>
 import validationRules from '../defaults/validationRules';
+import dataTags from '../defaults/apidatatags.json';
 
 export default {
     name: 'Commands',
@@ -284,6 +315,7 @@ export default {
                 {text: "Subscriber", value: 2},
                 {text: "Moderator", value: 3},
             ],
+            dataTags: dataTags,
             validationRules: validationRules,
             channelExists: false,
             channelData: [],
@@ -367,6 +399,22 @@ export default {
             }).catch(err => {
                 this.isSending = false;
                 this.responseError = err.response.data;
+            });
+        },
+        insertDataTag: function(tag, index) {
+            const el = index === '-new' ? this.$refs[`textarea${index}`].$el.querySelector('textarea') : this.$refs[`textarea${index}`][0].$el.querySelector('textarea');
+
+            let cursorPos = el.selectionEnd;
+            if (index === '-new') {
+                this.newCommandData.message = `${this.newCommandData.message.substring(0, cursorPos)}${tag.tag}${this.newCommandData.message.substring(cursorPos)}`;
+            } else {
+                this.channelData[index].message = `${this.channelData[index].message.substring(0, cursorPos)}${tag.tag}${this.channelData[index].message.substring(cursorPos)}`;
+            }
+
+            cursorPos += tag.tag.length;
+            this.$nextTick(() => {
+                el.focus();
+                el.selectionEnd = cursorPos
             });
         }
     },

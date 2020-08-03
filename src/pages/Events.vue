@@ -52,14 +52,14 @@
                                                         </v-btn>
                                                     </template>
                                                     <v-list dense>
-                                                        <v-list-item @click="flipEventStatus(event)">
-                                                            <v-list-item-content>
-                                                                <v-list-item-title>{{event.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
                                                         <v-list-item @click="cacheCurrentData(event); $set(modifyDialog, event.name, true);">
                                                             <v-list-item-content>
                                                                 <v-list-item-title>Modify</v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                        <v-list-item @click="flipEventStatus(event)">
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>{{event.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
                                                             </v-list-item-content>
                                                         </v-list-item>
                                                     </v-list>
@@ -72,7 +72,7 @@
                                                             <v-menu offset-y left close-on-click open-on-hover>
                                                                 <template v-slot:activator="{on}">
                                                                     <v-btn text outlined v-on="on" :ripple=false>
-                                                                        Insert Data Value
+                                                                        Insert Data Tag
                                                                     </v-btn>
                                                                 </template>
 
@@ -239,7 +239,6 @@ export default {
             this.channelData[event].message = `${this.channelData[event].message.substring(0, cursorPos)}${tag.tag}${this.channelData[event].message.substring(cursorPos)}`;
 
             cursorPos += tag.tag.length;
-            console.log(cursorPos);
             this.$nextTick(() => {
                 el.focus();
                 el.selectionEnd = cursorPos
