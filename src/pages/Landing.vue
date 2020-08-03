@@ -81,6 +81,7 @@ export default {
             ],
             errors: {
                 login: "There was an error logging you in",
+                auth: "You have been logged out due to an authentication error",
             },
         }
     },

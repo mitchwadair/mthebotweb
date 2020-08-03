@@ -28,7 +28,7 @@
                 <v-spacer/>
             </v-row>
             <v-row v-else>
-                <v-col>
+                <v-col class='px-0 px-md-3'>
                     <v-sheet tile elevation="4" class='mx-4'>
                         <v-toolbar flat dense>
                             <v-toolbar-title class='ml-n4 align-self-end'>
@@ -44,7 +44,7 @@
                                         <template v-slot:activator="{ on: tooltip }">
                                             <v-fab-transition>
                                                 <v-btn color="primary" v-show="tab == 0" v-on="{...dialog, ...tooltip}" @click="createNewCommand" depressed fab x-small class='ml-auto'>
-                                                    <v-icon>mdi-plus</v-icon>
+                                                    <v-icon color="accent">mdi-plus</v-icon>
                                                 </v-btn>
                                             </v-fab-transition>
                                         </template>
@@ -54,6 +54,7 @@
                                 <v-card>
                                     <v-card-title>New Command</v-card-title>
                                     <v-card-subtitle>Create a new command for your chat</v-card-subtitle>
+                                    <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
                                     <v-form ref="newForm" v-model="newFormValid">
                                         <v-card-text class='mb-n4'>
                                             <v-text-field 
@@ -64,17 +65,39 @@
                                                 :rules="[
                                                     validationRules.required,
                                                     validationRules.noSpaces,
-                                                    validationRules.nameExists(channelData.map(c => c.alias))
+                                                    validationRules.nameExists(channelData.map(c => c.alias), true)
                                                 ]"
                                                 outlined dense counter required
                                                 class='flex-grow-0'/>
                                         </v-card-text>
+                                        <v-card-actions class='mb-n4 mr-2'>
+                                            <v-card-text class='py-0 font-weight-medium' align="right">Data Tags:</v-card-text>
+                                            <v-menu v-for="key in Object.keys(dataTags)" :key="key" offset-y left open-on-hover>
+                                                <template v-slot:activator="{on}">
+                                                    <v-btn text outlined class='ml-2' v-on="on" :ripple=false>{{key}}</v-btn>
+                                                </template>
+
+                                                <v-list dense>
+                                                    <v-list-item v-for="tag in dataTags[key]" :key="tag.tag" @click="insertDataTag(tag, '-new')">
+                                                        <v-tooltip left nudge-left=10>
+                                                            <template v-slot:activator="{on}">
+                                                                <v-list-item-content v-on="on">
+                                                                    <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                </v-list-item-content>
+                                                            </template>
+                                                            <span>{{tag.info}}</span>
+                                                        </v-tooltip>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </v-card-actions>
                                         <v-card-text class='mb-n4'>
                                             <v-textarea
                                                     v-model="newCommandData.message"
                                                     label="Message"
                                                     hide-details="auto"
                                                     maxlength="500"
+                                                    :ref="'textarea-new'"
                                                     :rules="[validationRules.required]"
                                                     outlined dense counter auto-grow required/>
                                         </v-card-text>
@@ -91,7 +114,7 @@
                                         </v-card-text>
                                         <v-card-text>
                                             <v-select
-                                                    v-model="newCommandData.userLevel"
+                                                    v-model="newCommandData.user_level"
                                                     :items="userLevels"
                                                     label="User Level"
                                                     hide-details="auto"
@@ -101,15 +124,25 @@
                                     <v-card-actions>
                                         <v-spacer/>
                                         <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
-                                        <v-btn color="primary" text @click="if (newFormValid) {newDialog = false; addNew();}">Save</v-btn>
+                                        <v-btn color="primary" text @click="if (newFormValid) {addNew();}">Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
+                                <v-overlay :value="isSending" opacity=".15" absolute>
+                                    <v-progress-circular indeterminate color="primary" size="64"/>
+                                </v-overlay>
                             </v-dialog>
                         </v-toolbar>
                         <v-divider/>
                         <v-tabs-items v-model="tab">
                             <v-tab-item>
                                 <v-list>
+                                    <v-list-item v-if="channelData.length === 0">
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                Looks like you have no commands!  Hit the '+' button to make one.
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
                                     <template v-for="(command, i) in channelData">
                                         <v-list-item :key="'command' + i">
                                             <v-list-item-content>
@@ -127,7 +160,7 @@
                                                     </v-col>
                                                     <v-col class='flex-grow-0'>
                                                         <v-list-item-subtitle>User Level</v-list-item-subtitle>
-                                                        {{userLevels.find(ul => ul.value === command.userLevel).text}}+
+                                                        {{userLevels.find(ul => ul.value === command.user_level).text}}+
                                                     </v-col>
                                                     <v-col class='flex-grow-0'>
                                                         <v-menu offset-y left>
@@ -138,12 +171,12 @@
                                                             </template>
 
                                                             <v-list dense>
-                                                                <v-list-item @click="cacheCurrentData(); $set(modifyDialog, i, true);">
+                                                                <v-list-item @click="cacheCurrentData(command); $set(modifyDialog, i, true);">
                                                                     <v-list-item-content>
                                                                         <v-list-item-title>Modify</v-list-item-title>
                                                                     </v-list-item-content>
                                                                 </v-list-item>
-                                                                <v-list-item @click="cacheCurrentData(); $set(removeDialog, i, true);" color="error">
+                                                                <v-list-item @click="cacheCurrentData(command); $set(removeDialog, i, true);" color="error">
                                                                     <v-list-item-content>
                                                                         <v-list-item-title style="color: #FF5252">Remove</v-list-item-title>
                                                                     </v-list-item-content>
@@ -154,6 +187,7 @@
                                                             <v-card>
                                                                 <v-card-title>Modify !{{command.alias}}</v-card-title>
                                                                 <v-card-subtitle>Update the properties of the !{{command.alias}} command.</v-card-subtitle>
+                                                                <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
                                                                 <v-form v-model="modifyFormValid[i]">
                                                                     <v-card-text class='mb-n4'>
                                                                         <v-text-field 
@@ -164,16 +198,38 @@
                                                                             :rules="[
                                                                                 validationRules.required,
                                                                                 validationRules.noSpaces,
-                                                                                validationRules.nameExists(channelData.map(c => c.alias))
+                                                                                validationRules.nameExists(channelData.map(c => c.alias), false)
                                                                             ]"
                                                                             outlined dense counter required/>
                                                                     </v-card-text>
+                                                                    <v-card-actions class='mb-n4 mr-2'>
+                                                                        <v-card-text class='py-0 font-weight-medium' align="right">Data Tags:</v-card-text>
+                                                                        <v-menu v-for="key in Object.keys(dataTags)" :key="key" offset-y left open-on-hover>
+                                                                            <template v-slot:activator="{on}">
+                                                                                <v-btn text outlined class='ml-2' v-on="on" :ripple=false>{{key}}</v-btn>
+                                                                            </template>
+
+                                                                            <v-list dense>
+                                                                                <v-list-item v-for="tag in dataTags[key]" :key="tag.tag" @click="insertDataTag(tag, i)">
+                                                                                    <v-tooltip left nudge-left=10>
+                                                                                        <template v-slot:activator="{on}">
+                                                                                            <v-list-item-content v-on="on">
+                                                                                                <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                                            </v-list-item-content>
+                                                                                        </template>
+                                                                                        <span>{{tag.info}}</span>
+                                                                                    </v-tooltip>
+                                                                                </v-list-item>
+                                                                            </v-list>
+                                                                        </v-menu>
+                                                                    </v-card-actions>
                                                                     <v-card-text class='mb-n4'>
                                                                         <v-textarea
                                                                             v-model="command.message"
                                                                             label="Message"
                                                                             hide-details="auto"
                                                                             maxlength="500"
+                                                                            :ref="'textarea' + i"
                                                                             :rules="[validationRules.required]"
                                                                             outlined dense counter auto-grow required/>
                                                                     </v-card-text>
@@ -190,7 +246,7 @@
                                                                     </v-card-text>
                                                                     <v-card-text>
                                                                         <v-select
-                                                                            v-model="command.userLevel"
+                                                                            v-model="command.user_level"
                                                                             :items="userLevels"
                                                                             label="User Level"
                                                                             hide-details="auto"
@@ -198,36 +254,30 @@
                                                                     </v-card-text>
                                                                 </v-form>
                                                                 <v-card-actions>
-                                                                    <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
-                                                                        <template v-slot:activator="{ on }">
-                                                                            <v-btn color="error" v-on="on" text>Remove</v-btn>
-                                                                        </template>
-                                                                        <v-card>
-                                                                            <v-card-title>Remove Command</v-card-title>
-                                                                            <v-card-text>Are you sure you would like to remove the <strong>!{{command.alias}}</strong> command?</v-card-text>
-                                                                            <v-card-actions>
-                                                                                <v-spacer/>
-                                                                                <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
-                                                                                <v-btn color="error" text @click="$set(removeDialog, i, false); removeCommand(i)">Remove</v-btn>
-                                                                            </v-card-actions>
-                                                                        </v-card>
-                                                                    </v-dialog>
+                                                                    <v-btn color="error" text @click="$set(removeDialog, i, true)">Remove</v-btn>
                                                                     <v-spacer/>
-                                                                    <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify()">Cancel</v-btn>
-                                                                    <v-btn color="primary" text @click="if (modifyFormValid[i]) {$set(modifyDialog, i, false); updateData()}">Save</v-btn>
+                                                                    <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify(i)">Cancel</v-btn>
+                                                                    <v-btn color="primary" text @click="if (modifyFormValid[i]) {updateData(i, command)}">Save</v-btn>
                                                                 </v-card-actions>
                                                             </v-card>
+                                                            <v-overlay :value="isSending" opacity=".15" absolute>
+                                                                <v-progress-circular indeterminate color="primary" size="64"/>
+                                                            </v-overlay>
                                                         </v-dialog>
                                                         <v-dialog v-model="removeDialog[i]" attach="#commands" persistent max-width="20rem">
                                                             <v-card>
                                                                 <v-card-title>Remove Command</v-card-title>
                                                                 <v-card-text>Are you sure you would like to remove the <strong>!{{command.alias}}</strong> command?</v-card-text>
+                                                                <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
                                                                 <v-card-actions>
                                                                     <v-spacer/>
                                                                     <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
-                                                                    <v-btn color="error" text @click="$set(removeDialog, i, false); removeCommand(i)">Remove</v-btn>
+                                                                    <v-btn color="error" text @click="removeCommand(i)">Remove</v-btn>
                                                                 </v-card-actions>
                                                             </v-card>
+                                                            <v-overlay :value="isSending" opacity=".15" absolute>
+                                                                <v-progress-circular indeterminate color="primary" size="64"/>
+                                                            </v-overlay>
                                                         </v-dialog>
                                                     </v-col>
                                                 </v-row>
@@ -253,6 +303,7 @@
 
 <script>
 import validationRules from '../defaults/validationRules';
+import dataTags from '../defaults/apidatatags.json';
 
 export default {
     name: 'Commands',
@@ -264,6 +315,7 @@ export default {
                 {text: "Subscriber", value: 2},
                 {text: "Moderator", value: 3},
             ],
+            dataTags: dataTags,
             validationRules: validationRules,
             channelExists: false,
             channelData: [],
@@ -276,37 +328,48 @@ export default {
             removeDialog: {},
             tab: null,
             loadingData: true,
+            isSending: false,
+            responseError: null,
         };
     },
     methods: {
         enableBot: function() {
-            const channel = this.$store.state.userData.login;
-            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-                if (res.status === 200) {
-                    this.botStatus = true;
-                }
+            const channel = this.$store.state.userData.id;
+            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.$router.go();
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
         },
-        cacheCurrentData: function() {
-            this.dataCache = JSON.parse(JSON.stringify(this.channelData));
+        cacheCurrentData: function(command) {
+            this.responseError = null;
+            this.dataCache = JSON.parse(JSON.stringify(command));
         },
-        updateData: function() {
-            const channel = this.$store.state.userData.login;
-            this.axios.post(`/commands/${channel}`, this.channelData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).catch(err => {
-                console.log(`ERROR: ${err}`);
+        updateData: function(dialogIndex, commandData) {
+            const channel = this.$store.state.userData.id;
+            this.isSending = true;
+            this.axios.put(`/commands/${channel}/${this.dataCache.alias}`, commandData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.isSending = false;
+                this.modifyDialog[dialogIndex] = false;
+            }).catch(err => {
+                this.isSending = false;
+                this.responseError = err.response.data;
             });
         },
-        cancelModify: function() {
-            this.channelData = JSON.parse(JSON.stringify(this.dataCache));
+        cancelModify: function(index) {
+            let undo = this.channelData[index];
+            undo.alias = this.dataCache.alias;
+            undo.cooldown = this.dataCache.cooldown;
+            undo.message = this.dataCache.message;
+            undo.user_level = this.dataCache.user_level;
         },
         createNewCommand: function() {
+            this.responseError = null;
             this.newCommandData = {
                 alias: '',
                 message: '',
                 cooldown: 5,
-                userLevel: 0,
+                user_level: 0,
             }
             this.$refs.newForm.resetValidation();
         },
@@ -314,33 +377,67 @@ export default {
             this.newCommandData = {};
         },
         addNew: function() {
-            this.channelData.push(this.newCommandData);
-            this.updateData();
+            const channel = this.$store.state.userData.id;
+            this.isSending = true;
+            this.axios.post(`/commands/${channel}`, this.newCommandData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.isSending = false;
+                this.newDialog = false;
+                this.channelData.push(this.newCommandData);
+            }).catch(err => {
+                this.isSending = false;
+                this.responseError = err.response.data;
+            });
         },
         removeCommand: function(index) {
-            this.channelData.splice(index, 1);
-            this.updateData();
+            const channel = this.$store.state.userData.id;
+            let removed = this.channelData.splice(index, 1);
+            this.isSending = true;
+            this.axios.delete(`/commands/${channel}/${removed[0].alias}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                this.isSending = false;
+                this.removeDialog[index] = false;
+                this.modifyDialog[index] = false;
+            }).catch(err => {
+                this.isSending = false;
+                this.responseError = err.response.data;
+            });
+        },
+        insertDataTag: function(tag, index) {
+            const el = index === '-new' ? this.$refs[`textarea${index}`].$el.querySelector('textarea') : this.$refs[`textarea${index}`][0].$el.querySelector('textarea');
+
+            let cursorPos = el.selectionEnd;
+            if (index === '-new') {
+                this.newCommandData.message = `${this.newCommandData.message.substring(0, cursorPos)}${tag.tag}${this.newCommandData.message.substring(cursorPos)}`;
+            } else {
+                this.channelData[index].message = `${this.channelData[index].message.substring(0, cursorPos)}${tag.tag}${this.channelData[index].message.substring(cursorPos)}`;
+            }
+
+            cursorPos += tag.tag.length;
+            this.$nextTick(() => {
+                el.focus();
+                el.selectionEnd = cursorPos
+            });
         }
     },
     mounted() {
-        const channel = this.$store.state.userData.login;
-        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-            if (res.status === 404) {
-                this.loadingData = false;
-                this.channelExists = false;
-                return;
-            }
+        const channel = this.$store.state.userData.id;
+        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
             this.axios.get(`/commands/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                 this.channelData = res.data;
                 this.channelExists = true;
                 this.loadingData = false;
             }).catch(err => {
+                this.loadingData = false;
                 console.log(`ERROR: ${err}`);
             });
         }).catch(err => {
             this.loadingData = false;
             if (err.response.status === 404) {
                 this.channelExists = false;
+                return;
+            } else if (err.response.status === 401) {
+                localStorage.removeItem('uat');
+                this.$router.push(`/?error=auth&message=${err.response.data}`);
+                this.$router.go();
                 return;
             }
             console.log(`ERROR: ${err}`);
