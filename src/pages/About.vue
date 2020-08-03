@@ -9,7 +9,7 @@
             <v-row>
                 <v-col class='pt-0'>
                     <v-card tile elevation="0" class='mx-12'>
-                        <v-card-title class='headline pt-0'>What is MtheBot_?</v-card-title>
+                        <v-card-title class='headline'>What is MtheBot_?</v-card-title>
                         <v-card-text class='body-1'>
                             MtheBot_ is an 
                             <a href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">open-source</a> 
@@ -28,7 +28,7 @@
             <v-row>
                 <v-col class='pt-0'>
                     <v-card tile elevation="0" class='mx-12'>
-                        <v-card-title class='headline pt-0'>How can I support MtheBot_?</v-card-title>
+                        <v-card-title class='headline'>How can I support MtheBot_?</v-card-title>
                         <v-card-text class='body-1'>
                             MtheBot_ is currently a one-man operation.  Because of this, I incur numerous monthly costs associated with keeping the bot running, which I currently
                             pay out of pocket.  These costs include domain registration and maintenance, server architechture, and more.  If you would like to help keep MtheBot_ 
@@ -43,7 +43,7 @@
             <v-row>
                 <v-col class='pt-0'>
                     <v-card tile elevation="0" class='d-flex flex-column mx-12'>
-                        <v-card-title class='headline pt-0'>Report an Issue</v-card-title>
+                        <v-card-title class='headline'>Report an Issue</v-card-title>
                         <v-card-text class='body-1'>
                             If you encounter an issue or bug, you can submit an issue on GitHub or contact me to get help resolving it.
                         </v-card-text>
@@ -61,7 +61,7 @@
             <v-row>
                 <v-col>
                     <v-card tile elevation="0" height="100%" class='d-flex flex-column mx-12'>
-                        <v-card-title class='pt-0'>Contribute to MtheBot_</v-card-title>
+                        <v-card-title class=''>Contribute to MtheBot_</v-card-title>
                         <v-card-text>
                             MtheBot_ is an open-source project.  I welcome pull-requests to contribute to MtheBot_ on GitHub!
                         </v-card-text>
@@ -74,7 +74,7 @@
                 </v-col>
                 <v-col>
                     <v-card tile elevation="0" height="100%" class='d-flex flex-column mx-12'>
-                        <v-card-title class='pt-0'>Support MtheBot_</v-card-title>
+                        <v-card-title class=''>Support MtheBot_</v-card-title>
                         <v-card-text>
                             As I said above, MtheBot_ is a one-man operation.  Any support is greatly appreciated and keeps the bot up and running!
                         </v-card-text>

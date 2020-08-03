@@ -149,14 +149,14 @@
                                                         </v-btn>
                                                     </template>
                                                     <v-list dense>
-                                                        <v-list-item @click="flipTimerStatus(timer)">
-                                                            <v-list-item-content>
-                                                                <v-list-item-title>{{timer.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
                                                         <v-list-item @click="cacheCurrentData(timer); $set(modifyDialog, i, true);">
                                                             <v-list-item-content>
                                                                 <v-list-item-title>Modify</v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                        <v-list-item @click="flipTimerStatus(timer)">
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>{{timer.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
                                                             </v-list-item-content>
                                                         </v-list-item>
                                                         <v-list-item @click="cacheCurrentData(timer); $set(removeDialog, i, true);">
