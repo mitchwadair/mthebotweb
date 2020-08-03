@@ -14,7 +14,7 @@ export default {
                     this.$store.commit('setUserData', res.data.data[0]);
                     this.axios.get(`/chats/${this.$store.state.userData.id}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
                         if (res.status === 404) {
-                            this.$router.push('/dashboard');
+                            this.$router.replace('/dashboard');
                             return;
                         }
                         this.axios.post(`/auth/${this.$store.state.userData.id}`, {token: token}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
@@ -22,7 +22,7 @@ export default {
                         });
                     }).catch(err => {
                         if (err.response.status === 404) {
-                            this.$router.push('/dashboard');
+                            this.$router.replace('/dashboard');
                             return;
                         }
                         console.log(`ERROR: ${err}`);
@@ -33,7 +33,7 @@ export default {
                     this.$router.go();
                 });
         } else {
-            this.$router.push('/');
+            this.$router.replace('/');
         }
     }
 }

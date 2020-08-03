@@ -58,9 +58,12 @@
         <v-col>
           <v-card height="100%" class='d-flex flex-column'>
             <v-card-title>Support</v-card-title>
-            <v-card-text>Consider supporting the development and maintenance of MtheBot_ by supporting me on Patreon!</v-card-text>
+            <v-card-text>Consider supporting the development and maintenance of MtheBot_ by supporting me on Patreon or donating!</v-card-text>
             <v-card-actions class='mt-auto'>
                 <v-btn text color="primary" href='https://www.patreon.com/mitchdev' target="_blank" rel="noopener noreferrer">MtheBot_ on Patreon</v-btn>
+                <v-btn text color="primary" href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&item_name=Supporting+the+Development+of+MtheBot_&currency_code=USD&source=url' target="_blank" rel="noopener noreferrer">
+                  Donate to MtheBot_
+                </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
