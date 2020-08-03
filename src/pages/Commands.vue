@@ -44,7 +44,7 @@
                                         <template v-slot:activator="{ on: tooltip }">
                                             <v-fab-transition>
                                                 <v-btn color="primary" v-show="tab == 0" v-on="{...dialog, ...tooltip}" @click="createNewCommand" depressed fab x-small class='ml-auto'>
-                                                    <v-icon>mdi-plus</v-icon>
+                                                    <v-icon color="accent">mdi-plus</v-icon>
                                                 </v-btn>
                                             </v-fab-transition>
                                         </template>

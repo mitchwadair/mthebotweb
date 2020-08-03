@@ -40,7 +40,7 @@
                                                     <v-tooltip left>
                                                         <template v-slot:activator="{ on: tooltip }">
                                                             <v-btn color="primary" v-on="{...dialog, ...tooltip}" @click="createNewTimer" depressed fab x-small class='ml-auto'>
-                                                                <v-icon>mdi-plus</v-icon>
+                                                                <v-icon color="accent">mdi-plus</v-icon>
                                                             </v-btn>
                                                         </template>
                                                         <span>Add a new timer</span>

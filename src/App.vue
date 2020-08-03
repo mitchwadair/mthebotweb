@@ -1,6 +1,6 @@
 <template>
   <v-app v-if="storeLoaded">
-    <v-app-bar app clipped-left flat color="accent">
+    <v-app-bar app clipped-left flat color="primary" light>
       <div class="d-flex align-center">
         <app-bar-header/>
       </div>
@@ -28,8 +28,8 @@
       <router-view style='height: 100%; overflow-y: auto'></router-view>
     </v-content>
 
-    <v-footer app fixed padless width="100%" style="bottom: 0">
-      <v-card flat tile width="100%" class='text-center' color="accent">
+    <v-footer app fixed padless width="100%" style="bottom: 0" light>
+      <v-card flat tile width="100%" class='text-center' color="primary">
         <v-card-text class="pt-2 pb-0">
           <v-btn class="mx-2" icon small to="/">
             <v-icon>mdi-home</v-icon>
