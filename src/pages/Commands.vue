@@ -28,7 +28,7 @@
                 <v-spacer/>
             </v-row>
             <v-row v-else>
-                <v-col>
+                <v-col class='px-0 px-md-3'>
                     <v-sheet tile elevation="4" class='mx-4'>
                         <v-toolbar flat dense>
                             <v-toolbar-title class='ml-n4 align-self-end'>

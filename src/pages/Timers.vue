@@ -28,7 +28,7 @@
                 <v-spacer/>
             </v-row>
             <v-row v-else>
-                <v-col>
+                <v-col class='px-0 px-md-3'>
                     <v-sheet tile elevation="4" class='mx-4'>
                         <v-list class='pt-0'>
                             <v-list-item key="actions">
