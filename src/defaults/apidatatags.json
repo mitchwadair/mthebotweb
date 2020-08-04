@@ -1,9 +1,14 @@
 {
     "Twitch": [
-        {"label": "Follow Age", "tag": "{{followage}}", "info": "How long a user has followed you for"},
+        {"label": "Follow Age", "tag": "{{followage}}", "info": "How long a chatter has followed you for"},
         {"label": "Follow Count", "tag": "{{followcount}}", "info": "Your current number of followers"},
         {"label": "Subscriber Count", "tag": "{{subcount}}", "info": "Your current number of subscribers"},
         {"label": "Uptime", "tag": "{{uptime}}", "info": "How long your stream has been live"},
         {"label": "Current Game", "tag": "{{game}}", "info": "The game currently being played on your stream"}
+    ],
+    "General": [
+        {"label": "Sender", "tag": "{{sender}}", "info": "The chatter who used the command"},
+        {"label": "Channel", "tag": "{{channel}}", "info": "Your channel name"},
+        {"label": "Commands", "tag": "{{commands}}", "info": "A comma-separated list of the available commands in your channel"}
     ]
 }
