@@ -135,7 +135,7 @@
                                             </v-col>
                                             <v-col class='flex-grow-0 text-no-wrap'>
                                                 <v-list-item-subtitle>Interval</v-list-item-subtitle>
-                                                {{timer.seconds}} seconds
+                                                {{timer.interval}} seconds
                                             </v-col>
                                             <v-col class='flex-grow-0'>
                                                 <v-list-item-subtitle>Threshold</v-list-item-subtitle>
