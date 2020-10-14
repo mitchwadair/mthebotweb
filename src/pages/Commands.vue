@@ -104,7 +104,7 @@
                                         <v-card-text>
                                             <v-text-field
                                                 type="number"
-                                                v-model="newCommandData.cooldown"
+                                                v-model.number="newCommandData.cooldown"
                                                 label="Cooldown Time"
                                                 suffix="seconds"
                                                 hide-details="auto"
@@ -236,7 +236,7 @@
                                                                     <v-card-text>
                                                                         <v-text-field
                                                                             type="number"
-                                                                            v-model="command.cooldown"
+                                                                            v-model.number="command.cooldown"
                                                                             label="Cooldown Time"
                                                                             suffix="seconds"
                                                                             hide-details="auto"
