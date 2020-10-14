@@ -77,7 +77,7 @@
                                                         <v-card-text>
                                                             <v-text-field
                                                                 type="number"
-                                                                v-model="newTimerData.interval"
+                                                                v-model.number="newTimerData.interval"
                                                                 label="Message Interval"
                                                                 suffix="seconds"
                                                                 hide-details="auto"
@@ -88,7 +88,7 @@
                                                         <v-card-text>
                                                             <v-text-field
                                                                 type="number"
-                                                                v-model="newTimerData.message_threshold"
+                                                                v-model.number="newTimerData.message_threshold"
                                                                 label="Message Threshold"
                                                                 hint="The number of chats required before being able to send the timed message"
                                                                 suffix="messages"
@@ -197,7 +197,7 @@
                                                             <v-card-text>
                                                                 <v-text-field
                                                                     type="number"
-                                                                    v-model="timer.interval"
+                                                                    v-model.number="timer.interval"
                                                                     label="Message Interval"
                                                                     suffix="seconds"
                                                                     hide-details="auto"
@@ -208,7 +208,7 @@
                                                             <v-card-text>
                                                                 <v-text-field
                                                                     type="number"
-                                                                    v-model="timer.message_threshold"
+                                                                    v-model.number="timer.message_threshold"
                                                                     label="Message Threshold"
                                                                     hint="The number of chats required before being able to send the timed message"
                                                                     suffix="messages"
