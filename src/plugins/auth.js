@@ -17,9 +17,9 @@ function createAuth(router) {
                 const params = {
                     client_id: 'cd1q55j22rdxm0o3lp2jwy8osgsjn2',
                     redirect_uri: process.env.NODE_ENV == 'development' ? 'http://localhost:8081/auth' : 'https://bot.mtheb.tv/auth',
-                    response_type: 'token',
+                    response_type: 'code',
                     force_verify: true,
-                    scope: 'channel:read:subscriptions+channel:read:redemptions'
+                    scope: 'channel:read:subscriptions channel:read:redemptions channel:manage:redemptions'
                 }
                 Object.keys(params).forEach(key => {
                     loginURL.searchParams.append(key, params[key]);
@@ -28,15 +28,11 @@ function createAuth(router) {
             },
             logout: function() {
                 localStorage.removeItem('uat');
+                localStorage.removeItem('userData');
                 router.push('/');
             },
             getProfileData: function() {
-                return this.axios.get('https://api.twitch.tv/helix/users', {
-                    headers: {
-                        'Authorization': `Bearer ${this.$auth.accessToken}`,
-                        'Client-ID': 'cd1q55j22rdxm0o3lp2jwy8osgsjn2',
-                    }
-                });
+                return JSON.parse(localStorage.getItem('userData'));
             }
         }
     });

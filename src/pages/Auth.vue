@@ -5,30 +5,17 @@
 <script>
 export default {
     mounted: function() {
-        const hash = window.location.hash;
-        if (hash !== '') {
-            const token = hash.substring(1).split('&')[0].split('=')[1];
-            this.$auth.accessToken = token;
-            this.$auth.getProfileData()
-                .then(res => {
-                    this.$store.commit('setUserData', res.data.data[0]);
-                    this.axios.get(`/chats/${this.$store.state.userData.id}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                        this.axios.post(`/auth/${this.$store.state.userData.id}`, {token: token}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                            this.$router.replace('/dashboard');
-                        });
-                    }).catch(err => {
-                        if (err.response.status === 404) {
-                            this.$router.replace('/dashboard');
-                            return;
-                        }
-                        console.log(err.toString());
-                    });
-                }).catch(err => {
-                    this.$auth.logout();
-                    this.$router.push(`/?error=login&message=${err.response.data.message}`);
-                    this.$router.go();
-                });
+        const code = this.$route.query.code;
+        if (code) {
+            this.axios.post('/auth', {code: code}).then(res => {
+                this.$auth.accessToken = res.data.session_token;
+                let newData = {...res.data};
+                delete newData['session_token'];
+                this.$store.commit('setUserData', newData);
+                this.$router.replace('/dashboard');
+            });
         } else {
+            console.log('test')
             this.$router.replace('/');
         }
     }

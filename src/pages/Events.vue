@@ -263,6 +263,7 @@ export default {
                 return;
             } else if (err.response.status === 401) {
                 localStorage.removeItem('uat');
+                localStorage.removeItem('userData');
                 this.$router.push(`/?error=auth&message=${err.response.data}`);
                 this.$router.go();
                 return;

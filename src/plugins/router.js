@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
             next();
         }
     } else {
-        if (to.hash === '') {
+        if (!to.query.code) {
             next('/');
         } else {
             next();
