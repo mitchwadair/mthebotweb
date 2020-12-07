@@ -19,7 +19,7 @@
             <v-card-title>MtheBot_ is Enabled</v-card-title>
             <v-card-text>
               MtheBot_ is currently sitting in your chat awaiting commands! Please ensure MtheBot_ has moderator status in your chat
-              to ensure everything works. You may disable MtheBot_ and it will leave your chat.
+              so everything works correctly. You may disable MtheBot_ and it will leave your chat.
             </v-card-text>
             <v-card-actions>
                 <v-btn @click="disableBot" text color="primary">Disable MtheBot_</v-btn>
@@ -58,10 +58,10 @@
         <v-col>
           <v-card height="100%" class='d-flex flex-column'>
             <v-card-title>Support</v-card-title>
-            <v-card-text>Consider supporting the development and maintenance of MtheBot_ by supporting me on Patreon or donating!</v-card-text>
+            <v-card-text>Consider supporting the development and maintenance of MtheBot_ by supporting me on GitHub Sponsors or donating through PayPal!</v-card-text>
             <v-card-actions class='mt-auto'>
-                <v-btn text color="primary" href='https://www.patreon.com/mitchdev' target="_blank" rel="noopener noreferrer">MtheBot_ on Patreon</v-btn>
-                <v-btn text color="primary" href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&item_name=Supporting+the+Development+of+MtheBot_&currency_code=USD&source=url' target="_blank" rel="noopener noreferrer">
+                <v-btn text color="primary" href='https://github.com/sponsors/mitchwadair' target="_blank" rel="noopener noreferrer">GitHub Sponsors</v-btn>
+                <v-btn text color="primary" href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD' target="_blank" rel="noopener noreferrer">
                   Donate to MtheBot_
                 </v-btn>
             </v-card-actions>
