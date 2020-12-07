@@ -12,21 +12,6 @@
                     <v-progress-circular indeterminate color="primary" size="100" width="8"/>
                 </v-col>
             </v-row>
-            <v-row v-else-if="!channelExists">
-                <v-col>
-                    <v-card flat>
-                        <v-card-title>Channel Not Activated</v-card-title>
-                        <v-card-text>
-                            Looks like you haven't enabled MtheBot_ on your channel for the first time.
-                            In order to modify MtheBot_ for your channel, you must enable it first.
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn @click="enableBot" text color="primary">Enable MtheBot_</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
-                <v-spacer/>
-            </v-row>
             <v-row v-else>
                 <v-col class='px-0 px-md-3'>
                     <v-sheet tile elevation="4" class='mx-4'>
@@ -266,7 +251,6 @@ export default {
     data: function() {
         return {
             validationRules: validationRules,
-            channelExists: false,
             channelData: [],
             dataCache: [],
             newTimerData: {},
@@ -283,8 +267,10 @@ export default {
     methods: {
         enableBot: function() {
             const channel = this.$store.state.userData.id;
-            this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                this.$router.go();
+            this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
+                if (res.status === 200) {
+                    this.$router.go();
+                }
             }).catch(err => {
                 console.log(`ERROR: ${err}`);
             });
@@ -364,27 +350,11 @@ export default {
     },
     mounted() {
         const channel = this.$store.state.userData.id;
-        this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-            this.axios.get(`/timers/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-                this.channelData = res.data;
-                this.channelExists = true;
-                this.loadingData = false;
-            }).catch(err => {
-                this.loadingData = false;
-                console.log(`ERROR: ${err}`);
-            });
+        this.axios.get(`/timers/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
+            this.channelData = res.data;
+            this.loadingData = false;
         }).catch(err => {
             this.loadingData = false;
-            if (err.response.status === 404) {
-                this.channelExists = false;
-                return;
-            } else if (err.response.status === 401) {
-                localStorage.removeItem('uat');
-                localStorage.removeItem('userData');
-                this.$router.push(`/?error=auth&message=${err.response.data}`);
-                this.$router.go();
-                return;
-            }
             console.log(`ERROR: ${err}`);
         });
     },

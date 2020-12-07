@@ -13,7 +13,6 @@ export default {
                 this.$router.replace('/dashboard');
             });
         } else {
-            console.log('test')
             this.$router.replace('/');
         }
     }

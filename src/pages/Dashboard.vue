@@ -122,36 +122,12 @@ export default {
     },
     enableBot: function() {
       const channel = this.$store.state.userData.id;
-      this.axios.get(`/chats/${channel}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-        if (res.status === 404) {
-          this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-            if (res.status === 200) {
-              this.botStatus = true;
-            }
-          }).catch(err => {
-            console.log(`ERROR: ${err}`);
-          });
-        } else {
-          this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-            if (res.status === 200) {
-              this.botStatus = true;
-            }
-          }).catch(err => {
-            console.log(`ERROR: ${err}`);
-          });
+      this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
+        if (res.status === 200) {
+          this.botStatus = true;
         }
       }).catch(err => {
-        if (err.response.status === 404) {
-          this.axios.post(`/init/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {
-            if (res.status === 200) {
-              this.botStatus = true;
-            }
-          }).catch(err => {
-            console.log(`ERROR: ${err}`);
-          });
-        } else {
-          console.log(`ERROR: ${err}`);
-        }
+        console.log(`ERROR: ${err}`);
       });
     }
   }
