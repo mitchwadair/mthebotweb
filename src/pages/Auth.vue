@@ -9,9 +9,7 @@ export default {
         if (code) {
             this.axios.post('/auth', {code: code}).then(res => {
                 this.$auth.accessToken = res.data.session_token;
-                let newData = {...res.data};
-                delete newData['session_token'];
-                this.$store.commit('setUserData', newData);
+                this.$store.commit('setUserData', res.data.user_data);
                 this.$router.replace('/dashboard');
             });
         } else {
