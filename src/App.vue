@@ -24,9 +24,9 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-content style='max-height: 100vh'>
+    <v-main style='max-height: 100vh'>
       <router-view style='height: 100%; overflow-y: auto'></router-view>
-    </v-content>
+    </v-main>
 
     <v-footer app fixed padless width="100%" style="bottom: 0" light>
       <v-card flat tile width="100%" class='text-center' color="primary">
@@ -76,8 +76,6 @@ export default {
         {icon: 'mdi-github', link: 'https://github.com/mitchwadair/mthebot'},
         {icon: 'mdi-linkedin', link: 'https://www.linkedin.com/in/mitchell-adair/'},
         {icon: 'mdi-twitch', link: 'https://twitch.tv/mtheb_'},
-        {icon: 'mdi-patreon', link: 'https://www.patreon.com/mitchdev'},
-        {icon: 'mdi-gift', link: 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&item_name=Supporting+the+Development+of+MtheBot_&currency_code=USD&source=url'},
       ],
     }
   },
@@ -90,22 +88,14 @@ export default {
     }
   },
   created() {
-    if (!localStorage.getItem('version') || localStorage.getItem('version') !== 'scopeUpgrade') {
+    if (!localStorage.getItem('version') || localStorage.getItem('version') !== 'scopeUpgrade2') {
       this.$auth.logout();
-      localStorage.setItem('version', 'scopeUpgrade');
+      localStorage.setItem('version', 'scopeUpgrade2');
     }
     if (this.$auth.isAuthenticated()) {
-      this.$auth.getProfileData().then(res => {
-        this.$store.commit('setUserData', res.data.data[0]);
-        this.storeLoaded = true;
-      }).catch(err => {
-        localStorage.removeItem('uat');
-        this.$router.push(`/?error=auth&message=${err.response.data.message}`);
-        this.$router.go();
-      });
-    } else {
-      this.storeLoaded = true;
+      this.$store.commit('setUserData', this.$auth.getProfileData());
     }
+    this.storeLoaded = true;
     if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;

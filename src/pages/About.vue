@@ -32,8 +32,8 @@
                         <v-card-text class='body-1'>
                             MtheBot_ is currently a one-man operation.  Because of this, I incur numerous monthly costs associated with keeping the bot running, which I currently
                             pay out of pocket.  These costs include domain registration and maintenance, server architechture, and more.  If you would like to help keep MtheBot_ 
-                            running, you could consider supporting the project on <a href="https://www.patreon.com/mitchdev" target="_blank" rel="noopener noreferrer">Patreon</a> or giving 
-                            a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&item_name=Supporting+the+Development+of+MtheBot_&currency_code=USD&source=url" target="_blank" rel="noopener noreferrer">
+                            running, you could consider supporting the project on <a href="https://github.com/sponsors/mitchwadair" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a> 
+                            or giving a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD" target="_blank" rel="noopener noreferrer">
                             one-time donation</a>.  Anything is appreciated and will directly help the efforts being made not only to maintain MtheBot_, but also to allow me to dedicate 
                             more time to improving the bot and it's features.
                         </v-card-text>
@@ -79,10 +79,10 @@
                             As I said above, MtheBot_ is a one-man operation.  Any support is greatly appreciated and keeps the bot up and running!
                         </v-card-text>
                         <v-card-actions class='pt-0 pl-4 mt-auto'>
-                            <v-btn outlined small href="https://www.patreon.com/mitchdev" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-patreon</v-icon>MtheBot_ on Patreon
+                            <v-btn outlined small href="https://github.com/sponsors/mitchwadair" target="_blank" rel="noopener noreferrer">
+                                <v-icon left>mdi-github</v-icon>GitHub Sponsors
                             </v-btn>
-                            <v-btn outlined small href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&item_name=Supporting+the+Development+of+MtheBot_&currency_code=USD&source=url" target="_blank" rel="noopener noreferrer">
+                            <v-btn outlined small href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-gift</v-icon>Donate to MtheBot_
                             </v-btn>
                         </v-card-actions>
