@@ -94,7 +94,7 @@
                                                 suffix="seconds"
                                                 hide-details="auto"
                                                 min="0"
-                                                :rules="[validationRules.required]"
+                                                :rules="[validationRules.required, validationRules.aboveZero]"
                                                 outlined dense required/>
                                         </v-card-text>
                                         <v-card-text>
@@ -226,7 +226,7 @@
                                                                             suffix="seconds"
                                                                             hide-details="auto"
                                                                             min="0"
-                                                                            :rules="[validationRules.required]"
+                                                                            :rules="[validationRules.required, validationRules.aboveZero]"
                                                                             outlined dense required/>
                                                                     </v-card-text>
                                                                     <v-card-text>
