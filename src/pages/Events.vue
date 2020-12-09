@@ -62,15 +62,25 @@
                                                                 </template>
 
                                                                 <v-list dense>
-                                                                    <v-list-item v-for='tag in dataTags.general' :key='tag.label' @click="insertDataTag(name, tag, i)">
-                                                                        <v-list-item-content>
-                                                                            <v-list-item-title>{{tag.label}}</v-list-item-title>
-                                                                        </v-list-item-content>
+                                                                    <v-list-item v-for='tag in dataTags.general' :key='tag.label' @click="insertDataTag(tag, i)">
+                                                                        <v-tooltip left nudge-left=10>
+                                                                            <template v-slot:activator="{on}">
+                                                                                <v-list-item-content v-on="on">
+                                                                                    <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                                </v-list-item-content>
+                                                                            </template>
+                                                                            <span>{{tag.info}}</span>
+                                                                        </v-tooltip>
                                                                     </v-list-item>
-                                                                    <v-list-item v-for='tag in dataTags[event.name]' :key='tag.label' @click="insertDataTag(name, tag, i)">
-                                                                        <v-list-item-content>
-                                                                            <v-list-item-title>{{tag.label}}</v-list-item-title>
-                                                                        </v-list-item-content>
+                                                                    <v-list-item v-for='tag in dataTags[event.name]' :key='tag.label' @click="insertDataTag(tag, i)">
+                                                                        <v-tooltip left nudge-left=10>
+                                                                            <template v-slot:activator="{on}">
+                                                                                <v-list-item-content v-on="on">
+                                                                                    <v-list-item-title>{{tag.label}}</v-list-item-title>
+                                                                                </v-list-item-content>
+                                                                            </template>
+                                                                            <span>{{tag.info}}</span>
+                                                                        </v-tooltip>
                                                                     </v-list-item>
                                                                 </v-list>
                                                             </v-menu>
@@ -120,39 +130,39 @@ export default {
         return {
             dataTags: {
                 general: [
-                    {label: 'User', tag: '{{user}}'},
+                    {label: 'User', tag: '{{user}}', info: 'The user the action originated from'},
                 ],
                 raid: [
-                    {label: 'Viewers', tag: '{{viewers}}'},
+                    {label: 'Viewers', tag: '{{viewers}}', info: 'The number of viewers in the raid'},
                 ],
                 host: [
-                    {label: 'Viewers', tag: '{{viewers}}'},
+                    {label: 'Viewers', tag: '{{viewers}}', info: 'The number of viewers in the host'},
                 ],
                 sub: [
-                    {label: 'Sub Type', tag: '{{type}}'},
+                    {label: 'Sub Type', tag: '{{type}}', info: 'The subscription type'},
                 ],
                 resub: [
-                    {label: 'Total Months', tag: '{{months}}'},
-                    {label: 'Streak', tag: '{{streak}}'},
-                    {label: 'Sub Type', tag: '{{type}}'},
+                    {label: 'Total Months', tag: '{{months}}', info: 'The total number of months subbed'},
+                    {label: 'Streak', tag: '{{streak}}', info: 'The current number of months in the sub streak'},
+                    {label: 'Sub Type', tag: '{{type}}', info: 'The subscription type'},
                 ],
                 subgift: [
-                    {label: 'Total Gifts', tag: '{{total}}'},
-                    {label: 'Streak', tag: '{{streak}}'},
-                    {label: 'Recipient', tag: '{{recipient}}'},
-                    {label: 'Sub Type', tag: '{{type}}'},
+                    {label: 'Total Gifts', tag: '{{total}}', info: 'The total number of subs gifted by the user'},
+                    {label: 'Streak', tag: '{{streak}}', info: 'The current number of months in the sub streak'},
+                    {label: 'Recipient', tag: '{{recipient}}', info: 'The user who received the sub gift'},
+                    {label: 'Sub Type', tag: '{{type}}', info: 'The subscription type'},
                 ],
                 giftupgrade: [
-                    {label: 'Sub Gifter', tag: '{{gifter}}'},
+                    {label: 'Sub Gifter', tag: '{{gifter}}', info: 'The original gifter of the subscription'},
                 ],
                 mysterygift: [
-                    {label: 'Total Gifts', tag: '{{total}}'},
-                    {label: 'Number of Subs', tag: '{{count}}'},
-                    {label: 'Sub Type', tag: '{{type}}'},
+                    {label: 'Total Gifts', tag: '{{total}}', info: 'The total number of subs gifted by the user'},
+                    {label: 'Number of Subs', tag: '{{count}}', info: 'The number of subs gifted at this time'},
+                    {label: 'Sub Type', tag: '{{type}}', info: 'The subscription type'},
                 ],
                 anongiftupgrade: [],
                 cheer: [
-                    {label: 'Cheer Amount', tag: '{{amount}}'},
+                    {label: 'Cheer Amount', tag: '{{amount}}', info: 'The amount of bits cheered'},
                 ]
             },
             eventLabels: {
@@ -218,16 +228,16 @@ export default {
             undo.message = this.dataCache.message;
             undo.enabled = this.dataCache.enabled;
         },
-        insertDataTag: function(event, tag, index) {
+        insertDataTag: function(tag, index) {
             const el = this.$refs[`textarea${index}`][0].$el.querySelector('textarea');
 
             let cursorPos = el.selectionEnd;
-            this.channelData[event].message = `${this.channelData[event].message.substring(0, cursorPos)}${tag.tag}${this.channelData[event].message.substring(cursorPos)}`;
+            this.channelData[index].message = `${this.channelData[index].message.substring(0, cursorPos)}${tag.tag}${this.channelData[index].message.substring(cursorPos)}`;
 
             cursorPos += tag.tag.length;
             this.$nextTick(() => {
                 el.focus();
-                el.selectionEnd = cursorPos
+                el.selectionEnd = cursorPos;
             });
         }
     },
