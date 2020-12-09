@@ -99,7 +99,9 @@ export default {
     if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
-      this.$router.replace(redirect);
+      this.$router.replace(redirect).catch(() => {
+        //do nothing
+      });
     }
   }
 };
