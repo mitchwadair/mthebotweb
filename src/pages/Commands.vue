@@ -20,7 +20,7 @@
                             :rules="[
                                 validationRules.required,
                                 validationRules.noSpaces,
-                                validationRules.nameExists(channelData.map(c => c.alias), toModify < 0 ? true : false)
+                                validationRules.nameExists(toModify < 0 ? channelData.map(c => c.alias) : channelData.filter(c => c.alias !== channelData[toModify].alias).map(c => c.alias))
                             ]"
                             outlined dense counter required
                             class='flex-grow-0'/>
