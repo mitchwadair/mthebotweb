@@ -8,7 +8,7 @@
             </v-row>
             <v-row class='mx-auto' style='max-width: 90%'>
                 <v-col class='pt-0'>
-                    <v-card tile elevation="0">
+                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class='headline'>What is MtheBot_?</v-card-title>
                         <v-card-text class='body-1'>
                             MtheBot_ is an 
@@ -25,9 +25,10 @@
                     </v-card>
                 </v-col>
             </v-row>
+            <v-divider class='mx-auto' style='max-width: 80%'/>
             <v-row class='mx-auto' style='max-width: 90%'>
                 <v-col class='pt-0'>
-                    <v-card tile elevation="0">
+                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class='headline'>How can I support MtheBot_?</v-card-title>
                         <v-card-text class='body-1'>
                             MtheBot_ is currently a one-man operation.  Because of this, I incur numerous monthly costs associated with keeping the bot running, which I currently
@@ -40,18 +41,19 @@
                     </v-card>
                 </v-col>
             </v-row>
+            <v-divider class='mx-auto' style='max-width: 80%'/>
             <v-row class='mx-auto' style='max-width: 90%'>
                 <v-col class='pt-0'>
-                    <v-card tile elevation="0">
+                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class='headline'>Report an Issue</v-card-title>
                         <v-card-text class='body-1'>
                             If you encounter an issue or bug, you can submit an issue on GitHub or contact me to get help resolving it.
                         </v-card-text>
-                        <v-card-actions class='pt-0 pl-4 mt-auto flex-wrap'>
-                            <v-btn outlined small href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
+                        <v-card-actions class='pt-0 pl-4 mt-auto'>
+                            <v-btn text small color='primary' href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-github</v-icon>GitHub Issues
                             </v-btn>
-                            <v-btn outlined small @click="openContactDialog">
+                            <v-btn text small color='primary' @click="openContactDialog">
                                 <v-icon left>mdi-email</v-icon>Contact
                             </v-btn>
                         </v-card-actions>
@@ -60,13 +62,13 @@
             </v-row>
             <v-row class='mx-auto' style='max-width: 90%'>
                 <v-col class='pt-0'>
-                    <v-card tile elevation="0" height="100%">
+                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class=''>Contribute to MtheBot_</v-card-title>
                         <v-card-text>
                             MtheBot_ is an open-source project.  I welcome pull-requests to contribute to MtheBot_ on GitHub!
                         </v-card-text>
                         <v-card-actions class='pt-0 pl-4 mt-auto'>
-                            <v-btn outlined small href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
+                            <v-btn text small color='primary' href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
                                 <v-icon left>mdi-github</v-icon>MtheBot_ on GitHub
                             </v-btn>
                         </v-card-actions>
