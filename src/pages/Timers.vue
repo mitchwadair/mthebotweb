@@ -119,7 +119,7 @@
                             </v-list-item-content>
                         </v-list-item>
                         <template v-for="(timer, i) in channelData">
-                            <v-card :key="'timer' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4" color="secondary">
+                            <v-card :key="'timer' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                 <v-card-title>
                                     {{timer.name}}
                                     <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>

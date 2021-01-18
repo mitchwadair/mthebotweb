@@ -147,7 +147,7 @@
                                     </v-list-item-content>
                                 </v-list-item>
                                 <template v-for="(command, i) in channelData">
-                                    <v-card :key="'command' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4" color="secondary">
+                                    <v-card :key="'command' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                         <v-card-title class='pb-2'>!{{command.alias}}</v-card-title>
                                         <v-card-text class='py-0'>
                                             <v-row>

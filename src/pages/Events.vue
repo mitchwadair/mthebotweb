@@ -74,7 +74,7 @@
                 <v-col class='mx-2'>
                     <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 600px'>
                         <template v-for="(event, i) in channelData">
-                            <v-card :key="'event' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4" color="secondary">
+                            <v-card :key="'event' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                 <v-card-title class='pb-2'>
                                     {{eventLabels[event.name]}}
                                     <v-chip v-if="event.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
