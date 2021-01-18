@@ -10,10 +10,10 @@
     <v-container v-else>
       <v-row>
         <v-col align="center">
-          <h1 class='display-3'>Welcome {{userData.display_name}}</h1>
+          <h1 class='display-3'>Welcome, {{userData.display_name}}!</h1>
         </v-col>
       </v-row>
-      <v-row class='mx-4'>
+      <v-row class='mx-auto' style='max-width: 90%'>
         <v-col>
           <v-card v-if="botStatus" flat>
             <v-card-title>MtheBot_ is Enabled</v-card-title>
@@ -34,7 +34,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="botStatus" class='mt-5 mx-4 justify-around'>
+      <v-row v-if="botStatus" class='mx-auto' style='max-width: 90%'>
         <v-col v-for="(cardData, i) in navCardData" :key="i">
           <v-card height="100%" class='d-flex flex-column'>
             <v-card-title>{{cardData.title}}</v-card-title>
@@ -45,7 +45,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row class='mt-5 mx-4'>
+      <v-row class='mx-auto' style='max-width: 90%'>
         <v-col>
           <v-card height="100%" class='d-flex flex-column'>
             <v-card-title>About</v-card-title>
@@ -62,7 +62,7 @@
             <v-card-actions class='mt-auto'>
                 <v-btn text color="primary" href='https://github.com/sponsors/mitchwadair' target="_blank" rel="noopener noreferrer">GitHub Sponsors</v-btn>
                 <v-btn text color="primary" href='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD' target="_blank" rel="noopener noreferrer">
-                  Donate to MtheBot_
+                  Donate
                 </v-btn>
             </v-card-actions>
           </v-card>
