@@ -170,7 +170,7 @@
                                                 </v-col>
                                             </v-row>
                                         </v-card-text>
-                                        <v-card-actions>
+                                        <v-card-actions class='pt-0'>
                                             <v-btn text @click="modifyCommand(i)" color="primary">Modify</v-btn>
                                             <v-btn icon @click="openRemoveDialog(i)" color="error">
                                                 <v-icon>mdi-delete</v-icon>
