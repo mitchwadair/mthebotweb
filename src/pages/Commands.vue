@@ -249,7 +249,7 @@ export default {
                 user_level: 0,
             }
             this.modifyDialog = true;
-            this.$refs.formDialog.resetValidation();
+            this.$refs.formDialog && this.$refs.formDialog.resetValidation();
         },
         cancelModify: function() {
             this.responseError = null;
@@ -290,12 +290,12 @@ export default {
         },
         removeCommand: function() {
             const channel = this.$store.state.userData.id;
-            let removed = this.channelData.splice(this.toRemove, 1);
             this.isSending = true;
-            this.axios.delete(`/commands/${channel}/${removed[0].alias}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+            this.axios.delete(`/commands/${channel}/${this.channelData[this.toRemove].alias}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
                 this.isSending = false;
                 this.removeDialog = false;
                 this.modifyDialog = false;
+                this.channelData.splice(this.toRemove, 1);
                 this.toModify = -1;
                 this.toRemove = -1;
             }).catch(err => {
