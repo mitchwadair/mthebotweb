@@ -80,7 +80,7 @@
                     <v-btn v-if="toModify >= 0" color="error" text @click="openRemoveDialog(toModify)">Remove</v-btn>
                     <v-spacer/>
                     <v-btn color="primary" text @click="cancelModify">Cancel</v-btn>
-                    <v-btn color="primary" text @click="submitModify">Save</v-btn>
+                    <v-btn color="primary" text @click="{if (modifyFormValid){submitModify()}}">Save</v-btn>
                 </v-card-actions>
             </v-card>
             <v-overlay :value="isSending" opacity=".15" absolute>
@@ -211,7 +211,6 @@ export default {
             dataTags: dataTags,
             validationRules: validationRules,
             channelData: [],
-            dataCache: [],
             newCommandData: {},
             modifyDialog: false,
             toModify: -1,
