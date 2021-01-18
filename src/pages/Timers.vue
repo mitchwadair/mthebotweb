@@ -1,5 +1,89 @@
 <template>
     <div id='timers'>
+        <v-dialog v-model="modifyDialog" attach="#timers" persistent max-width="50rem">
+            <v-card>
+                <v-card-title v-if="toModify < 0">New Timer</v-card-title>
+                <v-card-title v-else>Modify {{channelData[toModify].name}}</v-card-title>
+
+                <v-card-subtitle v-if="toModify < 0">Create a new timer for your chat</v-card-subtitle>
+                <v-card-subtitle v-else>Update the properties of the {{channelData[toModify].name}} timer.</v-card-subtitle>
+
+                <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
+
+                <v-form ref="formDialog" v-model="modifyFormValid">
+                    <v-card-text class='mb-n4'>
+                        <v-text-field 
+                            v-model="newTimerData.name"
+                            label="Name"
+                            hide-details="auto"
+                            maxlength="15"
+                            :rules="[
+                                validationRules.required,
+                                validationRules.noSpaces,
+                                validationRules.nameExists(toModify < 0 ? channelData.map(e => e.name) : channelData.filter(e => e.name !== channelData[toModify].name).map(e => e.name))
+                            ]"
+                            outlined dense counter required
+                            class='flex-grow-0'/>
+                    </v-card-text>
+                    <v-card-text class='mb-n4'>
+                        <v-textarea
+                                v-model="newTimerData.message"
+                                label="Message"
+                                hide-details="auto"
+                                maxlength="500"
+                                :rules="[validationRules.required]"
+                                outlined dense counter auto-grow required/>
+                    </v-card-text>
+                    <v-card-text>
+                        <v-text-field
+                            type="number"
+                            v-model.number="newTimerData.interval"
+                            label="Message Interval"
+                            suffix="seconds"
+                            hide-details="auto"
+                            min="0"
+                            :rules="[validationRules.required, validationRules.aboveZero]"
+                            outlined dense required/>
+                    </v-card-text>
+                    <v-card-text>
+                        <v-text-field
+                            type="number"
+                            v-model.number="newTimerData.message_threshold"
+                            label="Message Threshold"
+                            hint="The number of chats required before being able to send the timed message"
+                            suffix="messages"
+                            hide-details="auto"
+                            min="0"
+                            :rules="[validationRules.required, validationRules.aboveZero]"
+                            outlined dense required/>
+                    </v-card-text>
+                </v-form>
+                <v-card-actions>
+                    <v-btn v-if="toModify >= 0" color="error" text @click="openRemoveDialog(toModify)">Remove</v-btn>
+                    <v-spacer/>
+                    <v-btn color="primary" text @click="cancelModify">Cancel</v-btn>
+                    <v-btn color="primary" text @click="{if (modifyFormValid){submitModify()}}">Save</v-btn>
+                </v-card-actions>
+            </v-card>
+            <v-overlay :value="isSending" opacity=".15" absolute>
+                <v-progress-circular indeterminate color="primary" size="64"/>
+            </v-overlay>
+        </v-dialog>
+        <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
+            <v-card>
+                <v-card-title>Remove Timer</v-card-title>
+                <v-card-text>Are you sure you would like to remove the <strong v-if="toRemove > -1">{{channelData[toRemove].name}}</strong> timer?</v-card-text>
+                <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn color="primary" text @click="cancelRemove">Cancel</v-btn>
+                    <v-btn color="error" text @click="removeTimer">Remove</v-btn>
+                </v-card-actions>
+            </v-card>
+            <v-overlay :value="isSending" opacity=".15" absolute>
+                <v-progress-circular indeterminate color="primary" size="64"/>
+            </v-overlay>
+        </v-dialog>
         <v-container>
             <v-row>
                 <v-col class='mx-3'>
@@ -12,109 +96,38 @@
                     <v-progress-circular indeterminate color="primary" size="100" width="8"/>
                 </v-col>
             </v-row>
-            <v-row v-else>
-                <v-col class='px-0 px-md-3'>
-                    <v-sheet tile elevation="4" class='mx-4'>
-                        <v-list class='pt-0'>
-                            <v-list-item key="actions">
-                                <v-list-item-content class='py-0'>
-                                    <v-row>
-                                        <v-col class='d-flex py-0'>
-                                            <v-dialog v-model="newDialog" attach="#timers" persistent max-width="50rem">
-                                                <template v-slot:activator="{ on: dialog }">
-                                                    <v-tooltip left>
-                                                        <template v-slot:activator="{ on: tooltip }">
-                                                            <v-btn color="primary" v-on="{...dialog, ...tooltip}" @click="createNewTimer" depressed fab x-small class='ml-auto'>
-                                                                <v-icon color="accent">mdi-plus</v-icon>
-                                                            </v-btn>
-                                                        </template>
-                                                        <span>Add a new timer</span>
-                                                    </v-tooltip>
-                                                </template>
-                                                <v-card>
-                                                    <v-card-title>New Timer</v-card-title>
-                                                    <v-card-subtitle>Create a new timer for your chat</v-card-subtitle>
-                                                    <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
-                                                    <v-form ref="newForm" v-model="newFormValid">
-                                                        <v-card-text class='mb-n4'>
-                                                            <v-text-field 
-                                                                v-model="newTimerData.name"
-                                                                label="Name"
-                                                                hide-details="auto"
-                                                                maxlength="15"
-                                                                :rules="[
-                                                                    validationRules.required,
-                                                                    validationRules.noSpaces,
-                                                                    validationRules.nameExists(channelData.map(t => t.name), true)
-                                                                ]"
-                                                                outlined dense counter required
-                                                                class='flex-grow-0'/>
-                                                        </v-card-text>
-                                                        <v-card-text class='mb-n4'>
-                                                            <v-textarea
-                                                                    v-model="newTimerData.message"
-                                                                    label="Message"
-                                                                    hide-details="auto"
-                                                                    maxlength="500"
-                                                                    :rules="[validationRules.required]"
-                                                                    outlined dense counter auto-grow required/>
-                                                        </v-card-text>
-                                                        <v-card-text>
-                                                            <v-text-field
-                                                                type="number"
-                                                                v-model.number="newTimerData.interval"
-                                                                label="Message Interval"
-                                                                suffix="seconds"
-                                                                hide-details="auto"
-                                                                min="0"
-                                                                :rules="[validationRules.required, validationRules.aboveZero]"
-                                                                outlined dense required/>
-                                                        </v-card-text>
-                                                        <v-card-text>
-                                                            <v-text-field
-                                                                type="number"
-                                                                v-model.number="newTimerData.message_threshold"
-                                                                label="Message Threshold"
-                                                                hint="The number of chats required before being able to send the timed message"
-                                                                suffix="messages"
-                                                                hide-details="auto"
-                                                                min="0"
-                                                                :rules="[validationRules.required, validationRules.aboveZero]"
-                                                                outlined dense required/>
-                                                        </v-card-text>
-                                                    </v-form>
-                                                    <v-card-actions>
-                                                        <v-spacer/>
-                                                        <v-btn color="primary" text @click="newDialog = false; cancelNew()">Cancel</v-btn>
-                                                        <v-btn color="primary" text @click="if (newFormValid) {addNew()}">Save</v-btn>
-                                                    </v-card-actions>
-                                                </v-card>
-                                                <v-overlay :value="isSending" opacity=".15" absolute>
-                                                    <v-progress-circular indeterminate color="primary" size="64"/>
-                                                </v-overlay>
-                                            </v-dialog>
-                                        </v-col>
-                                    </v-row>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <v-divider/>
-                            <v-list-item v-if="channelData.length === 0">
-                                <v-list-item-content>
-                                    <v-list-item-title>
-                                        Looks like you have no timers!  Hit the '+' button to make one.
+            <v-row v-else class='mx-2'>
+                <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 600px'>
+                    <v-toolbar flat dense>
+                        <v-spacer/>
+                        <v-tooltip left>
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="primary" v-on="on" @click="modifyEvent(-1)" depressed fab x-small class='ml-auto'>
+                                    <v-icon color="accent">mdi-plus</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Add a new timer</span>
+                        </v-tooltip>
+                    </v-toolbar>
+                    <v-divider/>
+                    <v-row class='mx-auto' style='max-width: 600px'>
+                        <v-list-item v-if="channelData.length === 0">
+                            <v-list-item-content>
+                                <v-list-item-title>
+                                    Looks like you have no timers!  Hit the '+' button to make one.
+                                </v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <template v-for="(timer, i) in channelData">
+                                <v-list-item :key="'timer' + i">
+                                    <v-list-item-content>
+                                        <v-list-item-title class='font-weight-medium'>
+                                        {{timer.name}}
+                                        <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
+                                        <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
                                     </v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <template v-for="(timer, i) in channelData">
-                                 <v-list-item :key="'timer' + i">
-                                     <v-list-item-content>
-                                         <v-list-item-title class='font-weight-medium'>
-                                            {{timer.name}}
-                                            <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
-                                            <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
-                                        </v-list-item-title>
-                                         <v-row class='mb-n4 mt-n2'>
-                                             <v-col style="word-break: break-word">
+                                        <v-row class='mb-n4 mt-n2'>
+                                            <v-col style="word-break: break-word">
                                                 <v-list-item-subtitle>Message</v-list-item-subtitle>
                                                 "{{timer.message}}"
                                             </v-col>
@@ -134,7 +147,7 @@
                                                         </v-btn>
                                                     </template>
                                                     <v-list dense>
-                                                        <v-list-item @click="cacheCurrentData(timer); $set(modifyDialog, i, true);">
+                                                        <v-list-item @click="modifyEvent(i)">
                                                             <v-list-item-content>
                                                                 <v-list-item-title>Modify</v-list-item-title>
                                                             </v-list-item-content>
@@ -144,100 +157,21 @@
                                                                 <v-list-item-title>{{timer.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
                                                             </v-list-item-content>
                                                         </v-list-item>
-                                                        <v-list-item @click="cacheCurrentData(timer); $set(removeDialog, i, true);">
+                                                        <v-list-item @click="openRemoveDialog(i)">
                                                             <v-list-item-content>
                                                                 <v-list-item-title style="color: #FF5252">Remove</v-list-item-title>
                                                             </v-list-item-content>
                                                         </v-list-item>
                                                     </v-list>
                                                 </v-menu>
-                                                <v-dialog v-model="modifyDialog[i]" attach="#timers" persistent max-width="50rem">
-                                                    <v-card>
-                                                        <v-card-title>Modify {{timer.name}}</v-card-title>
-                                                        <v-card-subtitle>Update the properties of the {{timer.name}} timer.</v-card-subtitle>
-                                                        <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
-                                                        <v-form v-model="modifyFormValid[i]">
-                                                            <v-card-text class='mb-n4'>
-                                                                <v-text-field 
-                                                                    v-model="timer.name"
-                                                                    label="Name"
-                                                                    hide-details="auto"
-                                                                    maxlength="15"
-                                                                    :rules="[
-                                                                        validationRules.required,
-                                                                        validationRules.noSpaces,
-                                                                        validationRules.nameExists(channelData.map(t => t.name), false)
-                                                                    ]"
-                                                                    outlined dense counter required/>
-                                                            </v-card-text>
-                                                            <v-card-text class='mb-n4'>
-                                                                <v-textarea
-                                                                    v-model="timer.message"
-                                                                    label="Message"
-                                                                    hide-details="auto"
-                                                                    maxlength="500"
-                                                                    :rules="[validationRules.required]"
-                                                                    outlined dense counter auto-grow required/>
-                                                            </v-card-text>
-                                                            <v-card-text>
-                                                                <v-text-field
-                                                                    type="number"
-                                                                    v-model.number="timer.interval"
-                                                                    label="Message Interval"
-                                                                    suffix="seconds"
-                                                                    hide-details="auto"
-                                                                    min="0"
-                                                                    :rules="[validationRules.required, validationRules.aboveZero]"
-                                                                    outlined dense required/>
-                                                            </v-card-text>
-                                                            <v-card-text>
-                                                                <v-text-field
-                                                                    type="number"
-                                                                    v-model.number="timer.message_threshold"
-                                                                    label="Message Threshold"
-                                                                    hint="The number of chats required before being able to send the timed message"
-                                                                    suffix="messages"
-                                                                    hide-details="auto"
-                                                                    min="0"
-                                                                    :rules="[validationRules.required, validationRules.aboveZero]"
-                                                                    outlined dense required/>
-                                                            </v-card-text>
-                                                        </v-form>
-                                                        <v-card-actions>
-                                                            <v-btn color="error" text @click="$set(removeDialog, i, true)">Remove</v-btn>
-                                                            <v-spacer/>
-                                                            <v-btn color="primary" text @click="$set(modifyDialog, i, false); cancelModify(i)">Cancel</v-btn>
-                                                            <v-btn color="primary" text @click="if (modifyFormValid[i]) {updateData(i, timer)}">Save</v-btn>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                    <v-overlay :value="isSending" opacity=".15" absolute>
-                                                        <v-progress-circular indeterminate color="primary" size="64"/>
-                                                    </v-overlay>
-                                                </v-dialog>
-                                                <v-dialog v-model="removeDialog[i]" attach="#timers" persistent max-width="20rem">
-                                                    <v-card>
-                                                        <v-card-title>Remove Message</v-card-title>
-                                                        <v-card-text>Are you sure you would like to remove the <strong>{{timer.name}}</strong> timed message?</v-card-text>
-                                                        <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
-                                                        <v-card-actions>
-                                                            <v-spacer/>
-                                                            <v-btn color="primary" text @click="$set(removeDialog, i, false)">Cancel</v-btn>
-                                                            <v-btn color="error" text @click="removeTimer(i)">Remove</v-btn>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                    <v-overlay :value="isSending" opacity=".15" absolute>
-                                                        <v-progress-circular indeterminate color="primary" size="64"/>
-                                                    </v-overlay>
-                                                </v-dialog>
                                             </v-col>
-                                         </v-row>
-                                     </v-list-item-content>
-                                 </v-list-item>
-                                 <v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/>
-                            </template>
-                        </v-list>
-                    </v-sheet>
-                </v-col>
+                                        </v-row>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/>
+                        </template>
+                    </v-row>
+                </v-sheet>
             </v-row>
         </v-container>
     </div>
@@ -252,13 +186,12 @@ export default {
         return {
             validationRules: validationRules,
             channelData: [],
-            dataCache: [],
             newTimerData: {},
-            modifyDialog: {},
+            modifyDialog: false,
+            toModify: -1,
             modifyFormValid: {},
-            newDialog: false,
-            newFormValid: true,
-            removeDialog: {},
+            removeDialog: false,
+            toRemove: -1,
             loadingData: true,
             isSending: false,
             responseError: null,
@@ -277,71 +210,82 @@ export default {
         },
         flipTimerStatus: function(timer) {
             const channel = this.$store.state.userData.id;
-            timer.enabled = !timer.enabled;
-            this.axios.put(`/timers/${channel}/${timer.name}`, timer, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+            let newData = {...timer};
+            newData.enabled = !timer.enabled;
+            this.axios.put(`/timers/${channel}/${timer.name}`, newData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
                 this.isSending = false;
+                timer.enabled = !timer.enabled;
             }).catch(() => {
                 this.isSending = false;
                 timer.enabled = !timer.enabled;
             });
         },
-        cacheCurrentData: function(timer) {
+        modifyEvent: function(index) {
             this.responseError = null;
-            this.dataCache = JSON.parse(JSON.stringify(timer));
-        },
-        updateData: function(dialogIndex, timerData) {
-            const channel = this.$store.state.userData.id;
-            this.isSending = true;
-            this.axios.put(`/timers/${channel}/${this.dataCache.name}`, timerData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                this.isSending = false;
-                this.modifyDialog[dialogIndex] = false;
-            }).catch(err => {
-                this.isSending = false;
-                this.responseError = err.response.data;
-            });
-        },
-        cancelModify: function(index) {
-            let undo = this.channelData[index];
-            undo.name = this.dataCache.name;
-            undo.enabled = this.dataCache.enabled;
-            undo.message = this.dataCache.message;
-            undo.interval = this.dataCache.interval;
-            undo.message_threshold = this.dataCache.message_threshold;
-        },
-        createNewTimer: function() {
-            this.responseError = null;
-            this.newTimerData = {
+            this.toModify = index;
+            this.newTimerData = index >= 0 ? {
+                name: this.channelData[index].name,
+                enabled: this.channelData[index].enabled,
+                message: this.channelData[index].message,
+                interval: this.channelData[index].interval,
+                message_threshold: this.channelData[index].message_threshold,
+            } : {
                 name: '',
                 enabled: true,
                 message: '',
                 interval: 300,
                 message_threshold: 5,
             }
-            this.$refs.newForm.resetValidation();
+            this.modifyDialog = true;
+            this.$refs.formDialog.resetValidation();
         },
-        cancelNew: function() {
+        cancelModify: function() {
+            this.responseError = null;
+            this.modifyDialog = false;
             this.newTimerData = {};
+            this.toModify = -1;
         },
-        addNew: function() {
+        submitModify: function() {
             const channel = this.$store.state.userData.id;
             this.isSending = true;
-            this.axios.post(`/timers/${channel}`, this.newTimerData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
-                this.isSending = false;
-                this.newDialog = false;
-                this.channelData.push(this.newTimerData);
-            }).catch(err => {
-                this.isSending = false;
-                this.responseError = err.response.data;
-            });
+            if (this.toModify < 0) {
+                this.axios.post(`/timers/${channel}`, this.newTimerData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                    this.isSending = false;
+                    this.modifyDialog = false;
+                    this.channelData.push(this.newTimerData);
+                }).catch(err => {
+                    this.isSending = false;
+                    this.responseError = err.response.data;
+                });
+            } else {
+                this.axios.put(`/timers/${channel}/${this.channelData[this.toModify].name}`, this.newTimerData, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+                    this.isSending = false;
+                    this.modifyDialog = false;
+                    this.channelData[this.toModify] = this.newTimerData;
+                }).catch(err => {
+                    this.isSending = false;
+                    this.responseError = err.response.data;
+                });
+            }
         },
-        removeTimer: function(index) {
+        openRemoveDialog: function(index) {
+            this.toRemove = index;
+            this.removeDialog = true;
+        },
+        cancelRemove: function() {
+            this.toRemove = -1;
+            this.removeDialog = false;
+        },
+        removeTimer: function() {
             const channel = this.$store.state.userData.id;
-            let removed = this.channelData.splice(index, 1);
+            let removed = this.channelData.splice(this.toRemove, 1);
             this.isSending = true;
             this.axios.delete(`/timers/${channel}/${removed[0].name}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
                 this.isSending = false;
-                this.removeDialog[index] = false;
-                this.modifyDialog[index] = false;
+                this.removeDialog = false;
+                this.modifyDialog = false;
+                this.toModify = -1;
+                this.toRemove = -1;
             }).catch(err => {
                 this.isSending = false;
                 this.responseError = err.response.data;
