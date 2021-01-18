@@ -102,7 +102,7 @@
                         <v-spacer/>
                         <v-tooltip left>
                             <template v-slot:activator="{ on }">
-                                <v-btn color="primary" v-on="on" @click="modifyEvent(-1)" depressed fab x-small class='ml-auto'>
+                                <v-btn color="primary" v-on="on" @click="modifyTimer(-1)" depressed fab x-small class='ml-auto'>
                                     <v-icon color="accent">mdi-plus</v-icon>
                                 </v-btn>
                             </template>
@@ -119,56 +119,41 @@
                             </v-list-item-content>
                         </v-list-item>
                         <template v-for="(timer, i) in channelData">
-                                <v-list-item :key="'timer' + i">
-                                    <v-list-item-content>
-                                        <v-list-item-title class='font-weight-medium'>
-                                        {{timer.name}}
-                                        <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
-                                        <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
-                                    </v-list-item-title>
-                                        <v-row class='mb-n4 mt-n2'>
-                                            <v-col style="word-break: break-word">
-                                                <v-list-item-subtitle>Message</v-list-item-subtitle>
-                                                "{{timer.message}}"
-                                            </v-col>
-                                            <v-col class='flex-grow-0 text-no-wrap'>
-                                                <v-list-item-subtitle>Interval</v-list-item-subtitle>
-                                                {{timer.interval}} seconds
-                                            </v-col>
-                                            <v-col class='flex-grow-0'>
-                                                <v-list-item-subtitle>Threshold</v-list-item-subtitle>
-                                                {{timer.message_threshold}}
-                                            </v-col>
-                                            <v-col class='flex-grow-0'>
-                                                <v-menu offset-y left>
-                                                    <template v-slot:activator="{on}">
-                                                        <v-btn icon v-on="on" :ripple=false>
-                                                            <v-icon>mdi-dots-vertical</v-icon>
-                                                        </v-btn>
-                                                    </template>
-                                                    <v-list dense>
-                                                        <v-list-item @click="modifyEvent(i)">
-                                                            <v-list-item-content>
-                                                                <v-list-item-title>Modify</v-list-item-title>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
-                                                        <v-list-item @click="flipTimerStatus(timer)">
-                                                            <v-list-item-content>
-                                                                <v-list-item-title>{{timer.enabled ? 'Disable' : 'Enable'}}</v-list-item-title>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
-                                                        <v-list-item @click="openRemoveDialog(i)">
-                                                            <v-list-item-content>
-                                                                <v-list-item-title style="color: #FF5252">Remove</v-list-item-title>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
-                                                    </v-list>
-                                                </v-menu>
-                                            </v-col>
-                                        </v-row>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/>
+                            <v-card :key="'timer' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4" color="secondary">
+                                <v-card-title>
+                                    {{timer.name}}
+                                    <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
+                                    <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
+                                </v-card-title>
+                                <v-card-text class='py-0'>
+                                    <v-row>
+                                        <v-col class='pa-0 flex-grow-0 text-no-wrap'>
+                                            <v-card-subtitle class='py-0 subtitle-2'>Interval</v-card-subtitle>
+                                            <v-card-text class='text--primary pb-2'>{{timer.interval}} seconds</v-card-text>
+                                        </v-col>
+                                        <v-col class='pa-0 flex-grow-0 text-no-wrap'>
+                                            <v-card-subtitle class='py-0 subtitle-2'>Threshold</v-card-subtitle>
+                                            <v-card-text class='text--primary pb-2'>{{timer.message_threshold}} messages</v-card-text>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                                <v-divider class='mx-4'/>
+                                <v-card-text class='pb-0 pt-2'>
+                                    <v-row>
+                                        <v-col class='pa-0'>
+                                            <v-card-subtitle class='py-0 subtitle-2'>Message</v-card-subtitle>
+                                            <v-card-text class='text--primary'>"{{timer.message}}"</v-card-text>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                                <v-card-actions class='pt-0'>
+                                    <v-btn text @click="modifyTimer(i)" color="primary">Modify</v-btn>
+                                    <v-btn text @click="flipTimerStatus(timer)" color="primary">{{timer.enabled ? 'Disable' : 'Enable'}}</v-btn>
+                                    <v-btn icon @click="openRemoveDialog(i)" color="error">
+                                        <v-icon>mdi-delete</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
                         </template>
                     </v-row>
                 </v-sheet>
@@ -189,7 +174,7 @@ export default {
             newTimerData: {},
             modifyDialog: false,
             toModify: -1,
-            modifyFormValid: {},
+            modifyFormValid: false,
             removeDialog: false,
             toRemove: -1,
             loadingData: true,
@@ -220,7 +205,7 @@ export default {
                 timer.enabled = !timer.enabled;
             });
         },
-        modifyEvent: function(index) {
+        modifyTimer: function(index) {
             this.responseError = null;
             this.toModify = index;
             this.newTimerData = index >= 0 ? {
@@ -237,7 +222,7 @@ export default {
                 message_threshold: 5,
             }
             this.modifyDialog = true;
-            this.$refs.formDialog.resetValidation();
+            this.$refs.formDialog && this.$refs.formDialog.resetValidation();
         },
         cancelModify: function() {
             this.responseError = null;
@@ -278,12 +263,12 @@ export default {
         },
         removeTimer: function() {
             const channel = this.$store.state.userData.id;
-            let removed = this.channelData.splice(this.toRemove, 1);
             this.isSending = true;
-            this.axios.delete(`/timers/${channel}/${removed[0].name}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
+            this.axios.delete(`/timers/${channel}/${this.channelData[this.toRemove].name}`, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(() => {
                 this.isSending = false;
                 this.removeDialog = false;
                 this.modifyDialog = false;
+                this.channelData.splice(this.toRemove, 1);
                 this.toModify = -1;
                 this.toRemove = -1;
             }).catch(err => {
