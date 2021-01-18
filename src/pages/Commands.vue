@@ -174,7 +174,7 @@
                                             <v-btn text @click="modifyCommand(i)" color="primary">Modify</v-btn>
                                             <v-btn icon @click="openRemoveDialog(i)" color="error">
                                                 <v-icon>mdi-delete</v-icon>
-                                            </v-btn> 
+                                            </v-btn>
                                         </v-card-actions>
                                     </v-card>
                                     <!--v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/-->
