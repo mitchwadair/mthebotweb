@@ -114,96 +114,81 @@
                     <v-progress-circular indeterminate color="primary" size="100" width="8"/>
                 </v-col>
             </v-row>
-            <v-row v-else>
-                <v-col class='px-0 px-md-3'>
-                    <v-sheet tile elevation="4" class='mx-4'>
-                        <v-toolbar flat dense>
-                            <v-toolbar-title class='ml-n4 align-self-end'>
-                                <v-tabs v-model="tab">
-                                    <v-tab>Custom</v-tab>
-                                    <v-tab>Default</v-tab>
-                                </v-tabs>
-                            </v-toolbar-title>
-                            <v-spacer/>
-                            <v-tooltip left>
-                                <template v-slot:activator="{on}">
-                                    <v-fab-transition>
-                                        <v-btn color="primary" v-show="tab == 0" v-on="on" @click="modifyCommand(-1)" depressed fab x-small class='ml-auto'>
-                                            <v-icon color="accent">mdi-plus</v-icon>
-                                        </v-btn>
-                                    </v-fab-transition>
+            <v-row v-else class='mx-2'>
+                <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 600px'>
+                    <v-toolbar flat dense>
+                        <v-toolbar-title class='ml-n4 align-self-end'>
+                            <v-tabs v-model="tab">
+                                <v-tab>Custom</v-tab>
+                                <v-tab>Default</v-tab>
+                            </v-tabs>
+                        </v-toolbar-title>
+                        <v-spacer/>
+                        <v-tooltip left>
+                            <template v-slot:activator="{on}">
+                                <v-fab-transition>
+                                    <v-btn color="primary" v-show="tab == 0" v-on="on" @click="modifyCommand(-1)" depressed fab x-small class='ml-auto'>
+                                        <v-icon color="accent">mdi-plus</v-icon>
+                                    </v-btn>
+                                </v-fab-transition>
+                            </template>
+                            <span>Add a new command</span>
+                        </v-tooltip>
+                    </v-toolbar>
+                    <v-divider/>
+                    <v-tabs-items v-model="tab" style='background-color: rgba(0, 0, 0, 0)'>
+                        <v-tab-item>
+                            <v-row class='mx-auto' style='max-width: 600px'>
+                                <v-list-item v-if="channelData.length === 0">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Looks like you have no commands!  Hit the '+' button to make one.
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <template v-for="(command, i) in channelData">
+                                    <v-card :key="'command' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4" color="secondary">
+                                        <v-card-title class='pb-2'>!{{command.alias}}</v-card-title>
+                                        <v-card-text class='py-0'>
+                                            <v-row>
+                                                <v-col class='pa-0 flex-grow-0 text-no-wrap'>
+                                                    <v-card-subtitle class='py-0 subtitle-2'>Cooldown</v-card-subtitle>
+                                                    <v-card-text class='text--primary pb-2'>{{command.cooldown}} seconds</v-card-text>
+                                                </v-col>
+                                                <v-col class='pa-0 flex-grow-0 text-no-wrap'>
+                                                    <v-card-subtitle class='py-0 subtitle-2'>User Level</v-card-subtitle>
+                                                    <v-card-text class='text--primary pb-2'>{{userLevels.find(ul => ul.value === command.user_level).text}}+</v-card-text>
+                                                </v-col>
+                                            </v-row>
+                                        </v-card-text>
+                                        <v-divider class='mx-4'/>
+                                        <v-card-text class='pb-0 pt-2'>
+                                            <v-row>
+                                                <v-col class='pa-0'>
+                                                    <v-card-subtitle class='py-0 subtitle-2'>Message</v-card-subtitle>
+                                                    <v-card-text class='text--primary'>"{{command.message}}"</v-card-text>
+                                                </v-col>
+                                            </v-row>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                            <v-btn text @click="modifyCommand(i)" color="primary">Modify</v-btn>
+                                            <v-btn icon @click="openRemoveDialog(i)" color="error">
+                                                <v-icon>mdi-delete</v-icon>
+                                            </v-btn> 
+                                        </v-card-actions>
+                                    </v-card>
+                                    <!--v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/-->
                                 </template>
-                                <span>Add a new command</span>
-                            </v-tooltip>
-                        </v-toolbar>
-                        <v-divider/>
-                        <v-tabs-items v-model="tab">
-                            <v-tab-item>
-                                <v-list>
-                                    <v-list-item v-if="channelData.length === 0">
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                Looks like you have no commands!  Hit the '+' button to make one.
-                                            </v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                    <template v-for="(command, i) in channelData">
-                                        <v-list-item :key="'command' + i">
-                                            <v-list-item-content>
-                                                <v-list-item-title class='font-weight-medium'>
-                                                    !{{command.alias}}
-                                                </v-list-item-title>
-                                                <v-row class='mb-n4 mt-n2'>
-                                                    <v-col style="word-break: break-word">
-                                                        <v-list-item-subtitle>Message</v-list-item-subtitle>
-                                                        "{{command.message}}"
-                                                    </v-col>
-                                                    <v-col class='flex-grow-0 text-no-wrap'>
-                                                        <v-list-item-subtitle>Cooldown</v-list-item-subtitle>
-                                                        {{command.cooldown}} seconds
-                                                    </v-col>
-                                                    <v-col class='flex-grow-0'>
-                                                        <v-list-item-subtitle>User Level</v-list-item-subtitle>
-                                                        {{userLevels.find(ul => ul.value === command.user_level).text}}+
-                                                    </v-col>
-                                                    <v-col class='flex-grow-0'>
-                                                        <v-menu offset-y left>
-                                                            <template v-slot:activator="{on}">
-                                                                <v-btn icon v-on="on" :ripple=false>
-                                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                                </v-btn>
-                                                            </template>
-
-                                                            <v-list dense>
-                                                                <v-list-item @click="modifyCommand(i)">
-                                                                    <v-list-item-content>
-                                                                        <v-list-item-title>Modify</v-list-item-title>
-                                                                    </v-list-item-content>
-                                                                </v-list-item>
-                                                                <v-list-item @click="openRemoveDialog(i)" color="error">
-                                                                    <v-list-item-content>
-                                                                        <v-list-item-title style="color: #FF5252">Remove</v-list-item-title>
-                                                                    </v-list-item-content>
-                                                                </v-list-item>
-                                                            </v-list>
-                                                        </v-menu>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                        <v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/>
-                                    </template>
-                                </v-list>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <div class='pa-4'>
-                                    <h3 class='display-1 font-weight-light'>Default commands are currently in development</h3>
-                                    <h4 class='subtitle-1 font-weight-light'>Stay tuned to start using handy built-in commands for MtheBot_ in your channel!</h4>
-                                </div>
-                            </v-tab-item>
-                        </v-tabs-items>
-                    </v-sheet>
-                </v-col>
+                            </v-row>
+                        </v-tab-item>
+                        <v-tab-item>
+                            <div class='pa-4'>
+                                <h3 class='display-1 font-weight-light'>Default commands are currently in development</h3>
+                                <h4 class='subtitle-1 font-weight-light'>Stay tuned to start using handy built-in commands for MtheBot_ in your channel!</h4>
+                            </div>
+                        </v-tab-item>
+                    </v-tabs-items>
+                </v-sheet>
             </v-row>
         </v-container>
     </div>
