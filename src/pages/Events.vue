@@ -93,7 +93,6 @@
                                     <v-btn text @click="flipEventStatus(event)" color="primary">{{event.enabled ? 'Disable' : 'Enable'}}</v-btn>
                                 </v-card-actions>
                             </v-card>
-                            <v-divider v-if="i < Object.keys(channelData).length - 1" :key="i" class='mx-4'/>
                         </template>
                     </v-sheet>
                 </v-col>
