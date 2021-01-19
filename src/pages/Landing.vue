@@ -67,7 +67,7 @@
                 <v-col cols='auto' sm='7' md='6'>
                     <v-card color='rgba(0, 0, 0, 0)' flat align='center'>
                         <v-row class='justify-center'><v-icon color='primary' size='75' class='mx-auto'>mdi-timer</v-icon></v-row>
-                        <v-card-title class='justify-center title font-wieght-light pt-0'>Timers</v-card-title>
+                        <v-card-title class='justify-center title font-weight-light pt-0'>Timers</v-card-title>
                         <v-card-text class='body-2 font-weight-light'>
                             Send timed chat messages for your viewers to see.  Remind them of your chat rules, or plug your social media.  
                             Having a sponsored stream?  Ensure your chat can visit your sponsor's site.
