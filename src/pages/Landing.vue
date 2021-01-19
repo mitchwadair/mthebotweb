@@ -92,7 +92,7 @@
                 <v-spacer/>
                 <v-col align='center'>
                     <h2 id='support' class='display-1 font-weight-thin'>Support MtheBot_</h2>
-                    <v-divider class='mx-4 mt-4' style='max-width: 300px'/>
+                    <v-divider class='mx-4 mt-4' style='max-width: 200px'/>
                 </v-col>
                 <v-spacer/>
             </v-row>
