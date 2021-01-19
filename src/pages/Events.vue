@@ -72,7 +72,7 @@
             </v-row>
             <v-row v-else>
                 <v-col class='mx-2'>
-                    <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 600px'>
+                    <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 800px'>
                         <template v-for="(event, i) in channelData">
                             <v-card :key="'event' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                 <v-card-title class='pb-2'>

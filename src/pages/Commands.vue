@@ -115,7 +115,7 @@
                 </v-col>
             </v-row>
             <v-row v-else class='mx-2'>
-                <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 600px'>
+                <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 800px'>
                     <v-toolbar flat dense>
                         <v-toolbar-title class='ml-n4 align-self-end'>
                             <v-tabs v-model="tab">
@@ -138,7 +138,7 @@
                     <v-divider/>
                     <v-tabs-items v-model="tab" style='background-color: rgba(0, 0, 0, 0)'>
                         <v-tab-item>
-                            <v-row class='mx-auto' style='max-width: 600px'>
+                            <v-row class='mx-auto' style='max-width: 800px'>
                                 <v-list-item v-if="channelData.length === 0">
                                     <v-list-item-content>
                                         <v-list-item-title>
