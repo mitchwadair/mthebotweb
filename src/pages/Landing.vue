@@ -100,9 +100,8 @@
                 <v-col class='d-flex align-center'>
                     <p class='body-1 font-weight-light'>
                         MtheBot_ is currently being developed by a one-person team, and being paid for out-of-pocket.  Because of this, 
-                        I incur numerous monthly costs associated with keeping the bot running, which I currently pay out of pocket.  
-                        These costs include domain registration and maintenance, server architechture, and more.  Any help keeping it 
-                        running is greatly appreciated!
+                        I incur numerous monthly costs associated with keeping the bot running.  These costs include domain registration 
+                        and maintenance, server architechture, and more.  Any help keeping it running is greatly appreciated!
                     </p>
                 </v-col>
                 <v-col>
