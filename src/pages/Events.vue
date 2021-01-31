@@ -72,7 +72,7 @@
             </v-row>
             <v-row v-else>
                 <v-col class='mx-2'>
-                    <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 800px'>
+                    <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
                         <template v-for="(event, i) in channelData">
                             <v-card :key="'event' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                 <v-card-title class='pb-2'>
@@ -143,9 +143,11 @@ export default {
                 anongiftupgrade: [],
                 cheer: [
                     {label: 'Cheer Amount', tag: '{{amount}}', info: 'The amount of bits cheered'},
-                ]
+                ],
+                follow: []
             },
             eventLabels: {
+                follow: 'Follow',
                 raid: 'Raid',
                 host: 'Host',
                 sub: 'Subscription',
@@ -154,7 +156,7 @@ export default {
                 giftupgrade: 'Gifted Sub Continued',
                 mysterygift: 'Mystery Gift Subscription',
                 anongiftupgrade: 'Anonymous Gifted Sub Continued',
-                cheer: 'Cheer'
+                cheer: 'Cheer',
             },
             channelData: {},
             newEventData: {},

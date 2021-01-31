@@ -6,7 +6,7 @@
                     <h1 class='display-3'>About MtheBot_</h1>
                 </v-col>
             </v-row>
-            <v-row class='mx-auto' style='max-width: 90%'>
+            <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
                     <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class='headline'>What is MtheBot_?</v-card-title>
@@ -25,8 +25,8 @@
                     </v-card>
                 </v-col>
             </v-row>
-            <v-divider class='mx-auto' style='max-width: 80%'/>
-            <v-row class='mx-auto' style='max-width: 90%'>
+            <v-divider class='mx-auto' style='max-width: 900px'/>
+            <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
                     <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class='headline'>How can I support MtheBot_?</v-card-title>
@@ -41,8 +41,8 @@
                     </v-card>
                 </v-col>
             </v-row>
-            <v-divider class='mx-auto' style='max-width: 80%'/>
-            <v-row class='mx-auto' style='max-width: 90%'>
+            <v-divider class='mx-auto' style='max-width: 900px'/>
+            <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
                     <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class='headline'>Report an Issue</v-card-title>
@@ -60,7 +60,7 @@
                     </v-card>
                 </v-col>
             </v-row>
-            <v-row class='mx-auto' style='max-width: 90%'>
+            <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
                     <v-card tile color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class=''>Contribute to MtheBot_</v-card-title>

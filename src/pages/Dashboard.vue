@@ -13,7 +13,7 @@
           <h1 class='display-3'>Welcome, {{userData.display_name}}!</h1>
         </v-col>
       </v-row>
-      <v-row class='mx-auto' style='max-width: 90%'>
+      <v-row class='mx-auto' style='max-width: 1000px'>
         <v-col>
           <v-card v-if="botStatus" color='rgba(0, 0, 0, 0)' flat>
             <v-card-title>MtheBot_ is Enabled</v-card-title>
@@ -34,8 +34,8 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-divider class='mx-auto' style='max-width: 80%'/>
-      <v-row v-if="botStatus" class='mx-auto' style='max-width: 90%'>
+      <v-divider class='mx-auto' style='max-width: 900px'/>
+      <v-row v-if="botStatus" class='mx-auto' style='max-width: 1000px'>
         <v-col v-for="(cardData, i) in navCardData" :key="i">
           <v-card flat color='rgba(0, 0, 0, 0)' height="100%" class='d-flex flex-column'>
             <v-card-title>{{cardData.title}}</v-card-title>
@@ -46,8 +46,8 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-divider class='mx-auto' style='max-width: 80%'/>
-      <v-row class='mx-auto' style='max-width: 90%'>
+      <v-divider class='mx-auto' style='max-width: 900px'/>
+      <v-row class='mx-auto' style='max-width: 1000px'>
         <v-col>
           <v-card flat color='rgba(0, 0, 0, 0)' height="100%" class='d-flex flex-column'>
             <v-card-title>About</v-card-title>
