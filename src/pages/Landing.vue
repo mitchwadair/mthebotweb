@@ -1,9 +1,11 @@
 <template>
     <div id='landing'>
-        <v-alert v-if="errorData && errorData.get('error')" dense outlined dismissible type="error" class='top-error'>
-            {{errors[errorData.get('error')]}}:{{errorData.get('message')}}
-        </v-alert>
         <v-container>
+            <v-row v-if="errorData && errorData.get('error')" class='justify-center align-center mx-auto mt-10' style='max-width: 1000px'>
+                <v-alert dense outlined dismissible type="error" class='top-error'>
+                    {{errors[errorData.get('error')]}}:{{errorData.get('message')}}
+                </v-alert>
+            </v-row>
             <v-row class='justify-center align-center mx-auto mt-10' style='max-width: 1000px'>
                 <h1 align='center' class='display-2 font-weight-light'>MtheBot_</h1>
                 <v-img src="../assets/logo.png" max-width="75px" class='ml-4'></v-img>
