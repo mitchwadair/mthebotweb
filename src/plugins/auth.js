@@ -27,7 +27,7 @@ function createAuth(router) {
                     response_type: "code",
                     force_verify: true,
                     scope:
-                        "channel:read:subscriptions channel:read:redemptions channel:read:goals moderation:read channel:manage:redemptions channel:manage:moderators",
+                        "channel:read:subscriptions channel:read:redemptions channel:read:goals moderation:read channel:manage:redemptions channel:manage:moderators moderator:read:followers",
                 };
                 Object.keys(params).forEach((key) => {
                     loginURL.searchParams.append(key, params[key]);
