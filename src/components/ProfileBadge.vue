@@ -1,35 +1,24 @@
 <template>
-    <v-menu offset-y left close-on-click>
-        <template v-slot:activator="{on}">
-            <v-btn text v-on="on" :ripple=false>
-                <v-avatar class='mr-2' size="36" left>
-                    <img
-                        :src="avatar"
-                        alt="avatar"
-                    />
+    <v-menu location="bottom">
+        <template #activator="{ props }">
+            <v-btn variant="text" v-bind="props" :ripple="false">
+                <v-avatar class='mr-2' size="36">
+                    <img :src="avatar" alt="avatar" />
                 </v-avatar>
                 {{displayName}}
             </v-btn>
         </template>
 
-        <v-list dense>
-            <v-list-item v-for='item in items' :key='item.title' :to='item.route'>
-                <v-list-item-icon>
-                    <v-icon left dense>{{item.icon}}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
+        <v-list density="compact">
+            <v-list-item
+                v-for='item in items'
+                :key='item.title'
+                :to='item.route'
+                :title='item.title'
+                :prepend-icon='item.icon'
+            />
             <v-divider></v-divider>
-            <v-list-item @click="logout">
-                <v-list-item-icon>
-                    <v-icon left dense>mdi-logout-variant</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>Logout</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
+            <v-list-item @click="logout" title="Logout" prepend-icon="mdi-logout-variant" />
         </v-list>
     </v-menu>
 </template>

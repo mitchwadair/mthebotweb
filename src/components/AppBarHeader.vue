@@ -3,7 +3,7 @@
         <img
             alt="MtheBot_ Logo"
             class="mr-2"
-            :src="require('../assets/logo.png')"
+            :src="logo"
             width="40"
         />
         <v-toolbar-title>MtheBot_</v-toolbar-title>
@@ -13,6 +13,11 @@
 <script>
 export default {
     name: 'app-bar-header',
+    data() {
+        return {
+            logo: new URL('../assets/logo.png', import.meta.url).href,
+        };
+    },
 
     methods: {
         goHome: function() {

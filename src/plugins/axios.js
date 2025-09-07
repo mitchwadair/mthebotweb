@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-let instance = axios.create({
-    baseURL: process.env.NODE_ENV == 'development' ? process.env.VUE_APP_BASE_URL : "https://api.mtheb.tv",
+const instance = axios.create({
+  baseURL: import.meta.env.DEV ? 'http://localhost:8003' : 'https://api.mtheb.tv',
 });
 
 export default {
-    install(Vue) {
-        Vue.prototype.axios = instance;
-    }
-}
+  install(app) {
+    app.config.globalProperties.axios = instance;
+  },
+};

@@ -1,6 +1,6 @@
 <template>
     <div id='timers'>
-        <v-dialog v-model="modifyDialog" attach="#timers" persistent max-width="50rem">
+        <v-dialog v-model="modifyDialog" persistent max-width="50rem">
             <v-card>
                 <v-card-title v-if="toModify < 0">New Timer</v-card-title>
                 <v-card-title v-else>Modify {{channelData[toModify].name}}</v-card-title>
@@ -10,7 +10,7 @@
 
                 <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
 
-                <v-form ref="formDialog" v-model="modifyFormValid">
+                <v-form ref="formDialog">
                     <v-card-text class='mb-n4'>
                         <v-text-field 
                             v-model="newTimerData.name"
@@ -22,7 +22,7 @@
                                 validationRules.noSpaces,
                                 validationRules.nameExists(toModify < 0 ? channelData.map(e => e.name) : channelData.filter(e => e.name !== channelData[toModify].name).map(e => e.name))
                             ]"
-                            outlined dense counter required
+                            variant="outlined" density="compact" counter required
                             class='flex-grow-0'/>
                     </v-card-text>
                     <v-card-text class='mb-n4'>
@@ -32,7 +32,7 @@
                                 hide-details="auto"
                                 maxlength="500"
                                 :rules="[validationRules.required]"
-                                outlined dense counter auto-grow required/>
+                                variant="outlined" density="compact" counter auto-grow required/>
                     </v-card-text>
                     <v-card-text>
                         <v-text-field
@@ -43,7 +43,7 @@
                             hide-details="auto"
                             min="0"
                             :rules="[validationRules.required, validationRules.aboveZero]"
-                            outlined dense required/>
+                            variant="outlined" density="compact" required/>
                     </v-card-text>
                     <v-card-text>
                         <v-text-field
@@ -55,40 +55,40 @@
                             hide-details="auto"
                             min="0"
                             :rules="[validationRules.required, validationRules.aboveZero]"
-                            outlined dense required/>
+                            variant="outlined" density="compact" required/>
                     </v-card-text>
                 </v-form>
                 <v-card-actions>
-                    <v-btn v-if="toModify >= 0" color="error" text @click="openRemoveDialog(toModify)">Remove</v-btn>
+                    <v-btn v-if="toModify >= 0" color="error" variant="text" @click="openRemoveDialog(toModify)">Remove</v-btn>
                     <v-spacer/>
-                    <v-btn color="primary" text @click="cancelModify">Cancel</v-btn>
-                    <v-btn color="primary" text @click="{if (modifyFormValid){submitModify()}}">Save</v-btn>
+                    <v-btn color="primary" variant="text" @click="cancelModify">Cancel</v-btn>
+                    <v-btn color="primary" variant="text" @click="onSaveModify">Save</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-overlay :value="isSending" opacity=".15" absolute>
+            <v-overlay :model-value="isSending" opacity=".15" contained>
                 <v-progress-circular indeterminate color="primary" size="64"/>
             </v-overlay>
         </v-dialog>
-        <v-dialog v-model="removeDialog" attach="#timers" persistent max-width="20rem">
+        <v-dialog v-model="removeDialog" persistent max-width="20rem">
             <v-card>
                 <v-card-title>Remove Timer</v-card-title>
                 <v-card-text>Are you sure you would like to remove the <strong v-if="toRemove > -1">{{channelData[toRemove].name}}</strong> timer?</v-card-text>
                 <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="primary" text @click="cancelRemove">Cancel</v-btn>
-                    <v-btn color="error" text @click="removeTimer">Remove</v-btn>
+                    <v-btn color="primary" variant="text" @click="cancelRemove">Cancel</v-btn>
+                    <v-btn color="error" variant="text" @click="removeTimer">Remove</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-overlay :value="isSending" opacity=".15" absolute>
+            <v-overlay :model-value="isSending" opacity=".15" contained>
                 <v-progress-circular indeterminate color="primary" size="64"/>
             </v-overlay>
         </v-dialog>
         <v-container>
             <v-row>
                 <v-col class='mx-3'>
-                    <h1 class='display-2 font-weight-light'>Channel Timers</h1>
-                    <h2 class='subtitle-1 font-weight-light mx-2'>Configure the timed messages sent to your chat by MtheBot_!</h2>
+                    <h1 class='text-h3 font-weight-light'>Channel Timers</h1>
+                    <h2 class='text-subtitle-1 font-weight-light mx-2'>Configure the timed messages sent to your chat by MtheBot_!</h2>
                 </v-col>
             </v-row>
             <v-row v-if="loadingData">
@@ -97,13 +97,13 @@
                 </v-col>
             </v-row>
             <v-row v-else class='mx-2'>
-                <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
-                    <v-toolbar flat dense>
+                <v-sheet rounded="0" elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
+                    <v-toolbar flat density="compact">
                         <v-spacer/>
-                        <v-tooltip left>
-                            <template v-slot:activator="{ on }">
-                                <v-btn color="primary" v-on="on" @click="modifyTimer(-1)" depressed fab x-small class='ml-auto'>
-                                    <v-icon color="accent">mdi-plus</v-icon>
+                        <v-tooltip location="left">
+                            <template #activator="{ props }">
+                                <v-btn color="primary" v-bind="props" @click="modifyTimer(-1)" variant="flat" class='ml-auto' icon size="small">
+                                    <v-icon icon="mdi-plus" />
                                 </v-btn>
                             </template>
                             <span>Add a new timer</span>
@@ -118,21 +118,21 @@
                                 </v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
-                        <template v-for="(timer, i) in channelData">
-                            <v-card :key="'timer' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
+                        <template v-for="(timer, i) in channelData" :key="'timer' + i">
+                            <v-card class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                 <v-card-title>
                                     {{timer.name}}
-                                    <v-chip v-if="timer.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
-                                    <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
+                                    <v-chip v-if="timer.enabled" color="success" size="x-small" label class='ml-2 px-2'>Enabled</v-chip>
+                                    <v-chip v-else color="error" size="x-small" label class='ml-2 px-2'>Disabled</v-chip>
                                 </v-card-title>
                                 <v-card-text class='py-0'>
                                     <v-row>
                                         <v-col class='pa-0 flex-grow-0 text-no-wrap'>
-                                            <v-card-subtitle class='py-0 subtitle-2'>Interval</v-card-subtitle>
+                                            <v-card-subtitle class='py-0 text-subtitle-2'>Interval</v-card-subtitle>
                                             <v-card-text class='text--primary pb-2'>{{timer.interval}} seconds</v-card-text>
                                         </v-col>
                                         <v-col class='pa-0 flex-grow-0 text-no-wrap'>
-                                            <v-card-subtitle class='py-0 subtitle-2'>Threshold</v-card-subtitle>
+                                            <v-card-subtitle class='py-0 text-subtitle-2'>Threshold</v-card-subtitle>
                                             <v-card-text class='text--primary pb-2'>{{timer.message_threshold}} messages</v-card-text>
                                         </v-col>
                                     </v-row>
@@ -141,16 +141,16 @@
                                 <v-card-text class='pb-0 pt-2'>
                                     <v-row>
                                         <v-col class='pa-0'>
-                                            <v-card-subtitle class='py-0 subtitle-2'>Message</v-card-subtitle>
+                                            <v-card-subtitle class='py-0 text-subtitle-2'>Message</v-card-subtitle>
                                             <v-card-text class='text--primary'>"{{timer.message}}"</v-card-text>
                                         </v-col>
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions class='pt-0'>
-                                    <v-btn text @click="modifyTimer(i)" color="primary">Modify</v-btn>
-                                    <v-btn text @click="flipTimerStatus(timer)" color="primary">{{timer.enabled ? 'Disable' : 'Enable'}}</v-btn>
+                                    <v-btn variant="text" @click="modifyTimer(i)" color="primary">Modify</v-btn>
+                                    <v-btn variant="text" @click="flipTimerStatus(timer)" color="primary">{{timer.enabled ? 'Disable' : 'Enable'}}</v-btn>
                                     <v-btn icon @click="openRemoveDialog(i)" color="error">
-                                        <v-icon>mdi-delete</v-icon>
+                                        <v-icon icon="mdi-delete"></v-icon>
                                     </v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -183,6 +183,14 @@ export default {
         };
     },
     methods: {
+        async onSaveModify() {
+            if (this.$refs.formDialog && this.$refs.formDialog.validate) {
+                const res = await this.$refs.formDialog.validate();
+                const valid = typeof res === 'boolean' ? res : res?.valid;
+                if (!valid) return;
+            }
+            this.submitModify();
+        },
         enableBot: function() {
             const channel = this.$store.state.userData.id;
             this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {

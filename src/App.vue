@@ -1,6 +1,6 @@
 <template>
-    <v-app v-if="storeLoaded">
-        <v-app-bar app clipped-left flat color="primary" light>
+    <v-app v-if="storeLoaded" class="d-flex flex-column min-h-screen">
+        <v-app-bar flat color="primary" elevation="0" theme="light">
             <div class="d-flex align-center">
                 <app-bar-header />
             </div>
@@ -8,53 +8,52 @@
             <v-btn
                 @click.prevent="login"
                 v-if="!this.$auth.isAuthenticated()"
-                depressed
+                variant="flat"
                 color="#6441A5"
                 style="color: white"
             >
-                <v-icon left>mdi-twitch</v-icon>Login
+                <v-icon icon="mdi-twitch" class="mr-2" />Login
             </v-btn>
             <ProfileBadge v-if="this.$auth.isAuthenticated()" />
         </v-app-bar>
 
-        <v-navigation-drawer v-if="this.$auth.isAuthenticated()" clipped app>
-            <v-list>
-                <v-list-item v-for="item in sidebarItems" :key="item.title" link :to="item.route">
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+        <v-navigation-drawer v-if="this.$auth.isAuthenticated()" permanent>
+            <v-list nav>
+                <v-list-item
+                    v-for="item in sidebarItems"
+                    :key="item.title"
+                    :to="item.route"
+                    :title="item.title"
+                    :prepend-icon="item.icon"
+                />
             </v-list>
         </v-navigation-drawer>
 
-        <v-main style="max-height: 100vh">
-            <router-view style="height: 100%; overflow-y: auto"></router-view>
+        <v-main class="flex-grow-1">
+            <router-view></router-view>
         </v-main>
 
-        <v-footer app fixed padless width="100%" style="bottom: 0" light>
-            <v-card flat tile width="100%" class="text-center" color="primary">
-                <v-card-text class="pt-2 pb-0">
-                    <v-btn class="mx-2" icon small to="/">
-                        <v-icon>mdi-home</v-icon>
+        <v-footer elevation="0" width="100%" style="bottom: 0" theme="light" class="pa-0 flex-grow-0 flex-shrink-0">
+            <v-card flat rounded="0" width="100%" class="text-center pa-0 flex-grow-0" color="primary">
+                <v-card-text class="py-1">
+                    <v-btn class="mx-2" icon size="small" to="/">
+                        <v-icon icon="mdi-home"></v-icon>
                     </v-btn>
                     <v-btn
                         v-for="icon in footerIcons"
                         :key="icon.icon"
                         class="mx-2"
                         icon
-                        small
+                        size="small"
                         :href="icon.link"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <v-icon>{{ icon.icon }}</v-icon>
+                        <v-icon :icon="icon.icon"></v-icon>
                     </v-btn>
                 </v-card-text>
-                <v-card-text class="py-2">
-                    <v-icon small>mdi-copyright</v-icon>
+                <v-card-text class="py-1">
+                    <v-icon size="small" icon="mdi-copyright"></v-icon>
                     {{ new Date().getFullYear() }} -
                     <a
                         href="https://github.com/mitchwadair"
@@ -70,8 +69,8 @@
 </template>
 
 <script>
-import AppBarHeader from "./components/AppBarHeader";
-import ProfileBadge from "./components/ProfileBadge";
+import AppBarHeader from "./components/AppBarHeader.vue";
+import ProfileBadge from "./components/ProfileBadge.vue";
 import navItems from "./defaults/navitems.json";
 
 export default {

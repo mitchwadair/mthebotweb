@@ -3,14 +3,14 @@
         <v-container>
             <v-row>
                 <v-col class='pt-0' align="center">
-                    <h1 class='display-3'>About MtheBot_</h1>
+                    <h1 class='text-h3'>About MtheBot_</h1>
                 </v-col>
             </v-row>
             <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
-                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
-                        <v-card-title class='headline'>What is MtheBot_?</v-card-title>
-                        <v-card-text class='body-1'>
+                    <v-card rounded="0" color='rgba(0, 0, 0, 0)' flat>
+                        <v-card-title class='text-h5'>What is MtheBot_?</v-card-title>
+                        <v-card-text class='text-body-1'>
                             MtheBot_ is an 
                             <a href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">open-source</a> 
                             project by 
@@ -28,9 +28,9 @@
             <v-divider class='mx-auto' style='max-width: 900px'/>
             <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
-                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
-                        <v-card-title class='headline'>How can I support MtheBot_?</v-card-title>
-                        <v-card-text class='body-1'>
+                    <v-card rounded="0" color='rgba(0, 0, 0, 0)' flat>
+                        <v-card-title class='text-h5'>How can I support MtheBot_?</v-card-title>
+                        <v-card-text class='text-body-1'>
                             MtheBot_ is currently a one-man operation.  Because of this, I incur numerous monthly costs associated with keeping the bot running, which I currently
                             pay out of pocket.  These costs include domain registration and maintenance, server architechture, and more.  If you would like to help keep MtheBot_ 
                             running, you could consider supporting the project on <a href="https://github.com/sponsors/mitchwadair" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a> 
@@ -44,14 +44,14 @@
             <v-divider class='mx-auto' style='max-width: 900px'/>
             <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
-                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
-                        <v-card-title class='headline'>Report an Issue</v-card-title>
-                        <v-card-text class='body-1'>
+                    <v-card rounded="0" color='rgba(0, 0, 0, 0)' flat>
+                        <v-card-title class='text-h5'>Report an Issue</v-card-title>
+                        <v-card-text class='text-body-1'>
                             If you encounter an issue or bug, you can submit an issue on GitHub to get help resolving it.
                         </v-card-text>
                         <v-card-actions class='pt-0 pl-4 mt-auto'>
-                            <v-btn text small color='primary' href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-github</v-icon>GitHub Issues
+                            <v-btn variant="text" size='small' color='primary' href="https://github.com/mitchwadair/mthebot/issues" target="_blank" rel="noopener noreferrer">
+                                <v-icon icon="mdi-github" class="mr-2"/>GitHub Issues
                             </v-btn>
                         </v-card-actions>
                     </v-card>
@@ -59,14 +59,14 @@
             </v-row>
             <v-row class='mx-auto' style='max-width: 1000px'>
                 <v-col class='pt-0'>
-                    <v-card tile color='rgba(0, 0, 0, 0)' flat>
+                    <v-card rounded="0" color='rgba(0, 0, 0, 0)' flat>
                         <v-card-title class=''>Contribute to MtheBot_</v-card-title>
                         <v-card-text>
                             MtheBot_ is an open-source project.  I welcome pull-requests to contribute to MtheBot_ on GitHub!
                         </v-card-text>
                         <v-card-actions class='pt-0 pl-4 mt-auto'>
-                            <v-btn text small color='primary' href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
-                                <v-icon left>mdi-github</v-icon>MtheBot_ on GitHub
+                            <v-btn variant="text" size='small' color='primary' href="https://github.com/mitchwadair/mthebot" target="_blank" rel="noopener noreferrer">
+                                <v-icon icon="mdi-github" class="mr-2"/>MtheBot_ on GitHub
                             </v-btn>
                         </v-card-actions>
                     </v-card>

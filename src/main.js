@@ -1,18 +1,12 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import App from './App.vue'
+import { createApp } from 'vue';
+import { createStore } from 'vuex';
+import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './plugins/router';
 import auth from './plugins/auth';
 import axios from './plugins/axios';
 
-Vue.use(Vuex);
-Vue.use(auth, router);
-Vue.use(axios);
-
-Vue.config.productionTip = false;
-
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     userData: null,
   },
@@ -21,12 +15,14 @@ const store = new Vuex.Store({
       state.userData = data;
       localStorage.setItem('userData', JSON.stringify(data));
     },
-  }
+  },
 });
 
-new Vue({
-  render: h => h(App),
-  vuetify,
-  router,
-  store: store,
-}).$mount('#app')
+const app = createApp(App);
+app.use(store);
+app.use(router);
+app.use(vuetify);
+app.use(auth, { router });
+app.use(axios);
+
+app.mount('#app');

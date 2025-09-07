@@ -1,6 +1,6 @@
 <template>
     <div id='commands'>
-        <v-dialog v-model="modifyDialog" attach="#commands" persistent max-width="50rem">
+        <v-dialog v-model="modifyDialog" persistent max-width="50rem">
             <v-card>
                 <v-card-title v-if="toModify < 0">New Command</v-card-title>
                 <v-card-title v-else>Modify !{{channelData[toModify].alias}}</v-card-title>
@@ -10,7 +10,7 @@
 
                 <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
 
-                <v-form ref="formDialog" v-model="modifyFormValid">
+                <v-form ref="formDialog">
                     <v-card-text class='mb-n4'>
                         <v-text-field 
                             v-model="newCommandData.alias"
@@ -22,23 +22,21 @@
                                 validationRules.noSpaces,
                                 validationRules.nameExists(toModify < 0 ? channelData.map(c => c.alias) : channelData.filter(c => c.alias !== channelData[toModify].alias).map(c => c.alias))
                             ]"
-                            outlined dense counter required
+                            variant="outlined" density="compact" counter required
                             class='flex-grow-0'/>
                     </v-card-text>
                     <v-card-actions class='mb-n4 mr-2'>
                         <v-card-text class='py-0 font-weight-medium' align="right">Data Tags:</v-card-text>
-                        <v-menu v-for="key in Object.keys(dataTags)" :key="key" offset-y left open-on-hover>
-                            <template v-slot:activator="{on}">
-                                <v-btn text outlined class='ml-2' v-on="on" :ripple=false>{{key}}</v-btn>
+                        <v-menu v-for="key in Object.keys(dataTags)" :key="key" location="bottom" open-on-hover>
+                            <template #activator="{ props }">
+                                <v-btn variant="outlined" class='ml-2' v-bind="props" :ripple="false">{{key}}</v-btn>
                             </template>
 
-                            <v-list dense>
+                            <v-list density="compact">
                                 <v-list-item v-for="tag in dataTags[key]" :key="tag.tag" @click="insertDataTag(tag)">
-                                    <v-tooltip left nudge-left=10>
-                                        <template v-slot:activator="{on}">
-                                            <v-list-item-content v-on="on">
-                                                <v-list-item-title>{{tag.label}}</v-list-item-title>
-                                            </v-list-item-content>
+                                    <v-tooltip location="left" :offset="10">
+                                        <template #activator="{ props }">
+                                            <v-list-item-title v-bind="props">{{tag.label}}</v-list-item-title>
                                         </template>
                                         <span>{{tag.info}}</span>
                                     </v-tooltip>
@@ -54,7 +52,7 @@
                                 maxlength="500"
                                 :ref="'textarea-message'"
                                 :rules="[validationRules.required]"
-                                outlined dense counter auto-grow required/>
+                                variant="outlined" density="compact" counter auto-grow required/>
                     </v-card-text>
                     <v-card-text>
                         <v-text-field
@@ -65,7 +63,7 @@
                             hide-details="auto"
                             min="0"
                             :rules="[validationRules.required, validationRules.aboveZero]"
-                            outlined dense required/>
+                            variant="outlined" density="compact" required/>
                     </v-card-text>
                     <v-card-text>
                         <v-select
@@ -73,39 +71,41 @@
                                 :items="userLevels"
                                 label="User Level"
                                 hide-details="auto"
-                                outlined dense/>
+                                item-title="text"
+                                item-value="value"
+                                variant="outlined" density="compact"/>
                     </v-card-text>
                 </v-form>
                 <v-card-actions>
-                    <v-btn v-if="toModify >= 0" color="error" text @click="openRemoveDialog(toModify)">Remove</v-btn>
+                    <v-btn v-if="toModify >= 0" color="error" variant="text" @click="openRemoveDialog(toModify)">Remove</v-btn>
                     <v-spacer/>
-                    <v-btn color="primary" text @click="cancelModify">Cancel</v-btn>
-                    <v-btn color="primary" text @click="{if (modifyFormValid){submitModify()}}">Save</v-btn>
+                    <v-btn color="primary" variant="text" @click="cancelModify">Cancel</v-btn>
+                    <v-btn color="primary" variant="text" @click="onSaveModify">Save</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-overlay :value="isSending" opacity=".15" absolute>
+            <v-overlay :model-value="isSending" opacity=".15" contained>
                 <v-progress-circular indeterminate color="primary" size="64"/>
             </v-overlay>
         </v-dialog>
-        <v-dialog v-model="removeDialog" attach="#commands" persistent max-width="20rem">
+        <v-dialog v-model="removeDialog" persistent max-width="20rem">
             <v-card>
                 <v-card-title>Remove Command</v-card-title>
                 <v-card-text>Are you sure you would like to remove the <strong v-if="toRemove > -1">!{{channelData[toRemove].alias}}</strong> command?</v-card-text>
                 <v-card-text v-if="responseError" style="color: #FF5252">{{responseError}}</v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="primary" text @click="cancelRemove">Cancel</v-btn>
-                    <v-btn color="error" text @click="removeCommand">Remove</v-btn>
+                    <v-btn color="primary" variant="text" @click="cancelRemove">Cancel</v-btn>
+                    <v-btn color="error" variant="text" @click="removeCommand">Remove</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-overlay :value="isSending" opacity=".15" absolute>
+            <v-overlay :model-value="isSending" opacity=".15" contained>
                 <v-progress-circular indeterminate color="primary" size="64"/>
             </v-overlay>
         </v-dialog>
         <v-container>
             <v-row>
                 <v-col class='mx-3'>
-                    <h1 class='display-2 font-weight-light'>Channel Commands</h1>
+                    <h1 class='text-h3 font-weight-light'>Channel Commands</h1>
                     <h2 class='subtitle-1 font-weight-light mx-2'>Configure MtheBot_'s commands for your channel.</h2>
                 </v-col>
             </v-row>
@@ -115,29 +115,27 @@
                 </v-col>
             </v-row>
             <v-row v-else class='mx-2'>
-                <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
-                    <v-toolbar flat dense>
+                <v-sheet rounded="0" elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
+                    <v-toolbar flat density="compact">
                         <v-toolbar-title class='ml-n4 align-self-end'>
                             <v-tabs v-model="tab">
-                                <v-tab>Custom</v-tab>
-                                <v-tab>Default</v-tab>
+                                <v-tab value="custom">Custom</v-tab>
+                                <v-tab value="default">Default</v-tab>
                             </v-tabs>
                         </v-toolbar-title>
                         <v-spacer/>
-                        <v-tooltip left>
-                            <template v-slot:activator="{on}">
-                                <v-fab-transition>
-                                    <v-btn color="primary" v-show="tab == 0" v-on="on" @click="modifyCommand(-1)" depressed fab x-small class='ml-auto'>
-                                        <v-icon color="accent">mdi-plus</v-icon>
-                                    </v-btn>
-                                </v-fab-transition>
+                        <v-tooltip location="left">
+                            <template #activator="{ props }">
+                                <v-btn color="primary" v-show="tab === 'custom'" v-bind="props" @click="modifyCommand(-1)" variant="flat" class='ml-auto' icon size="small">
+                                    <v-icon icon="mdi-plus" />
+                                </v-btn>
                             </template>
                             <span>Add a new command</span>
                         </v-tooltip>
                     </v-toolbar>
                     <v-divider/>
-                    <v-tabs-items v-model="tab" style='background-color: rgba(0, 0, 0, 0)'>
-                        <v-tab-item>
+                    <v-window v-model="tab" style='background-color: rgba(0, 0, 0, 0)'>
+                        <v-window-item value="custom">
                             <v-row class='mx-auto' style='max-width: 1000px'>
                                 <v-list-item v-if="channelData.length === 0">
                                     <v-list-item-content>
@@ -146,17 +144,17 @@
                                         </v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
-                                <template v-for="(command, i) in channelData">
-                                    <v-card :key="'command' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
+                                <template v-for="(command, i) in channelData" :key="'command' + i">
+                                    <v-card class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                         <v-card-title class='pb-2'>!{{command.alias}}</v-card-title>
                                         <v-card-text class='py-0'>
                                             <v-row>
                                                 <v-col class='pa-0 flex-grow-0 text-no-wrap'>
-                                                    <v-card-subtitle class='py-0 subtitle-2'>Cooldown</v-card-subtitle>
+                                                    <v-card-subtitle class='py-0 text-subtitle-2'>Cooldown</v-card-subtitle>
                                                     <v-card-text class='text--primary pb-2'>{{command.cooldown}} seconds</v-card-text>
                                                 </v-col>
                                                 <v-col class='pa-0 flex-grow-0 text-no-wrap'>
-                                                    <v-card-subtitle class='py-0 subtitle-2'>User Level</v-card-subtitle>
+                                                    <v-card-subtitle class='py-0 text-subtitle-2'>User Level</v-card-subtitle>
                                                     <v-card-text class='text--primary pb-2'>{{userLevels.find(ul => ul.value === command.user_level).text}}+</v-card-text>
                                                 </v-col>
                                             </v-row>
@@ -165,29 +163,29 @@
                                         <v-card-text class='pb-0 pt-2'>
                                             <v-row>
                                                 <v-col class='pa-0'>
-                                                    <v-card-subtitle class='py-0 subtitle-2'>Message</v-card-subtitle>
+                                                    <v-card-subtitle class='py-0 text-subtitle-2'>Message</v-card-subtitle>
                                                     <v-card-text class='text--primary'>"{{command.message}}"</v-card-text>
                                                 </v-col>
                                             </v-row>
                                         </v-card-text>
                                         <v-card-actions class='pt-0'>
-                                            <v-btn text @click="modifyCommand(i)" color="primary">Modify</v-btn>
+                                            <v-btn variant="text" @click="modifyCommand(i)" color="primary">Modify</v-btn>
                                             <v-btn icon @click="openRemoveDialog(i)" color="error">
-                                                <v-icon>mdi-delete</v-icon>
+                                                <v-icon icon="mdi-delete"></v-icon>
                                             </v-btn>
                                         </v-card-actions>
                                     </v-card>
                                     <!--v-divider v-if="i < channelData.length - 1" :key="i" class='mx-4'/-->
                                 </template>
                             </v-row>
-                        </v-tab-item>
-                        <v-tab-item>
+                        </v-window-item>
+                        <v-window-item value="default">
                             <div class='pa-4'>
-                                <h3 class='display-1 font-weight-light'>Default commands are currently in development</h3>
-                                <h4 class='subtitle-1 font-weight-light'>Stay tuned to start using handy built-in commands for MtheBot_ in your channel!</h4>
+                                <h3 class='text-h4 font-weight-light'>Default commands are currently in development</h3>
+                                <h4 class='text-subtitle-1 font-weight-light'>Stay tuned to start using handy built-in commands for MtheBot_ in your channel!</h4>
                             </div>
-                        </v-tab-item>
-                    </v-tabs-items>
+                        </v-window-item>
+                    </v-window>
                 </v-sheet>
             </v-row>
         </v-container>
@@ -217,13 +215,21 @@ export default {
             modifyFormValid: true,
             removeDialog: false,
             toRemove: -1,
-            tab: null,
+            tab: 'custom',
             loadingData: true,
             isSending: false,
             responseError: null,
         };
     },
     methods: {
+        async onSaveModify() {
+            if (this.$refs.formDialog && this.$refs.formDialog.validate) {
+                const res = await this.$refs.formDialog.validate();
+                const valid = typeof res === 'boolean' ? res : res?.valid;
+                if (!valid) return;
+            }
+            this.submitModify();
+        },
         enableBot: function() {
             const channel = this.$store.state.userData.id;
             this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {

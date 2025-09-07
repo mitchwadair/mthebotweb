@@ -1,34 +1,30 @@
 <template>
     <div id="events">
-        <v-dialog v-model="modifyDialog" attach="#events" persistent max-width="50rem">
+        <v-dialog v-model="modifyDialog" persistent max-width="50rem">
             <v-card>
                 <v-card-title>Modify {{eventLabels[newEventData.name]}}</v-card-title>
                 <v-card-subtitle>Update the message displayed when a {{eventLabels[newEventData.name]}} happens.</v-card-subtitle>
                 <v-card-text align="right">
-                    <v-menu offset-y left close-on-click open-on-hover>
-                        <template v-slot:activator="{on}">
-                            <v-btn text outlined v-on="on" :ripple=false>
+                    <v-menu location="bottom" close-on-content-click open-on-hover>
+                        <template #activator="{ props }">
+                            <v-btn variant="outlined" v-bind="props" :ripple="false">
                                 Insert Data Tag
                             </v-btn>
                         </template>
 
-                        <v-list dense>
+                        <v-list density="compact">
                             <v-list-item v-for='tag in dataTags.general' :key='tag.label' @click="insertDataTag(tag)">
-                                <v-tooltip left nudge-left=10>
-                                    <template v-slot:activator="{on}">
-                                        <v-list-item-content v-on="on">
-                                            <v-list-item-title>{{tag.label}}</v-list-item-title>
-                                        </v-list-item-content>
+                                <v-tooltip location="left" :offset="10">
+                                    <template #activator="{ props }">
+                                        <v-list-item-title v-bind="props">{{tag.label}}</v-list-item-title>
                                     </template>
                                     <span>{{tag.info}}</span>
                                 </v-tooltip>
                             </v-list-item>
                             <v-list-item v-for='tag in dataTags[newEventData.name]' :key='tag.label' @click="insertDataTag(tag)">
-                                <v-tooltip left nudge-left=10>
-                                    <template v-slot:activator="{on}">
-                                        <v-list-item-content v-on="on">
-                                            <v-list-item-title>{{tag.label}}</v-list-item-title>
-                                        </v-list-item-content>
+                                <v-tooltip location="left" :offset="10">
+                                    <template #activator="{ props }">
+                                        <v-list-item-title v-bind="props">{{tag.label}}</v-list-item-title>
                                     </template>
                                     <span>{{tag.info}}</span>
                                 </v-tooltip>
@@ -37,7 +33,7 @@
                     </v-menu>
                 </v-card-text>
                 <v-card-text>
-                    <v-form v-model="modifyValid">
+                    <v-form ref="formDialog">
                         <v-textarea
                             v-model="newEventData.message"
                             hide-details="auto"
@@ -45,24 +41,24 @@
                             maxlength="500"
                             :ref="'modify-textarea'"
                             :rules="[validationRules.required]"
-                            outlined dense counter auto-grow required/>
+                            variant="outlined" density="compact" counter auto-grow required/>
                     </v-form>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="primary" text @click="cancelModify()">Cancel</v-btn>
-                    <v-btn color="primary" text @click="{if (modifyValid) {updateData()}}">Save</v-btn>
+                    <v-btn color="primary" variant="text" @click="cancelModify()">Cancel</v-btn>
+                    <v-btn color="primary" variant="text" @click="onSaveModify">Save</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-overlay :value="isSending" opacity=".15" absolute>
+            <v-overlay :model-value="isSending" opacity=".15" contained>
                 <v-progress-circular indeterminate color="primary" size="64"/>
             </v-overlay>
         </v-dialog>
         <v-container>
             <v-row>
                 <v-col class='mx-3'>
-                    <h1 class='display-2 font-weight-light'>Channel Events</h1>
-                    <h2 class='subtitle-1 font-weight-light mx-2'>Configure the messages sent to chat by MtheBot_ for various channel events.</h2>
+                    <h1 class='text-h3 font-weight-light'>Channel Events</h1>
+                    <h2 class='text-subtitle-1 font-weight-light mx-2'>Configure the messages sent to chat by MtheBot_ for various channel events.</h2>
                 </v-col>
             </v-row>
             <v-row v-if="loadingData">
@@ -72,25 +68,25 @@
             </v-row>
             <v-row v-else>
                 <v-col class='mx-2'>
-                    <v-sheet tile elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
-                        <template v-for="(event, i) in channelData">
-                            <v-card :key="'event' + i" class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
+                    <v-sheet rounded="0" elevation="0" class='mx-auto flex-grow-1' style='background-color: rgba(0, 0, 0, 0); max-width: 1000px'>
+                        <template v-for="(event, i) in channelData" :key="'event' + i">
+                            <v-card class='mx-auto mt-2' min-width="90%" max-width="90%" elevation="4">
                                 <v-card-title class='pb-2'>
                                     {{eventLabels[event.name]}}
-                                    <v-chip v-if="event.enabled" color="success" x-small label class='ml-2 px-2'>Enabled</v-chip>
-                                    <v-chip v-else color="error" x-small label class='ml-2 px-2'>Disabled</v-chip>
+                                    <v-chip v-if="event.enabled" color="success" size="x-small" label class='ml-2 px-2'>Enabled</v-chip>
+                                    <v-chip v-else color="error" size="x-small" label class='ml-2 px-2'>Disabled</v-chip>
                                 </v-card-title>
                                 <v-card-text class='pb-0 pt-2'>
                                     <v-row>
                                         <v-col class='pa-0'>
-                                            <v-card-subtitle class='py-0 subtitle-2'>Message</v-card-subtitle>
+                                            <v-card-subtitle class='py-0 text-subtitle-2'>Message</v-card-subtitle>
                                             <v-card-text class='text--primary'>"{{event.message}}"</v-card-text>
                                         </v-col>
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions class='pt-0'>
-                                    <v-btn text @click="modifyEvent(i)" color="primary">Modify</v-btn>
-                                    <v-btn text @click="flipEventStatus(event)" color="primary">{{event.enabled ? 'Disable' : 'Enable'}}</v-btn>
+                                    <v-btn variant="text" @click="modifyEvent(i)" color="primary">Modify</v-btn>
+                                    <v-btn variant="text" @click="flipEventStatus(event)" color="primary">{{event.enabled ? 'Disable' : 'Enable'}}</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </template>
@@ -170,6 +166,14 @@ export default {
         };
     },
     methods: {
+        async onSaveModify() {
+            if (this.$refs.formDialog && this.$refs.formDialog.validate) {
+                const res = await this.$refs.formDialog.validate();
+                const valid = typeof res === 'boolean' ? res : res?.valid;
+                if (!valid) return;
+            }
+            this.updateData();
+        },
         enableBot: function() {
             const channel = this.$store.state.userData.id;
             this.axios.post(`/chats/${channel}`, {}, {headers:{'Authorization': `Bearer ${this.$auth.accessToken}`}}).then(res => {

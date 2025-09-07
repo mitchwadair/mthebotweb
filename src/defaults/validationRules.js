@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     required: value => {
         if (value) {
             return value.trim && value.trim() === '' ? "This input is required" : !!value;

@@ -10,7 +10,7 @@
         <v-container v-else>
             <v-row>
                 <v-col align="center">
-                    <h1 class="display-3">Welcome, {{ userData.display_name }}!</h1>
+                    <h1 class="text-h3">Welcome, {{ userData.display_name }}!</h1>
                 </v-col>
             </v-row>
             <v-row class="mx-auto" style="max-width: 1000px">
@@ -22,7 +22,7 @@
                             it will leave your chat.
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn @click="disableBot" text color="primary">Disable MtheBot_</v-btn>
+                            <v-btn @click="disableBot" variant="text" color="primary">Disable MtheBot_</v-btn>
                         </v-card-actions>
                     </v-card>
                     <v-card v-else color="rgba(0, 0, 0, 0)" flat>
@@ -32,7 +32,7 @@
                             can join your chat. This action will set MtheBot_ as a moderator.</v-card-text
                         >
                         <v-card-actions>
-                            <v-btn @click="enableBot" text color="primary">Enable MtheBot_</v-btn>
+                            <v-btn @click="enableBot" variant="text" color="primary">Enable MtheBot_</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -44,7 +44,7 @@
                         <v-card-title>{{ cardData.title }}</v-card-title>
                         <v-card-text>{{ cardData.content }}</v-card-text>
                         <v-card-actions class="mt-auto">
-                            <v-btn text color="primary" :to="cardData.route">{{ cardData.action }}</v-btn>
+                            <v-btn variant="text" color="primary" :to="cardData.route">{{ cardData.action }}</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -56,7 +56,7 @@
                         <v-card-title>About</v-card-title>
                         <v-card-text>Learn more about MtheBot_</v-card-text>
                         <v-card-actions class="mt-auto">
-                            <v-btn text color="primary" to="/about">About</v-btn>
+                            <v-btn variant="text" color="primary" to="/about">About</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -69,7 +69,7 @@
                         >
                         <v-card-actions class="mt-auto">
                             <v-btn
-                                text
+                                variant="text"
                                 color="primary"
                                 href="https://github.com/sponsors/mitchwadair"
                                 target="_blank"
@@ -77,7 +77,7 @@
                                 >GitHub Sponsors</v-btn
                             >
                             <v-btn
-                                text
+                                variant="text"
                                 color="primary"
                                 href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9WS3KJPAV8JDJ&currency_code=USD"
                                 target="_blank"
