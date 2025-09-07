@@ -52,9 +52,6 @@
                     >
                         <v-icon>{{ icon.icon }}</v-icon>
                     </v-btn>
-                    <v-btn class="mx-2" icon small @click="openContactDialog">
-                        <v-icon>mdi-email</v-icon>
-                    </v-btn>
                 </v-card-text>
                 <v-card-text class="py-2">
                     <v-icon small>mdi-copyright</v-icon>
@@ -69,15 +66,12 @@
                 </v-card-text>
             </v-card>
         </v-footer>
-
-        <ContactDialog />
     </v-app>
 </template>
 
 <script>
 import AppBarHeader from "./components/AppBarHeader";
 import ProfileBadge from "./components/ProfileBadge";
-import ContactDialog from "./components/ContactDialog";
 import navItems from "./defaults/navitems.json";
 
 export default {
@@ -86,7 +80,6 @@ export default {
     components: {
         AppBarHeader,
         ProfileBadge,
-        ContactDialog,
     },
 
     data: function() {
@@ -103,9 +96,6 @@ export default {
     methods: {
         login: function() {
             this.$auth.login();
-        },
-        openContactDialog: function() {
-            this.$store.commit("setContactDialog", true);
         },
     },
     created() {
